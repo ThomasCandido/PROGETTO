@@ -1,0 +1,24 @@
+/*REGOLE GENERALI X BODY*/
+:root {
+    --bg-page: rgb(240, 240, 240);
+    --text-color: black;
+}
+
+
+body.theme-dark {
+    --bg-page: #121212;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding-bottom: 150px; 
+    overflow-y: scroll;    
+    
+    /* USA LE VARIABILI INVECE DEI COLORI FISSI */
+    background-color: var(--bg-page);
+    color: var(--text-color);
+    
+    /* Aggiungiamo una transizione per non accecare l'utente al cambio */
+    transition: background-color 0.5s ease, color 0.5s ease;
+}

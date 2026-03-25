@@ -1,0 +1,28 @@
+{
+  "name": "progetto",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ThomasCandido/PROGETTO.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ThomasCandido/PROGETTO/issues"
+  },
+  "homepage": "https://github.com/ThomasCandido/PROGETTO#readme",
+  "description": "",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.100.0",
+    "bcryptjs": "^3.0.3",
+    "body-parser": "^2.2.2",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "express-session": "^1.19.0"
+  }
+}
