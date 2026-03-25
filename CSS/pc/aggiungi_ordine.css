@@ -1,0 +1,272 @@
+
+/* 1. CONTENITORE RIEPILOGO (TABELLA) */
+.container_ordini {
+    width: 1400px;
+    margin: 30px auto;       /* Centrato nella pagina */
+    background-color: lightblue; /* Trasparenza 40% */
+    border-radius: 15px;
+    overflow-y: auto;        /* Scroll verticale interno */
+    overflow-x: auto;        /* Scroll orizzontale se necessario */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.container_ordini h2 {
+    position: sticky;
+    top: 0;
+    margin: 0;
+    padding: 15px;
+    background-color: cadetblue; /* Cadetblue trasparente */
+    color: white;
+    text-align: center;
+    font-family: Arial, sans-serif;
+}
+
+/* 2. STILE TABELLA RIEPILOGO */
+.tabella_stile_lista {
+    width: 100%;
+    table-layout: fixed;     /* equita larghezza per qualsiasi contenuto */
+    border-collapse: collapse;
+}
+
+.tabella_stile_lista thead th {
+    position: sticky;
+    top: 20px;               /* Sotto l'H2 */
+    z-index: 100;
+    background-color: rgba(240, 240, 240, 0.9); /* Quasi coprente per leggere bene */
+    color: #333;
+    padding: 8px;
+    border-bottom: 2px solid cadetblue;
+    font-family: Arial, sans-serif;
+}
+
+/* Celle del corpo (TD) */
+.tabella_stile_lista td {
+    padding: 5px 10px;      /* Altezza ridotta come chiesto */
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis; /* Puntini di sospensione se lungo */
+    white-space: nowrap;
+    color: #333;
+    background-color: rgb(243, 239, 239);
+    font-size: 14px;
+    font-family: Arial, sans-serif;
+}
+
+/* Larghezza specifica per la DATA */
+.tabella_stile_lista td:first-child, 
+.tabella_stile_lista th:first-child {
+    width: 110px;
+    min-width: 110px;
+    font-weight: bold;
+    overflow: visible;
+}
+
+.azioni_tabella{
+    padding: 10px;
+    text-align: center;
+}
+
+.azioni_tabella button
+{
+    font-weight: bold;
+    font-family: Arial,sans-serif;
+    border-radius: 10px;
+    background-color: cadetblue;
+    color:white;
+}
+
+/* 3. RIQUADRO FORM INSERIMENTO */
+.riquadro_form {
+    background-color: rgba(244, 244, 244, 0.8); /* Grigio trasparente */
+    backdrop-filter: blur(10px);
+    padding: 25px;
+    border-radius: 15px;
+    width: 700px;
+    margin: 20px auto;
+    border: 1px solid #ccc;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+}
+
+.riquadro_form h3 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* Input e Select nel Form */
+.tabella_ordine {
+    width: 100%;
+    border-spacing: 8px;
+}
+
+.tabella_ordine input, 
+.tabella_ordine select {
+    width: 100%;
+    height: 40px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box; /* */
+}
+
+/* 4. NOTE E AZIONI */
+.area-note {
+    width: 100%;
+    height: 60px;
+    resize: none;            /* */
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.campi_sotto {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+/* Bottoni icone (Reset, Allega, Aggiungi) */
+.bottone_ic {
+    padding: 8px 10px;
+    cursor: pointer;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    background: white;
+    transition: 0.3s;
+}
+
+.bottone_ic:hover {
+    background: #e0e0e0;
+    transform: scale(1.05);
+}
+
+/* Anteprima immagine in tabella */
+.tabella_stile_lista img {
+    height: 30px;           /* */
+    border-radius: 4px;
+    cursor: zoom-in;
+}
+
+
+/* --- MEDIA QUERY PER SMARTPHONE (OTTIMIZZAZIONE MASSIMA SPAZIO) --- */
+/* --- MEDIA QUERY PER SMARTPHONE (OTTIMIZZATA A SCHEDE) --- */
+@media screen and (max-width: 768px) {
+
+    /* 1. IL FORM */
+    .riquadro_form {
+        width: 95%;
+        margin: 10px auto;
+        padding: 15px;
+        background-color: #ffffff;
+        border: 1px solid #eee;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    .riquadro_form h3 {
+        font-size: 1.2rem;
+        margin-bottom: 10px;
+    }
+
+    /* Compattiamo gli input */
+    .tabella_ordine td {
+        display: block;
+        width: 100%;
+        padding: 2px 0;
+    }
+
+    .tabella_ordine input, 
+    .tabella_ordine select {
+        height: 35px;
+        font-size: 14px;
+        margin-bottom: 5px;
+    }
+
+    /*switch da tab a scheda*/
+    .container_ordini {
+        display: block !important;
+        width: 95%;
+        margin: 10px auto;
+        background-color: transparent; /* Sfondo trasparente per far risaltare le schede */
+        overflow-x: hidden; /* Niente scroll orizzontale */
+    }
+    .tabella_stile_lista thead {
+        display: none;
+    }
+
+    .tabella_stile_lista, 
+    .tabella_stile_lista tbody {
+        display: block;
+        width: 100%;
+    }
+
+    /* TRASFORMAZIONE DELLA RIGA (TR) IN UNA SCHEDA ELETGANTE (CARD) */
+    .tabella_stile_lista tr {
+        display: flex;
+        flex-direction: column; /* Impila i dati dall'alto verso il basso */
+        background-color: white;
+        margin-bottom: 15px;
+        border-radius: 12px;
+        padding: 15px;
+        border: 1px solid #eaeaea;
+        position: relative; /* Serve per posizionare i bottoni assoluti */
+    }
+
+    /* Stile dei singoli dati dentro la scheda */
+    .tabella_stile_lista td {
+        display: flex;
+        justify-content: space-between; /* Mette il dato a destra */
+        align-items: center;
+        text-align: right;
+        padding: 6px 0;
+        border-bottom: 1px solid #f0f0f0;
+        background-color: transparent;
+        font-size: 14px;
+        white-space: normal; /* Permette di andare a capo */
+    }
+
+    .tabella_stile_lista td:first-child{
+        width: 100% !important;
+    }
+    /* Togliamo la riga all'ultimo elemento */
+    .tabella_stile_lista td:last-child {
+        border-bottom: none;
+    }
+
+    /* AGGIUNGIAMO LE ETICHETTE (Pseudo-elementi) */
+    /* Visto che abbiamo nascosto l'intestazione, rimettiamo i nomi dei campi a sinistra di ogni dato! */
+    .tabella_stile_lista td::before {
+        content: attr(data-label); /* Prenderà il nome dal HTML */
+        font-weight: bold;
+        color: cadetblue;
+        text-align: left;
+        width: 40%;
+    }
+
+    /* 3. SISTEMIAMO L'IMMAGINE E LE AZIONI */
+    .tabella_stile_lista td img {
+        height: 40px;
+        width: auto;
+        border-radius: 5px;
+    }
+
+    /* I bottoni Modifica/Elimina li mettiamo belli larghi in fondo alla scheda */
+    .azioni_tabella {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        padding-top: 10px;
+        border-bottom: none !important;
+    }
+
+    .azioni_tabella button {
+        flex: 1;
+        padding: 10px;
+        font-size: 18px; /* Più facili da premere col dito */
+    }
+}

@@ -1,0 +1,43 @@
+/*---------BARRA DI RICERCA-----------*/
+.ricerca {
+    display: flex;    
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    max-width: 650px; 
+    margin: 0 auto 20px auto; 
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+.ricerca input {
+    flex-grow: 1;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 5px 15px;
+    border: 1px solid grey;
+    border-radius: 15px;
+    height: 50px; 
+    font-size: 16px;
+}
+
+.ricerca button {
+    background-color: cadetblue;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    height: 50px; 
+    width: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: 0.5s;
+
+}
+
+.ricerca button:hover {
+    background-color: grey;
+}

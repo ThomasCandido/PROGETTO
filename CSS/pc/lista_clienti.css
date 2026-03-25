@@ -1,0 +1,94 @@
+/* =========================================
+    TITOLI E SEPARATORI
+   ========================================= */
+h1 {
+    color: #2c3e50;
+    font-size: 24px;
+    margin: 20px auto;
+    text-align: center;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid #dcdde1;
+    margin: 10px 20px;
+}
+/* =========================================
+    TABELLA CLIENTI E RESPONSIVITÀ MOBILE
+   ========================================= */
+
+.table-container {
+    background-color: #ffffff;
+    margin: 20px;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    overflow-x: auto; /* Abilita lo scroll orizzontale su smartphone */
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 800px; /* Impedisce alla tabella di schiacciarsi troppo su mobile */
+}
+
+th, td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #dcdde1; /* Bordo coerente con il resto del tema */
+    color: #2c3e50;
+    font-size: 14px;
+}
+
+th {
+    background-color: #fafbfc; /* Sfondo leggero per l'intestazione */
+    font-weight: bold;
+    color: #34495e;
+    text-transform: uppercase;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+}
+
+tbody tr:hover {
+    background-color: #f1f2f6; /* Effetto hover quando passi il mouse su una riga */
+    transition: background-color 0.2s;
+}
+
+/* Rimuove il bordo default inserito via HTML nell'attributo border="1" */
+table[border="1"] {
+    border: none;
+}
+
+
+
+/* =========================================
+   BOTTONI FLUTTUANTI (Il + e il Cestino)
+========================================= */
+
+/* 1. La struttura base del bottone (rotondo, ombra, posizione) */
+.botton_fluttuante {
+    display: flex;
+    position: fixed;
+    width: 60px;
+    height: 60px;
+    border-radius: 15%;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px;
+    color: white;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    z-index: 1000;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    right: 30px;
+    bottom: 30px;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.botton_fluttuante:hover {
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
+}
+
+.btn_aggiungi { background-color: cadetblue; }
+.btn_aggiungi:hover { background-color: #4a7c7d; }
