@@ -1,0 +1,106 @@
+/* --- STILE PROFESSIONALE REPORT PDF --- */
+.pdf-document {
+    padding: 40px;
+    background-color: white;
+    font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+    color: #333;
+}
+
+/* Testata */
+.pdf-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-bottom: 3px solid #5f9ea0; /* cadetblue */
+    padding-bottom: 15px;
+    margin-bottom: 30px;
+}
+
+.pdf-header h1 {
+    margin: 0;
+    color: #5f9ea0;
+    font-size: 26px;
+    text-transform: uppercase;
+}
+
+.pdf-header p { margin: 5px 0 0 0; color: #777; font-size: 13px; }
+
+/* Badge Stato */
+.status-badge {
+    background-color: #5f9ea0;
+    color: white;
+    padding: 6px 14px;
+    border-radius: 50px;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+/* Sezioni Dati */
+.pdf-section-label {
+    font-size: 11px;
+    color: #5f9ea0;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-top: 20px;
+    display: block;
+}
+
+.pdf-client-name {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 5px 0 25px 0;
+}
+
+/* LA TABELLA A COLONNE SINGOLE */
+.pdf-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.pdf-table th {
+    background-color: #f4f8f9;
+    border: 1px solid #dee2e6;
+    padding: 10px;
+    font-size: 11px;
+    color: #555;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.pdf-table td {
+    border: 1px solid #dee2e6;
+    padding: 12px 8px;
+    font-size: 13px;
+    text-align: center;
+}
+
+.pdf-table td.text-left { text-align: left; }
+
+/* Box Note e Totale */
+.pdf-notes-box {
+    margin-top: 25px;
+    padding: 15px;
+    background-color: #fdfdfd;
+    border: 1px dashed #ccc;
+    font-style: italic;
+    font-size: 12px;
+}
+
+.pdf-total-container {
+    margin-top: 30px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.pdf-total-card {
+    background-color: #f1f8f9;
+    border: 2px solid #5f9ea0;
+    padding: 15px 30px;
+    border-radius: 8px;
+    text-align: right;
+}
+
+.total-label { font-size: 11px; color: #777; margin: 0; }
+.total-amount { font-size: 24px; font-weight: bold; color: #5f9ea0; margin: 0; }

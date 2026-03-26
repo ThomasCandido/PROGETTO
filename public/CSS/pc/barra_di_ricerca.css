@@ -1,27 +1,31 @@
-/*---------BARRA DI RICERCA-----------*/
+/*---------BARRA DI RICERCA + FILTRO -----------*/
+.ricerca-completa {
+    width: 100%;
+    max-width: 650px; /* TORNATA A 650PX COME VOLEVI TU */
+    margin: 0 auto 20px auto;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
 .ricerca {
     display: flex;    
     justify-content: center;
     align-items: center;
-    gap: 10px;
-    width: 100%;
-    max-width: 650px; 
-    margin: 0 auto 20px auto; 
-    padding: 0 20px;
-    box-sizing: border-box;
+    gap: 10px; 
 }
+
 .ricerca input {
     flex-grow: 1;
-    width: 100%;
-    box-sizing: border-box;
     padding: 5px 15px;
     border: 1px solid grey;
     border-radius: 15px;
     height: 50px; 
     font-size: 16px;
+    box-sizing: border-box;
 }
 
-.ricerca button {
+/* Stile comune per i bottoni */
+.ricerca button, .btn-filter {
     background-color: cadetblue;
     color: white;
     border: none;
@@ -34,10 +38,81 @@
     font-size: 20px;
     flex-shrink: 0;
     cursor: pointer;
-    transition: 0.5s;
-
+    transition: 0.3s;
 }
 
-.ricerca button:hover {
+.ricerca button:hover, .btn-filter:hover {
     background-color: grey;
+}
+
+/* TENDINA (Nascosta e posizionata bene) */
+.filter-dropdown-container {
+    position: relative;
+    display: flex;
+}
+
+.filter-dropdown {
+    display: none;
+    position: absolute;
+    top: 60px;
+    right: 0;
+    background-color: white;
+    border: 1px solid cadetblue;
+    border-radius: 12px;
+    padding: 15px;
+    z-index: 3000;
+    min-width: 220px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.filter-dropdown.show { display: block; }
+
+/* FIX DIMENSIONI INPUT TENDINA */
+/* 1. Reset degli input giganti dentro la tendina */
+/* 1. Forza la riga orizzontale e centra tutto */
+.filter-option {
+    display: flex !important;
+    flex-direction: row !important; /* Forza l'andamento orizzontale */
+    align-items: center !important; /* Centra verticalmente il pallino con il testo */
+    justify-content: flex-start !important; /* Attacca tutto a sinistra */
+    gap: 15px !important;           /* Spazio fisso tra pallino e scritta */
+    width: 100% !important;
+    padding: 8px 5px !important;
+    cursor: pointer;
+}
+
+/* 2. Rimpicciolisce gli input (Radio e Checkbox) */
+.filter-option input[type="radio"], 
+.filter-option input[type="checkbox"] {
+    all: revert !important;   /* Resetta quasi tutto allo stile base del browser */
+    width: 18px !important;   /* Larghezza fissa */
+    height: 18px !important;  /* Altezza fissa (niente più 50px!) */
+    margin: 0 !important;      /* Toglie margini che spostano l'allineamento */
+    cursor: pointer;
+    flex-shrink: 0;           /* Impedisce che si schiaccino se il testo è lungo */
+    accent-color: cadetblue;  /* Colora il pallino/spunta del tuo colore */
+}
+
+/* 3. Sistema il testo e le emoji */
+.filter-option span, 
+.filter-option label {
+    display: flex !important;
+    align-items: center !important;
+    font-size: 14px !important;
+    line-height: 1 !important;
+    white-space: nowrap !important; /* Impedisce al testo di andare a capo */
+}
+/* 4. Sistema i titoli che sono finiti in mezzo */
+.filter-title {
+    margin-top: 15px !important;
+    margin-bottom: 5px !important;
+    text-align: left !important;
+}
+
+.btn-apply {
+    width: 100% !important;
+    height: 35px !important;
+    margin-top: 10px;
+    background-color: #2c3e50 !important;
+    border-radius: 8px !important;
 }

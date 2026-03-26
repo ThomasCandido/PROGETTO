@@ -9,12 +9,16 @@
         <link rel="stylesheet" href="CSS/pc/menu_bar.css">
         <link rel="stylesheet" href="CSS/pc/barra_di_ricerca.css">
         <link rel="stylesheet" href="CSS/pc/storico_ordini.css">
+        <link rel="stylesheet" href="CSS/pc/pdf.css">
         <script src="JS/menu_bar.js"></script>
-        <script src = "JS/tema.js"></script>
+        <script src ="JS/tema.js"></script>
         <script src="JS/elimina.js"></script>
         <script src="JS/ricerca_ordini.js"></script>
         <script src = "JS/stats.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+        <script src = "JS/export_pdf.js"></script>
+        <script src="JS/filtri_ordini.js"></script>
     </head>
     <body>
         <!-- MENU DI NAVIGAZIONE-->
@@ -75,10 +79,42 @@
 
 
         <!-- BARRA DI RICERCA COMPLETATA-->
-        <form method="get" class = "ricerca">
-            <input type="text"  id="inputRicerca"placeholder="Cerca Ordine...">
-            <button type="submit" title="Cerca">&#8635;</button>
-        </form>
+        <div class="ricerca-completa">
+            <form method="get" class="ricerca">
+                <input type="text" id="inputRicerca" placeholder="Cerca Ordine...">
+                
+                <button type="submit" title="Cerca">&#8635;</button>
+        
+                <div class="filter-dropdown-container">
+                    <button type="button" id="filterBtn" class="btn-filter">⚙️</button>
+                    
+                    <div id="filterMenu" class="filter-dropdown">
+                        <p class="filter-title">Ordina per:</p>
+                        <label class="filter-option"><input type="radio" name="sort" value="date-new" checked> 📅 Più recenti</label>
+                        <label class="filter-option"><input type="radio" name="sort" value="price-asc"> 📈 Prezzo crescente</label>
+                        <label class="filter-option"><input type="radio" name="sort" value="price-desc"> 📉 Prezzo decrescente</label>
+                        <hr>
+                        <p class="filter-title">Mostra Stato:</p>
+                        <label class="filter-option"><input type="checkbox" class="status-filter" value="Ordinato" checked> 🔴 Ordinato</label>
+                        <label class="filter-option">
+                            <input type="checkbox" class="status-filter" value="In Lavorazione" checked> 
+                            <span>🟡 In Lavorazione</span>
+                        </label>
+                        
+                        <label class="filter-option">
+                            <input type="checkbox" class="status-filter" value="Evaso" checked> 
+                            <span>🟢 Evaso</span>
+                        </label>
+                        
+                        <label class="filter-option">
+                            <input type="checkbox" class="status-filter" value="Archiviato" checked> 
+                            <span>⚪ Archiviato</span>
+                        </label>
+                        <button type="button" id="applyFilters" class="btn-apply">Applica Filtri</button>
+                    </div>
+                </div>
+            </form>
+        </div>
 
 
 
@@ -115,7 +151,7 @@
                 <div class="azioni">
                     <button class="botton_elemem_lista" title="Allegato">&#128206;</button>
                     <button class="botton_elemem_lista" title="Modifica">&#128221;</button>
-                    <button class="botton_elemem_lista" title="Elimina">&#x1F5D1;</button>
+                    <button class="botton_elemem_lista btn_pdf" title="Esporta PDF">&#128196;</button>
                 </div>
             </li>
             <li>
@@ -149,7 +185,7 @@
                 <div class="azioni">
                     <button class="botton_elemem_lista" title="Allegato">&#128206;</button>
                     <button class="botton_elemem_lista" title="Modifica">&#128221;</button>
-                    <button class="botton_elemem_lista" title="Elimina">&#x1F5D1;</button>
+                    <button class="botton_elemem_lista btn_pdf" title="Esporta PDF">&#128196;</button>
                 </div>
             </li>
             <li>
@@ -183,7 +219,7 @@
                 <div class="azioni">
                     <button class="botton_elemem_lista" title="Allegato">&#128206;</button>
                     <button class="botton_elemem_lista" title="Modifica">&#128221;</button>
-                    <button class="botton_elemem_lista" title="Elimina">&#x1F5D1;</button>
+                    <button class="botton_elemem_lista btn_pdf" title="Esporta PDF">&#128196;</button>
                 </div>
             </li>
         </ul>
