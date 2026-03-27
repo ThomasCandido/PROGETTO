@@ -10,6 +10,7 @@
         <link rel="stylesheet" href="CSS/pc/body.css">
         <script src="JS/menu_bar.js"></script>
         <script src="JS/tema.js"></script>
+        <script src = "JS/aggiungi_cliente.js"></script>
     </head>
 
     <body>
@@ -42,7 +43,16 @@
         </li>
     </ul>
 </li>
-            <li><img src="allegati/log.png" style="border-radius: 50%;" height="20px" width="20px" alt="login" title="login"></li>
+          
+<li class="user-item">
+    <img src="allegati/log.png" class="user-avatar" id="userBtn" alt="login" title="Menu Utente">
+    <ul class="user-dropdown" id="userMenu">
+        <li class="dropdown-header">Account</li>
+        <li><a href="aggiungi_cliente.html?edit=true">⚙️ Modifica Profilo</a></li>
+        <li><hr></li>
+        <li><a href="/logout" class="logout-link">🚪 Logout</a></li>
+    </ul>
+</li>
                 
         </ul>
     </nav>
@@ -55,7 +65,7 @@
                 
                 <p><em>I campi contrassegnati con l'asterisco (*) sono obbligatori.</em></p>
                 
-                <form action="#" method="post">
+               <form id="formCliente">
                     
                     <fieldset>
                         <legend>Dati Società / Fatturazione</legend>
@@ -74,10 +84,6 @@
                             <input type="tel" id="telefono" name="telefono" required>
                         </div>
 
-                        <div class="form-group">
-                            <label for="id_societa">ID Società *:</label>
-                            <input type="text" id="id_societa" name="id_societa" required>
-                        </div>
                     </fieldset>
 
                     <fieldset>

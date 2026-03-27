@@ -23,19 +23,17 @@
     <body>
         <!-- MENU DI NAVIGAZIONE-->
          <nav>
-            <!-- x smarthphone-->
-            <div class="menu_lt" id="menu_smartphone">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-            <!--sezioni del menu-->
-            <ul class="menu" id="nav_menu">
-                <li><a href="lista_clienti.html">Clienti</a></li>
-                <li><a href="aggiungi_cliente.html">Aggiungi Cliente</a></li>
-                <li><a href="aggiungi_ordine.html" >Aggiungi Ordine</a></li>
-                <li><a href="storico_ordini_home.html" class="active">Storico Ordine</a></li>
-                <li class="theme-item">
+        <div class="menu_lt" id="menu_smartphone">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <ul class="menu" id="nav_menu">
+            <li><a href="lista_clienti.html">Clienti</a></li>
+            <li><a href="aggiungi_cliente.html" class="active">Aggiungi Cliente</a></li>
+            <li><a href="aggiungi_ordine.html">Aggiungi Ordine</a></li>
+            <li><a href="storico_ordini_home.html">Storico Ordine</a></li>
+            <li class="theme-item">
     <button id="themeBtn" class="theme-button">🎨</button>
     
     <ul class="theme-dropdown" id="themeMenu">
@@ -52,41 +50,49 @@
         </li>
     </ul>
 </li>
-                <li><img src="allegati/log.png" alt="login" title="login"></li>
+          
+<li class="user-item">
+    <img src="allegati/log.png" class="user-avatar" id="userBtn" alt="login" title="Menu Utente">
+    <ul class="user-dropdown" id="userMenu">
+        <li class="dropdown-header">Account</li>
+        <li><a href="aggiungi_cliente.html?edit=true">⚙️ Modifica Profilo</a></li>
+        <li><hr></li>
+        <li><a href="/logout" class="logout-link">🚪 Logout</a></li>
+    </ul>
+</li>
                 
-            </ul>
-        </nav>
-
-
+        </ul>
+    </nav>
         <br>
         <br>
 
+        <!-- CONTAINER X VISUALIZZATORE STATISTICHE-->
         <div class="stats-container">
-    <button id="openStats" class="btn-stats" title="Vedi Statistiche">📊 Statistiche Vendite</button>
-</div>
-
-<div id="statsModal" class="modal">
-    <div class="modal-content">
-        <span class="close-modal">&times;</span>
-        <h2>🏆 Top 5 Capi più Venduti</h2>
-        <p>Classifica per Tipologia e Colore</p>
-        <hr>
-        <div class="chart-container">
-            <canvas id="statsChart"></canvas>
+            <button id="openStats" class="btn-stats" title="Vedi Statistiche">📊 Statistiche Vendite</button>
         </div>
-    </div>
-</div>
+
+        <div id="statsModal" class="modal">
+            <div class="modal-content">
+                <span class="close-modal">&times;</span>
+                <h2>🏆 Top 5 Capi più Venduti</h2>
+                <p>Classifica per Tipologia e Colore</p>
+                <hr>
+                <div class="chart-container">
+                    <canvas id="statsChart"></canvas>
+                </div>
+            </div>
+        </div>
 
 
-        <!-- BARRA DI RICERCA COMPLETATA-->
+        <!-- BARRA DI RICERCA + FILTRI DI VISUALIZZAZIONE PAGINA-->
         <div class="ricerca-completa">
             <form method="get" class="ricerca">
                 <input type="text" id="inputRicerca" placeholder="Cerca Ordine...">
                 
-                <button type="submit" title="Cerca">&#8635;</button>
+                <button type="submit" title="Reflesh">&#8635;</button>
         
                 <div class="filter-dropdown-container">
-                    <button type="button" id="filterBtn" class="btn-filter">⚙️</button>
+                    <button type="button" id="filterBtn" class="btn-filter">🎚️</button>
                     
                     <div id="filterMenu" class="filter-dropdown">
                         <p class="filter-title">Ordina per:</p>

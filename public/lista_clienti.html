@@ -17,17 +17,17 @@
     <body>
 
         <nav>
-            <div class="menu_lt" id="menu_smartphone">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-            <ul class="menu" id="nav_menu">
-                <li><a href="lista_clienti.html" class="active">Clienti</a></li>
-                <li><a href="aggiungi_cliente.html">Aggiungi Cliente</a></li>
-                <li><a href="aggiungi_ordine.html">Aggiungi Ordine</a></li>
-                <li><a href="storico_ordini_home.html">Storico Ordine</a></li>
-                <li class="theme-item">
+        <div class="menu_lt" id="menu_smartphone">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <ul class="menu" id="nav_menu">
+            <li><a href="lista_clienti.html">Clienti</a></li>
+            <li><a href="aggiungi_cliente.html" class="active">Aggiungi Cliente</a></li>
+            <li><a href="aggiungi_ordine.html">Aggiungi Ordine</a></li>
+            <li><a href="storico_ordini_home.html">Storico Ordine</a></li>
+            <li class="theme-item">
     <button id="themeBtn" class="theme-button">🎨</button>
     
     <ul class="theme-dropdown" id="themeMenu">
@@ -44,10 +44,19 @@
         </li>
     </ul>
 </li>
-                <li><img src="allegati/log.png" style="border-radius: 50%;" height="20px" width="20px" alt="login" title="login"></li>
-            </ul>
-        </nav>
-
+          
+<li class="user-item">
+    <img src="allegati/log.png" class="user-avatar" id="userBtn" alt="login" title="Menu Utente">
+    <ul class="user-dropdown" id="userMenu">
+        <li class="dropdown-header">Account</li>
+        <li><a href="aggiungi_cliente.html?edit=true">⚙️ Modifica Profilo</a></li>
+        <li><hr></li>
+        <li><a href="/logout" class="logout-link">🚪 Logout</a></li>
+    </ul>
+</li>
+                
+        </ul>
+    </nav>
         <br><br>
         
         <form class="ricerca" onsubmit="return false;">

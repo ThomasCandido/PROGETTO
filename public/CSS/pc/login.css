@@ -1,11 +1,13 @@
+/* REGOLE CSS X LOGIN*/
 
 body{
     padding-top: 100px;
     display: flex;
-    justify-content: center; /* Centra la scatola orizzontalmente (destra/sinistra) */
+    justify-content: center;
     align-items: center;
 }
-/* 2. La "Carta" bianca centrale (la tua classe login_cnt) */
+
+
 .login_cnt {
     background-color: white;
     padding: 40px;
@@ -30,7 +32,7 @@ body{
 }
 
 .login-header h2 {
-    color: #2c3e50; /* Il blu scuro elegante della tua navbar */
+    color: #34495e; /* Il blu scuro elegante della tua navbar */
     margin: 10px 0 5px 0;
     font-size: 24px;
 }
@@ -42,7 +44,7 @@ body{
     margin: 0;
 }
 
-/* 4. I gruppi con Label e Input */
+
 .form-group {
     margin-bottom: 20px;
 }
@@ -51,7 +53,7 @@ body{
     display: block; /* Fa andare l'input a capo sotto la label */
     margin-bottom: 8px;
     font-weight: 600;
-    color: #2c3e50;
+    color: #34495e;
     font-size: 14px;
 }
 
@@ -65,11 +67,11 @@ body{
     transition: border-color 0.3s; /* Animazione fluida al click */
 }
 
-/* 5. Il super bottone di Accesso */
+
 .btn-login {
     width: 100%;
     padding: 14px;
-    background-color: #2c3e50; /* Riprende il blu scuro aziendale */
+    background-color: #34495e; /* Riprende il blu scuro aziendale */
     color: white;
     border: none;
     border-radius: 6px;
@@ -80,17 +82,13 @@ body{
     margin-top: 10px;
 }
 
-/* Effetto passaggio del mouse sul bottone */
+
 .btn-login:hover {
-    background-color: #34495e; /* Si schiarisce un pochino */
+    background-color: grey; /* Si schiarisce un pochino */
 }
 
-/* Effetto quando schiacci fisicamente il bottone col click */
-.btn-login:active {
-    transform: scale(0.98); /* Si rimpicciolisce del 2% dando l'effetto del click reale */
-}
 
-/* 6. Footer del login (Password dimenticata) */
+
 .login-footer {
     text-align: center;
     margin-top: 25px;
@@ -98,7 +96,7 @@ body{
 }
 
 .login-footer a {
-    color: #3498db;
+    color: cadetblue;
     text-decoration: none;
     font-weight: 500;
 }

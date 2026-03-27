@@ -7,22 +7,20 @@
     <title>Registrazione - Gestionale Tipografia</title>
     <link rel="stylesheet" href="CSS/pc/aggiungi_cliente.css">
     <link rel="stylesheet" href="CSS/pc/body.css">
+    <!-- PER FARE PICCOLI AGGIUSTAMENTI RISPETTO A CSS DI AGG.CLIENTE-->
     <style>
-        main { margin-top: 50px; }
         .login-link { text-align: center; margin-top: 20px; }
         .login-link a { color: cadetblue; font-weight: bold; text-decoration: none; }
     </style>
 </head>
 
 <body>
+    <!-- CAMPO DI REGISTRAZIONE COMPLETATO-->
     <main>
         <div class="form-aggiunta-cliente">
             <h1>Crea il tuo Account</h1>
-            
             <p><em>I campi contrassegnati con l'asterisco (*) sono obbligatori.</em></p>
-            
             <form action="/register" method="POST">
-                
                 <fieldset>
                     <legend>Dati Società / Fatturazione</legend>
                     <div class="form-group">
@@ -40,10 +38,6 @@
                         <input type="tel" id="telefono" name="telefono" required>
                     </div>
 
-                    <div class="form-group">
-                        <label for="id_societa">ID Società *:</label>
-                        <input type="text" id="id_societa" name="id_societa" required>
-                    </div>
                 </fieldset>
 
                 <fieldset>

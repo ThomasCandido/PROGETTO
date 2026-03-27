@@ -1,13 +1,32 @@
-/* SWITCH STYLE MENU BAR DA PC A SMARTPHONE*/
+/* GESTIONE NAVBAR (Smartphone + Profilo) */
 
 document.addEventListener('DOMContentLoaded', function() {
+    // 1. Menu Smartphone (Hamburger)
     const men_sm = document.getElementById('menu_smartphone');
     const navMenu = document.getElementById('nav_menu');
     
-    men_sm.addEventListener('click', () => 
-    {
-        // Aggiunge o toglie la classe "open" al menù e all'hamburger
-        navMenu.classList.toggle('open');
-        men_sm.classList.toggle('open');
-    });
+    if (men_sm && navMenu) {
+        men_sm.addEventListener('click', () => {
+            navMenu.classList.toggle('open');
+            men_sm.classList.toggle('open');
+        });
+    }
+
+    // 2. Tendina Profilo Utente
+    const userBtn = document.getElementById('userBtn');
+    const userMenu = document.getElementById('userMenu');
+
+    if (userBtn && userMenu) {
+        userBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); // Impedisce la chiusura immediata
+            userMenu.classList.toggle('show');
+        });
+
+        // Chiudi la tendina se clicchi ovunque fuori dal menu
+        document.addEventListener('click', (e) => {
+            if (!userMenu.contains(e.target) && !userBtn.contains(e.target)) {
+                userMenu.classList.remove('show');
+            }
+        });
+    }
 });
