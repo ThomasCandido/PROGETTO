@@ -17,13 +17,12 @@
 
 <body>
     <!-- CAMPO DI REGISTRAZIONE COMPLETATO-->
-    <!-- tieni a bada queste modifche compialre obbligatoriamente solo 
-     password email e società-->
+
     <main>
         <div class="form-aggiunta-cliente">
             <h1>Crea il tuo Account</h1>
             <p><em>I campi contrassegnati con l'asterisco (*) sono obbligatori.</em></p>
-            <form action="/register" method="POST" onsubmit="gestisciRegistrazione(event)">
+            <form action="/register" method="POST" onsubmit="return gestisciRegistrazione(event)">
                 <fieldset>
                     <legend>Dati Società / Fatturazione</legend>
                     <div class="form-group">

@@ -11,6 +11,12 @@
         <script src="JS/menu_bar.js"></script>
         <script src="JS/tema.js"></script>
         <script src = "JS/aggiungi_cliente.js"></script>
+        <script src="JS/visuale_utente.js"></script>
+        <script>
+        if (localStorage.getItem('isAdmin') === 'true') {
+            document.documentElement.classList.add('is-admin');
+        }
+    </script>
     </head>
 
     <body>
@@ -22,8 +28,8 @@
             <span></span>
         </div>
         <ul class="menu" id="nav_menu">
-            <li><a href="lista_clienti.html">Clienti</a></li>
-            <li><a href="aggiungi_cliente.html" class="active">Aggiungi Cliente</a></li>
+            <li class="admin-only"><a href="lista_clienti.html">Clienti</a></li>
+            <li class="admin-only"><a href="aggiungi_cliente.html" class="active">Aggiungi Cliente</a></li>
             <li><a href="aggiungi_ordine.html">Aggiungi Ordine</a></li>
             <li><a href="storico_ordini_home.html">Storico Ordine</a></li>
             <li class="theme-item">

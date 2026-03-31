@@ -19,6 +19,13 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
         <script src = "JS/export_pdf.js"></script>
         <script src="JS/filtri_ordini.js"></script>
+        <script src = "JS/storico_ordini.js"></script>
+        <script src="JS/visuale_utente.js"></script>
+        <script>
+        if (localStorage.getItem('isAdmin') === 'true') {
+            document.documentElement.classList.add('is-admin');
+        }
+    </script>
     </head>
     <body>
         <!-- MENU DI NAVIGAZIONE-->
@@ -29,8 +36,8 @@
             <span></span>
         </div>
         <ul class="menu" id="nav_menu">
-            <li><a href="lista_clienti.html">Clienti</a></li>
-            <li><a href="aggiungi_cliente.html" >Aggiungi Cliente</a></li>
+            <li class="admin-only"><a href="lista_clienti.html">Clienti</a></li>
+            <li class="admin-only"><a href="aggiungi_cliente.html" >Aggiungi Cliente</a></li>
             <li><a href="aggiungi_ordine.html">Aggiungi Ordine</a></li>
             <li><a href="storico_ordini_home.html" class="active">Storico Ordine</a></li>
             <li class="theme-item">

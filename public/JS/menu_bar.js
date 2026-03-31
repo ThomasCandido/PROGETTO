@@ -1,7 +1,7 @@
-/* GESTIONE NAVBAR (Smartphone + Profilo) */
+/* GESTIONE NAVBAR (Smartphone + Profilo + Permessi Admin) */
 
-document.addEventListener('DOMContentLoaded', function() {
-    // 1. Menu Smartphone (Hamburger)
+document.addEventListener('DOMContentLoaded', async function() {
+    
     const men_sm = document.getElementById('menu_smartphone');
     const navMenu = document.getElementById('nav_menu');
     
@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // 2. Tendina Profilo Utente
+
     const userBtn = document.getElementById('userBtn');
     const userMenu = document.getElementById('userMenu');
 
@@ -29,4 +29,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+
+    
 });

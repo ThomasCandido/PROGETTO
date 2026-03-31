@@ -162,9 +162,7 @@
 
 .btn-stats:hover { background-color: #34495e; }
 
-/* =========================================
-   GRAFICO STATISTICHE (Effetto Fluttuante)
-   ========================================= */
+/*GRAFICO STATISTICHE */
 .modal {
     display: none; 
     position: fixed;
@@ -173,7 +171,6 @@
     top: 0;
     width: 100%; 
     height: 100%;
-    /* 🔴 MODIFICA 1: Rimuoviamo il nero. Ora lo sfondo è completamente invisibile! */
     background-color: transparent; 
 }
 
@@ -188,7 +185,6 @@
     max-width: 600px;
     text-align: center;
     position: relative;
-    /* 🔴 MODIFICA 2: Aggiungiamo un'ombra marcata e un bordino per farlo "staccare" dalla pagina sotto */
     box-shadow: 0 15px 40px rgba(0,0,0,0.25); 
     border: 1px solid #ddd; /* Aiuta a delimitare il riquadro bianco */
 }
