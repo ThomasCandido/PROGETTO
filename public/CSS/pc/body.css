@@ -19,6 +19,5 @@ body {
     background-color: var(--bg-page);
     color: var(--text-color);
     
-    /* Aggiungiamo una transizione per non accecare l'utente al cambio */
     transition: background-color 0.5s ease, color 0.5s ease;
 }

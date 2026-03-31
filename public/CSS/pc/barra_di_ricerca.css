@@ -45,7 +45,7 @@
     background-color: grey;
 }
 
-/* TENDINA (Nascosta e posizionata bene) */
+/* TENDINA x filtri*/
 .filter-dropdown-container {
     position: relative;
     display: flex;
@@ -68,41 +68,38 @@
 .filter-dropdown.show { display: block; }
 
 /* FIX DIMENSIONI INPUT TENDINA */
-/* 1. Reset degli input giganti dentro la tendina */
-/* 1. Forza la riga orizzontale e centra tutto */
 .filter-option {
     display: flex !important;
-    flex-direction: row !important; /* Forza l'andamento orizzontale */
-    align-items: center !important; /* Centra verticalmente il pallino con il testo */
-    justify-content: flex-start !important; /* Attacca tutto a sinistra */
-    gap: 15px !important;           /* Spazio fisso tra pallino e scritta */
+    flex-direction: row !important; 
+    align-items: center !important; 
+    justify-content: flex-start !important; 
+    gap: 15px !important;   
     width: 100% !important;
     padding: 8px 5px !important;
     cursor: pointer;
 }
 
-/* 2. Rimpicciolisce gli input (Radio e Checkbox) */
+/*Rimpicciolisce gli input (Radio e Checkbox) */
 .filter-option input[type="radio"], 
 .filter-option input[type="checkbox"] {
-    all: revert !important;   /* Resetta quasi tutto allo stile base del browser */
-    width: 18px !important;   /* Larghezza fissa */
-    height: 18px !important;  /* Altezza fissa (niente più 50px!) */
-    margin: 0 !important;      /* Toglie margini che spostano l'allineamento */
+    all: revert !important;
+    width: 18px !important;  
+    height: 18px !important;  
+    margin: 0 !important;     
     cursor: pointer;
-    flex-shrink: 0;           /* Impedisce che si schiaccino se il testo è lungo */
-    accent-color: cadetblue;  /* Colora il pallino/spunta del tuo colore */
+    flex-shrink: 0;        
+    accent-color: cadetblue;  
 }
 
-/* 3. Sistema il testo e le emoji */
+/* Sistemazione del testo e delle emoji */
 .filter-option span, 
 .filter-option label {
     display: flex !important;
     align-items: center !important;
     font-size: 14px !important;
     line-height: 1 !important;
-    white-space: nowrap !important; /* Impedisce al testo di andare a capo */
+    white-space: nowrap !important; 
 }
-/* 4. Sistema i titoli che sono finiti in mezzo */
 .filter-title {
     margin-top: 15px !important;
     margin-bottom: 5px !important;

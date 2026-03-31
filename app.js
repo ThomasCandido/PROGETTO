@@ -30,7 +30,6 @@ const requireLogin = (req, res, next) => {
 // --- 2. ROTTE AUTENTICAZIONE (Login, Register, Logout) ---
 
 app.post('/register', async (req, res) => {
-    // RIMOSSO id_societa dal corpo della richiesta
     const { email, password, nome, cognome, societa, telefono } = req.body;
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -39,7 +38,6 @@ app.post('/register', async (req, res) => {
         
         if (userError) throw userError;
 
-        // RIMOSSO id_societa dall'inserimento nella tabella clienti
         await supabase.from('clienti').insert([{ 
             id_utente: newUser[0].id, 
             nome, 
@@ -49,10 +47,13 @@ app.post('/register', async (req, res) => {
             telefono
         }]);
 
-        res.send("<script>alert('Registrazione completata!'); window.location.href='/login.html';</script>");
-    } catch (err) { res.status(500).send("Errore: " + err.message); }
-});
+        // MODIFICA QUI: Mandiamo JSON invece di HTML
+        res.json({ success: true, message: "Registrazione completata!" });
 
+    } catch (err) { 
+        res.status(500).json({ success: false, message: err.message }); 
+    }
+});
 app.post('/login', async (req, res) => {
     const { email, password } = req.body;
     try {

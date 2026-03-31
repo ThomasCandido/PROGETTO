@@ -162,33 +162,42 @@
 
 .btn-stats:hover { background-color: #34495e; }
 
-/* Il Modal (Sfondo oscurato) */
+/* =========================================
+   GRAFICO STATISTICHE (Effetto Fluttuante)
+   ========================================= */
 .modal {
     display: none; 
     position: fixed;
     z-index: 5000;
-    left: 0; top: 0;
-    width: 100%; height: 100%;
-    background-color: rgba(0,0,0,0.7); /* Oscura lo sfondo */
+    left: 0; 
+    top: 0;
+    width: 100%; 
+    height: 100%;
+    /* 🔴 MODIFICA 1: Rimuoviamo il nero. Ora lo sfondo è completamente invisibile! */
+    background-color: transparent; 
 }
 
 /* Contenuto del Popup */
 .modal-content {
-    background-color: var(--card-bg); /* Segue il tema chiaro/scuro! */
+    background-color: var(--card-bg, #ffffff); /* Segue il tema, di base bianco */
     color: var(--text-color);
-    margin: 5% auto;
+    margin: 8% auto; /* Leggermente più centrato */
     padding: 20px;
     border-radius: 12px;
     width: 80%;
     max-width: 600px;
     text-align: center;
     position: relative;
+    /* 🔴 MODIFICA 2: Aggiungiamo un'ombra marcata e un bordino per farlo "staccare" dalla pagina sotto */
+    box-shadow: 0 15px 40px rgba(0,0,0,0.25); 
+    border: 1px solid #ddd; /* Aiuta a delimitare il riquadro bianco */
 }
 
 .close-modal {
     position: absolute;
     right: 20px; top: 10px;
     font-size: 28px; cursor: pointer;
+    color: inherit;
 }
 
 .chart-container {
@@ -198,6 +207,7 @@
 
 /* MEDIA QUERY*/
 @media screen and (max-width: 480px) {
+
     
     .lista_ordini {
         grid-template-columns: 1fr; /* Su telefono forza 1 sola colonna */
