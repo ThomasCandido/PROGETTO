@@ -40,16 +40,18 @@ const requireAdmin = (req, res, next) => {
 
 // Solo l'Admin può vedere la lista di tutti i clienti
 app.get('/lista_clienti.html', requireAdmin, (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'lista_clienti.html'));
+    // Aggiunto '..' perché il file è un livello sopra la cartella server
+    res.sendFile(path.join(__dirname, '..', 'public', 'lista_clienti.html'));
 });
 
 // Admin registra nuovi, Cliente modifica se stesso (Entrambi possono entrare)
 app.get('/aggiungi_cliente.html', requireLogin, (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'aggiungi_cliente.html'));
+    res.sendFile(path.join(__dirname, '..', 'public', 'aggiungi_cliente.html'));
 });
 
 // Carica tutto il resto (CSS, JS, Immagini)
-app.use(express.static('public')); 
+// Dobbiamo dire a Express che la cartella public è fuori dalla cartella server
+app.use(express.static(path.join(__dirname, '..', 'public'))); 
 
 
 // --- 4. ROTTE AUTENTICAZIONE ---
@@ -110,24 +112,21 @@ app.get('/logout', (req, res) => {
 
 app.get('/api/get-profile', requireLogin, async (req, res) => {
     try {
-        // 1. Recuperiamo l'email dalla tabella utenti (quella sicura del login)
         const { data: utente, error: utenteError } = await supabase
             .from('utenti').select('email').eq('id', req.session.utenteId).single();
 
         if (utenteError) throw utenteError;
 
-        // 2. Recuperiamo il resto dei dati dalla tabella clienti
         const { data: cliente, error: clienteError } = await supabase
             .from('clienti').select('*').eq('id_utente', req.session.utenteId).single();
 
-        // Se è un admin puro potrebbe non essere in 'clienti', gestiamo l'errore senza bloccare
         if (clienteError && clienteError.code !== 'PGRST116') throw clienteError;
 
         res.json({
             success: true,
             data: { 
                 ...(cliente || {}), 
-                email: utente.email, // Email presa da tabella UTENTI
+                email: utente.email, 
                 is_admin: req.session.isAdmin 
             }
         });
@@ -141,14 +140,12 @@ app.post('/api/update-profile', requireLogin, async (req, res) => {
     const utenteId = req.session.utenteId;
 
     try {
-        // Update Tabella Utenti (Email e Password)
         const updateUtente = { email };
         if (password && password.trim() !== "") {
             updateUtente.password = await bcrypt.hash(password, 10);
         }
         await supabase.from('utenti').update(updateUtente).eq('id', utenteId);
 
-        // Update Tabella Clienti (Dati anagrafici)
         await supabase.from('clienti')
             .update({ nome, cognome, societa, email_contatto: email, telefono })
             .eq('id_utente', utenteId);
@@ -175,12 +172,10 @@ app.get('/api/get-orders', requireLogin, async (req, res) => {
     try {
         let query = supabase.from('ordini').select('*');
 
-        // Se l'utente NON è admin, vede solo i suoi ordini
         if (!req.session.isAdmin) {
             query = query.eq('id_cliente', req.session.utenteId);
         }
 
-        // Ordiniamo per data_ordine decrescente (i più nuovi in alto)
         const { data, error } = await query.order('data_ordine', { ascending: false });
 
         if (error) throw error;
@@ -188,6 +183,30 @@ app.get('/api/get-orders', requireLogin, async (req, res) => {
         res.json({ success: true, data });
     } catch (err) {
         res.status(500).json({ success: false, message: "Errore caricamento: " + err.message });
+    }
+});
+
+
+
+// API per eliminare uno o più ordini
+app.delete('/api/delete-orders', requireLogin, async (req, res) => {
+    const { ids } = req.body; // Riceviamo un array di ID (es: [2, 5, 8])
+
+    try {
+        let query = supabase.from('ordini').delete().in('id', ids);
+
+        // SICUREZZA: Se l'utente non è admin, può eliminare solo i PROPRI ordini
+        if (!req.session.isAdmin) {
+            query = query.eq('id_cliente', req.session.utenteId);
+        }
+
+        const { error } = await query;
+
+        if (error) throw error;
+
+        res.json({ success: true, message: "Ordini eliminati con successo!" });
+    } catch (err) {
+        res.status(500).json({ success: false, message: "Errore eliminazione: " + err.message });
     }
 });
 

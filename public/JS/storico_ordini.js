@@ -7,39 +7,50 @@ document.addEventListener('DOMContentLoaded', async () => {
             const result = await response.json();
 
             if (result.success && result.data.length > 0) {
-                listaUl.innerHTML = ''; // Rimuoviamo gli ordini "finti" dell'HTML
+                listaUl.innerHTML = ''; // Svuota il caricamento
+
+                const isAdmin = localStorage.getItem('isAdmin') === 'true';
 
                 result.data.forEach(ordine => {
                     const li = document.createElement('li');
                     
-                    // Gestione colore semaforo in base allo stato del tuo schema
-                    let colorStato = "#e74c3c"; // Rosso (Default/Ordinato)
-                    if(ordine.stato === 'In Lavorazione') colorStato = "#f1c40f"; // Giallo
-                    if(ordine.stato === 'Evaso') colorStato = "#2ecc71"; // Verde
-                    if(ordine.stato === 'Archiviato') colorStato = "#bdc3c7"; // Grigio
+                    // Definizione Colore Stato
+                    let colorStato = "#e74c3c"; // Rosso
+                    if(ordine.stato === 'In Lavorazione') colorStato = "#f1c40f";
+                    if(ordine.stato === 'Evaso') colorStato = "#2ecc71";
+                    if(ordine.stato === 'Archiviato') colorStato = "#bdc3c7";
 
+                    // Costruzione HTML Card - ALLINEATA A EXPORT_PDF.JS
                     li.innerHTML = `
                         <div class="selezione">
                             <input type="checkbox" name="ordine_sel" value="${ordine.id}">
                         </div>
+                        
                         <div class="info">
                             <p class="id_ord"><b>cod:${ordine.id.toString().padStart(4, '0')}</b></p>
                             <p class="data_ord"><b>${new Date(ordine.data_ordine).toLocaleDateString('it-IT')}</b></p>
                         </div>
+                        
                         <div class="stato">
                             <p class="semaforo_stato" style="background-color: ${colorStato};"></p>
-                            <p><b>${ordine.stato}</b></p>
+                            <p><b>${ordine.stato || 'Ordinato'}</b></p>
                         </div>
+                        
                         <ul class="dettagli">
-                            <li><strong>Marca:</strong> ${ordine.marchio}</li>
-                            <li><strong>Tipologia:</strong> ${ordine.tipologia}</li>
-                            <li><strong>Quantità:</strong> ${ordine.quantita}</li>
-                            <li><strong>Prezzo:</strong> €${ordine.prezzo_cliente}</li>
-                            <li><strong>Note:</strong> ${ordine.note || 'Nessuna'}</li>
-                        </ul>
+                            <li><strong>Cliente:</strong> ${ordine.societa || 'Privato'}</li>   <li><strong>Marca:</strong> ${ordine.marchio}</li>               <li><strong>Tipologia:</strong> ${ordine.tipologia}</li>           <li><strong>Colore:</strong> ${ordine.colore}</li>                 <li><strong>Taglia:</strong> ${ordine.taglia}</li>                 <li><strong>Quantità:</strong> ${ordine.quantita}</li>             <li><strong>Prezzo Cliente:</strong> €${parseFloat(ordine.prezzo_cliente).toFixed(2)}</li> <li class="admin-only" style="display: ${isAdmin ? 'block' : 'none'}; color: #d35400;">
+                                <strong>Costo Az.:</strong> €${parseFloat(ordine.prezzo_azienda).toFixed(2)}
+                            </li>
+                            
+                            <li style="grid-column: span 2;"><strong>Note:</strong> ${ordine.note || 'Nessuna nota'}</li> </ul>
+                        
                         <div class="azioni">
-                            ${ordine.image_path ? `<button class="botton_elemem_lista" onclick="window.open('${ordine.image_path}')">📎</button>` : ''}
-                            <button class="botton_elemem_lista">📝</button>
+                            <button class="botton_elemem_lista" title="Allegato" 
+                                    style="visibility: ${ordine.image_path ? 'visible' : 'hidden'}"
+                                    onclick="window.open('${ordine.image_path}', '_blank')">📎</button>
+                            
+                            <button class="botton_elemem_lista" title="Modifica">📝</button>
+                            
+                            <button class="botton_elemem_lista btn_pdf" title="Esporta PDF">📄</button>
                         </div>
                     `;
                     listaUl.appendChild(li);
@@ -49,7 +60,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         } catch (err) {
             console.error("Errore:", err);
-            listaUl.innerHTML = '<p>Errore nel caricamento degli ordini.</p>';
+            listaUl.innerHTML = '<p>Errore tecnico nel caricamento.</p>';
         }
     }
 

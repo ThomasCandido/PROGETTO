@@ -1,49 +1,21 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const inputRicerca = document.getElementById('inputRicerca');
 
-    const input_R = document.getElementById('inputRicerca');
-    const lista = document.querySelector('.lista_ordini');
-    const form_R = document.querySelector('.ricerca'); 
-    const ordini = lista.querySelectorAll(':scope > li');
+    inputRicerca.addEventListener('input', () => {
+        const query = inputRicerca.value.toLowerCase();
+        // Cerchiamo i li creati dinamicamente
+        const ordini = document.querySelectorAll('.lista_ordini > li');
 
-
-    const filtraOrdini = () => {
-        const value = input_R.value.toLowerCase();
-        let trovati = 0;
-
-        for (var i = 0; i < ordini.length; i++) {
-            const text = ordini[i].innerText.toLowerCase();
+        for (let i = 0; i < ordini.length; i++) {
+            // Cerchiamo il testo dentro l'ordine (Cliente, Marca, Note...)
+            const testoOrdine = ordini[i].innerText.toLowerCase();
             
-            if (text.indexOf(value) > -1) {
-                ordini[i].style.display = ""; 
-                ordini[i].style.animation = "fadeIn 0.3s";
-                trovati++;
+            if (testoOrdine.includes(query)) {
+                // Il tuo CSS usa display: flex per i li, quindi lo ripristiniamo
+                ordini[i].style.display = 'flex';
             } else {
-                ordini[i].style.display = "none";
+                ordini[i].style.display = 'none';
             }
         }
-        gestisciMessaggioVuoto(trovati);
-    };
-
-    const gestisciMessaggioVuoto = (num) => {
-        let msg = document.getElementById('no-results-msg');
-        if (num === 0) {
-            if (!msg) {
-                msg = document.createElement('p');
-                msg.id = 'no-results-msg';
-                msg.innerHTML = "❌ Nessun ordine trovato.";
-                msg.style.textAlign = "center";
-                lista.parentNode.insertBefore(msg, lista.nextSibling);
-            }
-        } else if (msg) {
-            msg.remove();
-        }
-    };
-
-    input_R.addEventListener('keyup', filtraOrdini);
-    
-    form_R.addEventListener('submit', () => {
-        input_R.value = '';  
-        filtraOrdini();  
-        input_R.focus();
     });
 });

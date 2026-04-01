@@ -1,24 +1,49 @@
-document.addEventListener('DOMContentLoaded', function() {
-    // Peschiamo tutte le caselline di spunta e il bottone cestino
-    const checkboxes = document.querySelectorAll('input[name="ordine_sel"]');
+document.addEventListener('DOMContentLoaded', () => {
     const btnElimina = document.getElementById('btn_elimina_multiplo');
-    
-    // Funzione che conta le spunte
-    function controllaSelezioni() {
-            // Cerca quante caselline hanno lo stato "checked" (spuntato)
-            const selezionati = document.querySelectorAll('input[name="ordine_sel"]:checked').length;
-            
-            // Se c'è almeno 1 spunta, aggiungi la classe per far apparire il bottone
-            if (selezionati > 0) {
-                btnElimina.classList.add('mostra');
-            } else {
-                // Altrimenti togli la classe per farlo rimpicciolire e sparire
-                btnElimina.classList.remove('mostra');
-            }
+    const listaUl = document.querySelector('.lista_ordini');
+
+    // 1. Mostra/Nasconde il tasto (come prima)
+    listaUl.addEventListener('change', () => {
+        const selezionati = listaUl.querySelectorAll('input[name="ordine_sel"]:checked').length;
+        if (selezionati > 0) {
+            btnElimina.classList.add('mostra');
+        } else {
+            btnElimina.classList.remove('mostra');
+        }
+    });
+
+    // 2. Azione di eliminazione al click sul cestino
+    btnElimina.addEventListener('click', async () => {
+        const checkboxSelezionate = listaUl.querySelectorAll('input[name="ordine_sel"]:checked');
+        const ids = Array.from(checkboxSelezionate).map(cb => cb.value);
+
+        if (ids.length === 0) return;
+
+        // Chiediamo conferma (sempre meglio non cancellare per errore!)
+        if (!confirm(`Sei sicuro di voler eliminare ${ids.length} ordine/i? L'azione è irreversibile.`)) {
+            return;
         }
 
-        // Diamo l'ordine a ogni casellina di eseguire la funzione quando viene cliccata
-        checkboxes.forEach(box => {
-            box.addEventListener('change', controllaSelezioni);
-        });
-}); 
+        try {
+            const response = await fetch('/api/delete-orders', {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ ids: ids })
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                alert(result.message);
+                // Invece di ricaricare la pagina, chiamiamo la funzione che aggiorna la lista
+                // Se la funzione è globale in storico_ordini.js, possiamo usarla qui
+                location.reload(); 
+            } else {
+                alert("Errore: " + result.message);
+            }
+        } catch (err) {
+            console.error("Errore durante l'eliminazione:", err);
+            alert("Si è verificato un errore di rete.");
+        }
+    });
+});
