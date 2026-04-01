@@ -169,5 +169,27 @@ app.post('/recupero-diretto', async (req, res) => {
     } catch (err) { res.json({ success: false, message: "Errore database." }); }
 });
 
+
+// API per recuperare gli ordini dal database
+app.get('/api/get-orders', requireLogin, async (req, res) => {
+    try {
+        let query = supabase.from('ordini').select('*');
+
+        // Se l'utente NON è admin, vede solo i suoi ordini
+        if (!req.session.isAdmin) {
+            query = query.eq('id_cliente', req.session.utenteId);
+        }
+
+        // Ordiniamo per data_ordine decrescente (i più nuovi in alto)
+        const { data, error } = await query.order('data_ordine', { ascending: false });
+
+        if (error) throw error;
+
+        res.json({ success: true, data });
+    } catch (err) {
+        res.status(500).json({ success: false, message: "Errore caricamento: " + err.message });
+    }
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`🚀 Officina attiva su http://localhost:${PORT}`));

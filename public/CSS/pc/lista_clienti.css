@@ -13,82 +13,182 @@ hr {
     border-top: 1px solid #dcdde1;
     margin: 10px 20px;
 }
+
 /* =========================================
-    TABELLA CLIENTI E RESPONSIVITÀ MOBILE
+    BARRA DI RICERCA
    ========================================= */
-
-.table-container {
+.ricerca_cliente {
     background-color: #ffffff;
-    margin: 20px;
     padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-    overflow-x: auto; /* Abilita lo scroll orizzontale su smartphone */
+    margin: 20px;
+    border-radius: 8px; /* Stessi angoli arrotondati del form */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05); /* Stessa ombra */
 }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
-    min-width: 800px; /* Impedisce alla tabella di schiacciarsi troppo su mobile */
+.ricerca_cliente form {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap; /* Permette di andare a capo su schermi piccoli */
+    gap: 15px; /* Spazio tra gli elementi */
 }
 
-th, td {
-    padding: 12px 15px;
-    text-align: left;
-    border-bottom: 1px solid #dcdde1; /* Bordo coerente con il resto del tema */
-    color: #2c3e50;
+.ricerca_cliente label {
     font-size: 14px;
-}
-
-th {
-    background-color: #fafbfc; /* Sfondo leggero per l'intestazione */
-    font-weight: bold;
+    font-weight: 600;
     color: #34495e;
-    text-transform: uppercase;
-    font-size: 13px;
-    letter-spacing: 0.5px;
 }
 
-tbody tr:hover {
-    background-color: #f1f2f6; /* Effetto hover quando passi il mouse su una riga */
-    transition: background-color 0.2s;
+.ricerca_cliente input[type="text"] {
+    padding: 10px;
+    border: 1px solid #bdc3c7;
+    border-radius: 4px;
+    font-size: 15px;
+    transition: border-color 0.3s;
+    flex-grow: 1; /* Fa allargare la barra di ricerca per riempire lo spazio */
+    min-width: 200px;
 }
 
-/* Rimuove il bordo default inserito via HTML nell'attributo border="1" */
-table[border="1"] {
+.ricerca_cliente input[type="text"]:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+}
+
+.ricerca_cliente button {
+    padding: 10px 20px;
     border: none;
+    border-radius: 4px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    background-color: #27ae60; /* Verde principale */
+    color: white;
 }
 
+.ricerca_cliente button:hover {
+    background-color: #219150;
+}
 
+/* Bottone "Aggiungi Nuovo Cliente" con colore secondario */
+.ricerca_cliente a button {
+    background-color: #ecf0f1; 
+    color: #34495e;
+}
+
+.ricerca_cliente a button:hover {
+    background-color: #bdc3c7;
+    color: #333;
+}
 
 /* =========================================
-   BOTTONI FLUTTUANTI (Il + e il Cestino)
-========================================= */
+   LAYOUT FLASHCARD CLIENTI
+   ========================================= */
+.griglia-clienti {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 30px; 
+    padding: 5px 20px;
+    margin: 20px auto;
+    max-width: 1200px;
+}
 
-/* 1. La struttura base del bottone (rotondo, ombra, posizione) */
-.botton_fluttuante {
+.card-cliente {
     display: flex;
-    position: fixed;
-    width: 60px;
-    height: 60px;
-    border-radius: 15%;
-    justify-content: center;
+    flex-direction: column;
+    background-color: white;
+    border: 1px solid grey;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    transition: all 0.5s ease;
+}
+
+/* Effetto sollevamento quando passi col mouse */
+.card-cliente:hover {
+    transform: translateY(-10px); 
+}
+
+/* Header della card: Società a sx, ID a dx */
+.card-cliente .info {
+    display: flex;
+    justify-content: space-between;
     align-items: center;
-    font-size: 30px;
-    color: white;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.card-cliente .nome-societa { 
+    color: cadetblue; 
+    font-size: 1.3rem; 
+    font-weight: bold;
+    margin: 0; 
+}
+
+.card-cliente .id-societa { 
+    font-size: 1.1rem;
+    color: #555;
+    margin: 0; 
+}
+
+/* Elenco delle informazioni di contatto */
+.card-cliente .dettagli {
+    display: grid;
+    grid-template-columns: 1fr; /* Una colonna per avere i testi ben allineati */
+    gap: 12px;
+    font-size: 0.95rem;
+    margin-bottom: 10px;
+    list-style-type: none; 
+    padding: 0; 
+    margin-top: 0;
+}
+
+.card-cliente .dettagli li {
+    white-space: normal; 
+    line-height: 1.4;
+    color: #333;
+}
+
+.card-cliente .dettagli strong {
+    color: #2c3e50;
+    display: inline-block;
+    width: 90px;
+}
+
+.card-cliente a {
+    color: #3498db;
     text-decoration: none;
-    border: none;
+}
+
+.card-cliente a:hover {
+    text-decoration: underline;
+}
+
+/* =========================================
+   CHECKBOX SELEZIONE CLIENTI
+   ========================================= */
+.seleziona-cliente {
+    width: 20px;
+    height: 20px;
     cursor: pointer;
-    z-index: 1000;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    right: 30px;
-    bottom: 30px;
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    accent-color: cadetblue; /* Colora la spunta di blu quando è attiva */
+    margin: 0;
 }
 
-.botton_fluttuante:hover {
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
+/* Effetto speciale: quando la checkbox dentro la card è selezionata, evidenzia tutta la card */
+.card-cliente:has(.seleziona-cliente:checked) {
+    border: 2px solid cadetblue;
+    background-color: #f4fbfc; /* Azzurrino molto chiaro */
+    transform: translateY(-5px); /* Solleva leggermente la card */
+    box-shadow: 0 6px 12px rgba(95, 158, 160, 0.2); /* Ombra colorata */
 }
 
-.btn_aggiungi { background-color: cadetblue; }
-.btn_aggiungi:hover { background-color: #4a7c7d; }
+/* MEDIA QUERY PER SMARTPHONE */
+@media screen and (max-width: 480px) {
+    .griglia-clienti {
+        grid-template-columns: 1fr;
+        padding: 0 15px;
+        gap: 15px;
+    }
+}

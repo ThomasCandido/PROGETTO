@@ -13,6 +13,7 @@
         <script src="JS/menu_bar.js"></script>
         <script src="JS/tema.js"></script>
         <script src="JS/visuale_utente.js"></script>
+        <script src="JS/gestione-clienti.js"></script>
         <script>
         if (localStorage.getItem('isAdmin') === 'true') {
             document.documentElement.classList.add('is-admin');
@@ -72,58 +73,13 @@
 
         <br><br>
 
-        <div>
-            <table border="1" id="tabellaClienti">
-                <thead>
-                    <tr>
-                        <th>Società</th>
-                        <th>Nome</th>
-                        <th>Cognome</th>
-                        <th>codice fiscale</th>
-                        <th>e-mail</th>
-                        <th>telefono</th>
-                        <th>indirizzo</th>
-                        <th>ID</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Pixartprinting SpA</td>
-                        <td>Mario</td>
-                        <td>Rossi</td>
-                        <td>RSSMRA80E25H501U</td>
-                        <td>mario.rossi@example.com</td>
-                        <td>012345678</td>
-                        <td>via Roma 1, Milano</td>
-                        <td>123456</td>
-                    </tr>
-                    
-                     <tr>
-                        <td>Apple Italia</td>
-                        <td>Luigi</td>
-                        <td>Verdi</td>
-                        <td>LGUVRD80E25H501U</td>
-                        <td>luigi.verdi@example.com</td>
-                        <td>333444555</td>
-                        <td>via Mela 2, Roma</td>
-                        <td>123457</td>
-                    </tr>
-
-                    <tr>
-                        <td>Google Srl</td>
-                        <td>Giulia</td>
-                        <td>Bianchi</td>
-                        <td>GLBNC80E25H501U</td>
-                        <td>giulia.bianchi@example.com</td>
-                        <td>321654987</td>
-                        <td>via Web 3, Napoli</td>
-                        <td>123458</td>
-                    </tr>
-                </tbody>
-            </table>
+        <div style="text-align: center; margin-bottom: 20px;">
+            <button id="btn-elimina-selezionati" style="display: none; background-color: rgb(215, 49, 49); color: white; padding: 12px 24px; border-radius: 8px; border: none; cursor: pointer; font-size: 1.1rem; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                🗑️ Elimina Clienti Selezionati
+            </button>
         </div>
 
-        <a href="aggiungi_cliente.html" class="botton_fluttuante btn_aggiungi" title="Aggiungi Nuovo Cliente">+</a>
-
+        <div id="contenitore-clienti" class="griglia-clienti">
+            </div>
     </body>
 </html>

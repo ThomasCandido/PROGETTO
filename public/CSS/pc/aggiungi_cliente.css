@@ -89,6 +89,33 @@ legend {
     box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
 }
 
+/*TELEFONO*/
+/* Stile per il contenitore del telefono */
+.telefono-wrapper {
+    display: flex;
+    border: 1px solid #bdc3c7; /* Stesso colore degli altri input */
+    border-radius: 4px;
+}
+
+/* L'effetto quando clicchi dentro l'input */
+.telefono-wrapper:focus-within {
+    border-color: #3498db;
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+}
+
+.prefisso {
+    padding: 10px;
+    background-color: #f1f1f1;
+    border-right: 1px solid #bdc3c7;
+    font-weight: bold;
+}
+
+.telefono-wrapper input[type="tel"] {
+    border: none;
+    padding: 10px;
+    flex: 1; /* Espande l'input per riempire lo spazio */
+    outline: none;
+}
 /* =========================================
     PULSANTI
    ========================================= */

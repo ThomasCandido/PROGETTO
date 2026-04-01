@@ -12,6 +12,8 @@
         <script src="JS/tema.js"></script>
         <script src = "JS/aggiungi_cliente.js"></script>
         <script src="JS/visuale_utente.js"></script>
+        <script src="JS/password-email-phone.js"></script>
+        <script src="JS/gestione-clienti.js"></script>
         <script>
         if (localStorage.getItem('isAdmin') === 'true') {
             document.documentElement.classList.add('is-admin');
@@ -71,7 +73,7 @@
                 
                 <p><em>I campi contrassegnati con l'asterisco (*) sono obbligatori.</em></p>
                 
-               <form id="formCliente">
+                <form action="#" method="post">
                     
                     <fieldset>
                         <legend>Dati Società / Fatturazione</legend>
@@ -83,13 +85,23 @@
                         <div class="form-group">
                             <label for="email">Email Standard *:</label>
                             <input type="email" id="email" name="email" required>
+                            <span id="email-errore" style="color: #e74c3c; font-size: 12px; margin-top: 5px; display: none;">
+                                Inserisci un indirizzo email valido (es. nome@dominio.it)
+                            </span>
                         </div>
 
                         <div class="form-group">
                             <label for="telefono">Telefono Società *:</label>
-                            <input type="tel" id="telefono" name="telefono" required>
+                            <div class="telefono-wrapper">
+                                <span class="prefisso">+39</span>
+                                <input type="tel" id="telefono" name="telefono" required>
+                            </div>
                         </div>
 
+                        <div class="form-group">
+                            <label for="id_societa">ID Società *:</label>
+                            <input type="text" id="id_societa" name="id_societa" required>
+                        </div>
                     </fieldset>
 
                     <fieldset>
@@ -106,7 +118,12 @@
 
                         <div class="form-group">
                             <label for="password">Password *:</label>
-                            <input type="password" id="password" name="password" minlength="8" required>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <input type="password" id="password" name="password" minlength="8" required style="flex: 1;">
+                                <button type="button" id="mostra-password" title="Mostra/Nascondi password" style="background: transparent; border: none; padding: 0; margin: 0; cursor: pointer; display: flex;">
+                                    <img src="allegati/occhio-chiuso.png" id="icona-password" alt="Mostra password" width="24" height="24">
+                                </button>
+                            </div>
                         </div>
                     </fieldset>
 
