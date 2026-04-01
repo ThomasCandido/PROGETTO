@@ -16,7 +16,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 societa: document.getElementById('societa').value,
                 email: document.getElementById('email').value,
                 telefono: document.getElementById('telefono').value,
-                id_societa: document.getElementById('id_societa').value,
                 nome: document.getElementById('nome').value,
                 cognome: document.getElementById('cognome').value
             };
@@ -47,13 +46,11 @@ document.addEventListener('DOMContentLoaded', function() {
             card.className = 'card-cliente';
 
             card.innerHTML = `
-                <div class="info">
-                    <div style="display: flex; align-items: center; gap: 10px;">
-                        <input type="checkbox" class="seleziona-cliente" value="${index}">
-                        <p class="nome-societa">${cliente.societa}</p>
-                    </div>
-                    <p class="id-societa">ID: ${cliente.id_societa}</p>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <input type="checkbox" class="seleziona-cliente" value="${index}">
+                    <p class="nome-societa">${cliente.societa}</p>
                 </div>
+                    
                 <ul class="dettagli">
                     <li><strong>Referente:</strong> ${cliente.nome} ${cliente.cognome}</li>
                     <li><strong>Email:</strong> <a href="mailto:${cliente.email}">${cliente.email}</a></li>
