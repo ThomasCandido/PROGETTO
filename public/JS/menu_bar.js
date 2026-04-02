@@ -1,11 +1,12 @@
-/* GESTIONE NAVBAR (Smartphone + Profilo + Permessi Admin) */
+/* GESTIONE NAVBAR (Smartphone + Profilo) */
 
 document.addEventListener('DOMContentLoaded', async function() {
     
     const men_sm = document.getElementById('menu_smartphone');
     const navMenu = document.getElementById('nav_menu');
     
-    if (men_sm && navMenu) {
+    if (men_sm && navMenu) 
+    {
         men_sm.addEventListener('click', () => {
             navMenu.classList.toggle('open');
             men_sm.classList.toggle('open');

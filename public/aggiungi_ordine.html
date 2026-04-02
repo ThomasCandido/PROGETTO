@@ -5,12 +5,17 @@
     <meta charset="UTF-8">
     <meta name="author" content="Thomas Candido - Gabriele Iannone">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+    <!-- css-->
     <link rel="stylesheet" href="CSS/pc/body.css">
     <link rel="stylesheet" href="CSS/pc/aggiungi_ordine.css">
     <link rel="stylesheet" href="CSS/pc/menu_bar.css">
+
+    <!-- javascript-->
+    <script src="https://upload-widget.cloudinary.com/global/all.js" type="text/javascript"></script>
     <script src="JS/menu_bar.js"></script>
     <script src="JS/tema.js"></script>
-    <script src="JS/aggiungi_ordine.js"></script>
+    <script src="JS/aggiungi_ordine.js" defer></script>
     <script src="JS/visuale_utente.js"></script>
     <script>
         if (localStorage.getItem('isAdmin') === 'true') {
@@ -20,50 +25,37 @@
 </head>
 
 <body>
-    <!-- MENU DI NAVIGAZIONE-->
     <nav>
         <div class="menu_lt" id="menu_smartphone">
-            <span></span>
-            <span></span>
-            <span></span>
+            <span></span><span></span><span></span>
         </div>
         <ul class="menu" id="nav_menu">
             <li class="admin-only"><a href="lista_clienti.html">Clienti</a></li>
-            <li class="admin-only"><a href="aggiungi_cliente.html" >Aggiungi Cliente</a></li>
+            <li class="admin-only"><a href="aggiungi_cliente.html">Aggiungi Cliente</a></li>
             <li><a href="aggiungi_ordine.html" class="active">Aggiungi Ordine</a></li>
             <li><a href="storico_ordini_home.html">Storico Ordine</a></li>
+            
             <li class="theme-item">
-    <button id="themeBtn" class="theme-button">🎨</button>
-    
-    <ul class="theme-dropdown" id="themeMenu">
-        <li class="dropdown-header">Tema</li>
-        <li>
-            <label class="theme-option">
-                <input type="radio" name="theme" value="light" onchange="applyTheme('light')"> ☀️ Chiaro
-            </label>
-        </li>
-        <li>
-            <label class="theme-option">
-                <input type="radio" name="theme" value="dark" onchange="applyTheme('dark')"> 🌙 Scuro
-            </label>
-        </li>
-    </ul>
-</li>
-          
-<li class="user-item">
-    <img src="allegati/log.png" class="user-avatar" id="userBtn" alt="login" title="Menu Utente">
-    <ul class="user-dropdown" id="userMenu">
-        <li class="dropdown-header">Account</li>
-        <li><a href="aggiungi_cliente.html?edit=true">⚙️ Modifica Profilo</a></li>
-        <li><hr></li>
-        <li><a href="/logout" class="logout-link">🚪 Logout</a></li>
-    </ul>
-</li>
-                
+                <button id="themeBtn" class="theme-button">🎨</button>
+                <ul class="theme-dropdown" id="themeMenu">
+                    <li class="dropdown-header">Tema</li>
+                    <li><label class="theme-option"><input type="radio" name="theme" value="light" onchange="applyTheme('light')"> ☀️ Chiaro</label></li>
+                    <li><label class="theme-option"><input type="radio" name="theme" value="dark" onchange="applyTheme('dark')"> 🌙 Scuro</label></li>
+                </ul>
+            </li>
+            
+            <li class="user-item">
+                <img src="allegati/log.png" class="user-avatar" id="userBtn" alt="login" title="Menu Utente">
+                <ul class="user-dropdown" id="userMenu">
+                    <li class="dropdown-header">Account</li>
+                    <li><a href="aggiungi_cliente.html?edit=true">⚙️ Modifica Profilo</a></li>
+                    <li><hr></li>
+                    <li><a href="/logout" class="logout-link">🚪 Logout</a></li>
+                </ul>
+            </li>
         </ul>
     </nav>
 
-    <!-- RIQUADRO RIEPILOGO-->
     <div class="container_ordini">
         <h2>Riepilogo Ordine Corrente</h2>
     
@@ -80,8 +72,7 @@
                     <th>Quantità</th>
                     <th>Prezzo Cl.</th>
                     <th>Prezzo Az.</th>
-                    <th>Pers. (Note)</th>
-                    <th>File</th> 
+                    <th>Note</th>
                     <th>Anteprima</th> 
                     <th>Azioni</th>
                 </tr>
@@ -95,7 +86,6 @@
         </div>
     </div>
 
-    <!--RIQUADRO FORM-->
     <div class="riquadro_form">
         <h3>Inserisci Dettagli Ordine</h3>
         <form id="form_ordine">
@@ -103,15 +93,17 @@
                 <tbody>
                     <tr>
                         <td colspan="1">
-                            <input type="text" id="f_cliente" placeholder="Nome Cliente / Azienda" required>
+                            <input type="text" id="f_cliente" list="lista_clienti_datalist" placeholder="Nome Cliente / Azienda" required>
+                            <datalist id="lista_clienti_datalist"></datalist>
+                            <input type="hidden" id="id_cliente_nascosto">
                         </td>
                         <td colspan="1">
                             <select id="f_stato" class="select-stato" required>
                                 <option value="" selected disabled>Stato Ordine</option>
-                                <option value="ordinato" class="stato-rosso">🔴 Ordinato</option>
-                                <option value="lavorazione" class="stato-giallo">🟡 In Lavorazione</option>
-                                <option value="evaso" class="stato-verde">🟢 Evaso</option>
-                                <option value="archiviato" class="stato-grigio">⚪ Archiviato</option>
+                                <option value="Ordinato" class="stato-rosso">🔴 Ordinato</option>
+                                <option value="In Lavorazione" class="stato-giallo">🟡 In Lavorazione</option>
+                                <option value="Evaso" class="stato-verde">🟢 Evaso</option>
+                                <option value="Archiviato" class="stato-grigio">⚪ Archiviato</option>
                             </select>
                         </td>
                         <td colspan="2"><input type="date" id="f_data" required></td>
@@ -124,10 +116,8 @@
                         <td>
                             <select id="f_taglia" required>
                                 <option value="" selected disabled>Taglia</option>
-                                <option value="S">S</option>
-                                <option value="M">M</option>
-                                <option value="L">L</option>
-                                <option value="XL">XL</option>
+                                <option value="S">S</option><option value="M">M</option>
+                                <option value="L">L</option><option value="XL">XL</option>
                             </select>
                         </td>
                     </tr>
@@ -135,7 +125,7 @@
                     <tr>
                         <td><input type="number" id="f_quantita" placeholder="Qtà" min="1" required></td>
                         <td colspan="1"><input type="number" id="f_prezzo_cl" step="0.01" placeholder="€ Cliente" required></td>
-                        <td colspan="2"><input type="number" id="f_prezzo_az" step="0.01" placeholder="€ Azienda" required></td>
+                        <td colspan="2"><input type="number" id="f_prezzo_az" step="0.01" placeholder="€ Azienda"></td>
                     </tr>
 
                     <tr>
@@ -147,8 +137,8 @@
                     <tr>
                         <td colspan="4">
                             <div class="campi_sotto">
-                                <input type="file" id="input_file_nascosto" style="display: none;">
-                                <button type="button" class="bottone_ic" onclick="document.getElementById('input_file_nascosto').click()" title="Allega Foto">&#128206;</button>
+                                <input type="hidden" id="f_image_url">
+                                <button type="button" class="bottone_ic" id="upload_widget_opener" title="Allega Foto su Cloudinary">&#128206;</button>
                                 <button type="reset" class="bottone_ic" title="Reset Form">&#x21BB;</button>
                                 <button type="button" class="bottone_ic" onclick="aggiungiRigaTabella()" title="Aggiungi a Riepilogo">&#10133;</button>
                             </div>

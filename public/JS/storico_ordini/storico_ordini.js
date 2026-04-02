@@ -14,13 +14,19 @@ document.addEventListener('DOMContentLoaded', async () => {
                 result.data.forEach(ordine => {
                     const li = document.createElement('li');
                     
-                    // Definizione Colore Stato
+                    // 1. GESTIONE NOME CLIENTE (Risoluzione problema "Privato")
+                    // Se esiste l'oggetto clienti (grazie al JOIN del server), prendi la societa
+                    const nomeCliente = (ordine.clienti && ordine.clienti.societa) 
+                                        ? ordine.clienti.societa 
+                                        : 'Privato';
+
+                    // 2. Definizione Colore Stato
                     let colorStato = "#e74c3c"; // Rosso
                     if(ordine.stato === 'In Lavorazione') colorStato = "#f1c40f";
                     if(ordine.stato === 'Evaso') colorStato = "#2ecc71";
                     if(ordine.stato === 'Archiviato') colorStato = "#bdc3c7";
 
-                    // Costruzione HTML Card - ALLINEATA A EXPORT_PDF.JS
+                    // 3. Costruzione HTML Card
                     li.innerHTML = `
                         <div class="selezione">
                             <input type="checkbox" name="ordine_sel" value="${ordine.id}">
@@ -37,15 +43,22 @@ document.addEventListener('DOMContentLoaded', async () => {
                         </div>
                         
                         <ul class="dettagli">
-                            <li><strong>Cliente:</strong> ${ordine.societa || 'Privato'}</li>   <li><strong>Marca:</strong> ${ordine.marchio}</li>               <li><strong>Tipologia:</strong> ${ordine.tipologia}</li>           <li><strong>Colore:</strong> ${ordine.colore}</li>                 <li><strong>Taglia:</strong> ${ordine.taglia}</li>                 <li><strong>Quantità:</strong> ${ordine.quantita}</li>             <li><strong>Prezzo Cliente:</strong> €${parseFloat(ordine.prezzo_cliente).toFixed(2)}</li> <li class="admin-only" style="display: ${isAdmin ? 'block' : 'none'}; color: #d35400;">
+                            <li><strong>Cliente:</strong> ${nomeCliente}</li> 
+                            <li><strong>Marca:</strong> ${ordine.marchio}</li> 
+                            <li><strong>Tipologia:</strong> ${ordine.tipologia}</li> 
+                            <li><strong>Colore:</strong> <span style="display:inline-block; width:12px; height:12px; background:${ordine.colore}; border-radius:50%;"></span> ${ordine.colore}</li> 
+                            <li><strong>Taglia:</strong> ${ordine.taglia}</li> 
+                            <li><strong>Quantità:</strong> ${ordine.quantita}</li> 
+                            <li><strong>Prezzo Cliente:</strong> €${parseFloat(ordine.prezzo_cliente).toFixed(2)}</li> 
+                            <li class="admin-only" style="display: ${isAdmin ? 'block' : 'none'}; color: #d35400;">
                                 <strong>Costo Az.:</strong> €${parseFloat(ordine.prezzo_azienda).toFixed(2)}
                             </li>
-                            
-                            <li style="grid-column: span 2;"><strong>Note:</strong> ${ordine.note || 'Nessuna nota'}</li> </ul>
+                            <li style="grid-column: span 2;"><strong>Note:</strong> ${ordine.note || 'Nessuna nota'}</li> 
+                        </ul>
                         
                         <div class="azioni">
                             <button class="botton_elemem_lista" title="Allegato" 
-                                    style="visibility: ${ordine.image_path ? 'visible' : 'hidden'}"
+                                    style="display: ${ordine.image_path ? 'inline-block' : 'none'}"
                                     onclick="window.open('${ordine.image_path}', '_blank')">📎</button>
                             
                             <button class="botton_elemem_lista" title="Modifica">📝</button>

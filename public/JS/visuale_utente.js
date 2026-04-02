@@ -13,11 +13,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             const utente = result.data;
 
             if (utente.is_admin) {
-                // Confermiamo lo stato di Admin
+                // is admin
                 localStorage.setItem('isAdmin', 'true');
                 document.documentElement.classList.add('is-admin');
-            } else {
-                // Se il server dice che è un cliente, puliamo la memoria
+            } 
+            else 
+            {
+                // no admin
                 localStorage.setItem('isAdmin', 'false');
                 document.documentElement.classList.remove('is-admin');
             }

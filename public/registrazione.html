@@ -7,7 +7,7 @@
     <title>Registrazione Account Cliente</title>
     <link rel="stylesheet" href="CSS/pc/aggiungi_cliente.css">
     <link rel="stylesheet" href="CSS/pc/body.css">
-    <script src="JS/registrazione.js"></script>
+    <script src="JS/login_register_control/registrazione.js"></script>
     <!-- PER FARE PICCOLI AGGIUSTAMENTI RISPETTO A CSS DI AGG.CLIENTE-->
     <style>
         .login-link { text-align: center; margin-top: 20px; }
@@ -22,7 +22,7 @@
         <div class="form-aggiunta-cliente">
             <h1>Crea il tuo Account</h1>
             <p><em>I campi contrassegnati con l'asterisco (*) sono obbligatori.</em></p>
-            <form action="/register" method="POST" onsubmit="return gestisciRegistrazione(event)">
+            <form action="/register" method="POST" onsubmit="return validaRegistrazione()">
                 <fieldset>
                     <legend>Dati Società / Fatturazione</legend>
                     <div class="form-group">
