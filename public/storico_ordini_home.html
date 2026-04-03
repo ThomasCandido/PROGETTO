@@ -21,15 +21,18 @@
         <script src = "JS/storico_ordini/stats.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-        <script src = "JS/export_pdf.js"></script>
+        <script src="https://chir.ag/projects/ntc/ntc.js"></script>
+        <script src = "JS/storico_ordini/export_pdf.js"></script>
+        <script src = "JS/storico_ordini/modifica.js"></script>
         <script src="JS/storico_ordini/filtri_ordini.js"></script>
         <script src = "JS/storico_ordini/storico_ordini.js"></script>
         <script src="JS/visuale_utente.js"></script>
         <script>
-        if (localStorage.getItem('isAdmin') === 'true') {
-            document.documentElement.classList.add('is-admin');
-        }
-    </script>
+            if (localStorage.getItem('isAdmin') === 'true')
+            {
+                document.documentElement.classList.add('is-admin');
+            }
+        </script>
     </head>
     <body>
         <!-- MENU DI NAVIGAZIONE-->

@@ -2,17 +2,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnElimina = document.getElementById('btn_elimina_multiplo');
     const listaUl = document.querySelector('.lista_ordini');
 
-    // 1. Mostra/Nasconde il tasto (come prima)
+    // Mostra/Nasconde il tasto
     listaUl.addEventListener('change', () => {
         const selezionati = listaUl.querySelectorAll('input[name="ordine_sel"]:checked').length;
-        if (selezionati > 0) {
+        if (selezionati > 0) 
+        {
             btnElimina.classList.add('mostra');
-        } else {
+        } 
+        else 
+        {
             btnElimina.classList.remove('mostra');
         }
     });
 
-    // 2. Azione di eliminazione al click sul cestino
+    // Azione di eliminazione al click sul cestino
     btnElimina.addEventListener('click', async () => {
         const checkboxSelezionate = listaUl.querySelectorAll('input[name="ordine_sel"]:checked');
         const ids = Array.from(checkboxSelezionate).map(cb => cb.value);

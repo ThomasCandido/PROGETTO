@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const applyBtn = document.getElementById('applyFilters');
     const listaOrdini = document.querySelector('.lista_ordini');
 
-    // 2. Gestione Apertura/Chiusura Menu
+    // Gestione Apertura/Chiusura Menu
     filterBtn.addEventListener('click', (e) => {
         e.stopPropagation(); // Impedisce la chiusura immediata cliccando sul tasto
         filterMenu.classList.toggle('show');
