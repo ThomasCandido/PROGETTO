@@ -3,98 +3,124 @@ async function ModificaCard(li, ordine) {
     const stati = ['Ordinato', 'In Lavorazione', 'Evaso', 'Archiviato'];
     const option_stato = stati.map(s => `<option value="${s}" ${ordine.stato === s ? 'selected' : ''}>${s}</option>`).join('');
     const dataIso = new Date(ordine.data_ordine).toISOString().split('T')[0];
-    const nomeCliente = (ordine.clienti && ordine.clienti.societa) ? ordine.clienti.societa : 'Privato';
+    const nomeCliente = (ordine.clienti && ordine.clienti.societa) ? ordine.clienti.societa : 'Nome sconosciuto';
+
+    let nuovoUrlImmagine = ordine.image_path; 
 
     li.classList.add('editing-mode');
 
-    // Manteniamo le stesse classi CSS della card originale!
+    // Usiamo delle classi al posto degli ID per gli input, così non ci sbagliamo
     li.innerHTML = `
-        <div class="selezione">
-            <input type="checkbox" disabled> </div>
-        
         <div class="info">
             <p class="id_ord"><b>cod:${ordine.id.toString().padStart(4, '0')}</b></p>
-            <input type="date" id="edit-data-${ordine.id}" value="${dataIso}" class="input-ghost">
+            <input type="date" class="edit-data input-ghost" value="${dataIso}">
         </div>
-        
         <div class="stato">
-            <select id="edit-stato-${ordine.id}" class="select-ghost">
-                ${option_stato}
-            </select>
+            <select class="edit-stato select-ghost">${option_stato}</select>
         </div>
-        
         <ul class="dettagli">
             <li><strong>Cliente:</strong> ${nomeCliente}</li> 
-            <li><strong>Marca:</strong> <input type="text" id="edit-marca-${ordine.id}" value="${ordine.marchio}" class="input-ghost"></li> 
-            <li><strong>Tipo:</strong> <input type="text" id="edit-tipo-${ordine.id}" value="${ordine.tipologia}" class="input-ghost"></li> 
-            <li><strong>Colore:</strong> <input type="color" id="edit-colore-${ordine.id}" value="${ordine.colore}" style="width:20px; height:20px; border:none; vertical-align:middle;"></li> 
-            <li><strong>Taglia:</strong> <input type="text" id="edit-taglia-${ordine.id}" value="${ordine.taglia}" class="input-ghost" style="width:40px;"></li> 
-            <li><strong>Qtà:</strong> <input type="number" id="edit-qta-${ordine.id}" value="${ordine.quantita}" class="input-ghost" style="width:50px;"></li> 
-            <li><strong>Prezzo (€):</strong> <input type="number" step="0.01" id="edit-prezzo-c-${ordine.id}" value="${ordine.prezzo_cliente}" class="input-ghost" style="width:70px;"></li> 
+            <li><strong>Marca:</strong> <input type="text" class="edit-marca" value="${ordine.marchio}"></li> 
+            <li><strong>Tipo:</strong> <input type="text" class="edit-tipo" value="${ordine.tipologia}"></li> 
+            <li><strong>Taglia:</strong> <input type="text" class="edit-taglia" value="${ordine.taglia}" style="width:50px;"></li> 
+            <li><strong>Qtà:</strong> <input type="number" class="edit-qta" value="${ordine.quantita}" style="width:50px;"></li> 
+            <li><strong>Prezzo (€):</strong> <input type="number" class="edit-prezzo" value="${ordine.prezzo_cliente}" style="width:70px;"></li> 
             <li style="grid-column: span 2;">
-                <strong>Note:</strong> <textarea id="edit-note-${ordine.id}" class="input-ghost">${ordine.note || ''}</textarea>
+                <strong>Note:</strong> <textarea class="edit-note">${ordine.note || ''}</textarea>
             </li>
             <li style="grid-column: span 2;">
-                <strong>Nuovo Allegato:</strong> <input type="file" id="edit-file-${ordine.id}" accept="image/*" style="font-size: 0.8rem;">
+                <button type="button" style="margin-top: 15px;" class="btn-apri-widget botton_elemem_lista">📷 Cambia Foto</button>
+                <span class="status-foto" style="font-size:0.8rem; color:green; display:none;">✅ Caricata!</span>
             </li>
         </ul>
-        
         <div class="azioni">
-            <button class="btn-salva-agg" title="Salva">✅</button>
-            <button class="btn-annulla-agg" title="Annulla">❌</button>
+            <button class="botton_elemem_lista btn_salva" style="background:rgb(212, 237, 218)">✅ Salva</button>
+            <button class="botton_elemem_lista btn_annulla" style="background:rgb(248, 215, 218)">❌ Annulla</button>
         </div>
     `;
 
-    // --- Eventi ---
-    li.querySelector('.btn-annulla-agg').onclick = () => {
+    // --- 1. GESTIONE CLOUDINARY ---
+    const btnWidget = li.querySelector('.btn-apri-widget');
+    const statusFoto = li.querySelector('.status-foto');
+
+    if (typeof cloudinary !== 'undefined') {
+        const editWidget = cloudinary.createUploadWidget({
+            cloudName: "dfjburbax", 
+            uploadPreset: "joajwzcg",
+            multiple: false
+        }, (error, result) => {
+            if (!error && result && result.event === "success") {
+                nuovoUrlImmagine = result.info.secure_url; 
+                statusFoto.style.display = "inline";
+            }
+        });
+        btnWidget.onclick = () => editWidget.open();
+    } else {
+        btnWidget.innerText = "Cloudinary Error";
+        btnWidget.disabled = true;
+    }
+
+    // --- 2. TASTO ANNULLA ---
+    li.querySelector('.btn_annulla').onclick = () => {
         li.innerHTML = cont_old;
         li.classList.remove('editing-mode');
-        caricaOrdiniDalDatabase(); 
+        // Ricollego il tasto modifica originale
+        const btnMod = li.querySelector('button[title="Modifica"]');
+        if(btnMod) btnMod.onclick = () => ModificaCard(li, ordine);
     };
 
-    li.querySelector('.btn-salva-agg').onclick = async () => {
-        const formData = new FormData();
-        formData.append('id', ordine.id);
-        formData.append('data_ordine', document.getElementById(`edit-data-${ordine.id}`).value);
-        formData.append('stato', document.getElementById(`edit-stato-${ordine.id}`).value);
-        formData.append('marchio', document.getElementById(`edit-marca-${ordine.id}`).value);
-        formData.append('tipologia', document.getElementById(`edit-tipo-${ordine.id}`).value);
-        formData.append('taglia', document.getElementById(`edit-taglia-${ordine.id}`).value);
-        formData.append('quantita', document.getElementById(`edit-qta-${ordine.id}`).value);
-        formData.append('colore', document.getElementById(`edit-colore-${ordine.id}`).value);
-        formData.append('prezzo_cliente', document.getElementById(`edit-prezzo-c-${ordine.id}`).value);
-        formData.append('note', document.getElementById(`edit-note-${ordine.id}`).value);
+    // --- 3. TASTO CONFERMA (Salva) ---
+    li.querySelector('.btn_salva').onclick = async () => {
+        console.log("Pulsante Salva cliccato!"); // Verifica in console
 
-        const fileInput = document.getElementById(`edit-file-${ordine.id}`);
-        if (fileInput.files[0]) formData.append('immagine', fileInput.files[0]);
+        const datiAggiornati = {
+            id: ordine.id,
+            data_ordine: li.querySelector('.edit-data').value,
+            stato: li.querySelector('.edit-stato').value,
+            marchio: li.querySelector('.edit-marca').value,
+            tipologia: li.querySelector('.edit-tipo').value,
+            taglia: li.querySelector('.edit-taglia').value,
+            quantita: li.querySelector('.edit-qta').value,
+            prezzo_cliente: li.querySelector('.edit-prezzo').value,
+            note: li.querySelector('.edit-note').value,
+            image_path: nuovoUrlImmagine 
+        };
 
-        await salvaModifica(formData);
+        console.log("Dati pronti per l'invio:", datiAggiornati);
+        await salvaModifica(datiAggiornati);
     };
 }
-async function salvaModifica(formData) {
+
+
+async function salvaModifica(dati) {
     try {
+        console.log("Inviando dati al server...", dati);
+
         const response = await fetch('/api/update-order', {
-            method: 'POST', 
-            // NOTA: Con FormData NON devi impostare l'header Content-Type.
-            // Il browser lo fa da solo includendo il "boundary" necessario per i file.
-            body: formData 
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(dati) // Trasforma l'oggetto in testo JSON
         });
 
         const result = await response.json();
 
         if (result.success) {
-            alert("Ordine aggiornato con successo! ✅");
-            // Invece di reload, richiamiamo la funzione globale per rinfrescare la lista
+            alert("Ottimo! Ordine aggiornato con successo. 🚀");
+            
+            // Rinfreschiamo la lista senza ricaricare tutta la pagina
             if (typeof caricaOrdiniDalDatabase === "function") {
                 caricaOrdiniDalDatabase();
             } else {
+                // Se per qualche motivo la funzione non è globale, ricarichiamo la pagina
                 location.reload();
             }
         } else {
-            alert("Errore dal server: " + result.message);
+            alert("Ops! Il server dice: " + result.message);
         }
     } catch (err) {
-        console.error("Errore nell'invio:", err);
-        alert("Errore tecnico durante il salvataggio.");
+        console.error("Errore durante il fetch:", err);
+        alert("Errore di connessione: il server non risponde.");
     }
 }

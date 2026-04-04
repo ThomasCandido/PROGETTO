@@ -202,6 +202,46 @@
 }
 
 
+/*Regole css x card in modifica*/
+.editing-mode .dettagli {
+    display: grid;
+    /* Forza le due colonne a non superare mai il 50% della card */
+    grid-template-columns: repeat(2, minmax(0, 1fr)); 
+    gap: 10px 15px;
+    padding: 10px 0;
+    width: 100%;
+    box-sizing: border-box; /* Evita che il padding allarghi la card */
+}
+
+.editing-mode .dettagli li {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Taglia quello che prova a uscire */
+}
+
+/* REGOLA D'ORO: Gli input non devono mai superare la loro colonna */
+.editing-mode input, 
+.editing-mode select, 
+.editing-mode textarea {
+    width: 100%;
+    max-width: 100%; /* Impedisce di "strabordare" */
+    box-sizing: border-box; 
+    padding: 6px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.edit-data {
+    width: 130px !important;
+    display: inline-block;
+}
+
+.edit-note {
+    grid-column: span 2;
+    height: 60px;
+    resize: none; 
+}
+
 
 /* MEDIA QUERY*/
 @media screen and (max-width: 480px) {

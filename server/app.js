@@ -317,6 +317,23 @@ app.post('/api/save-orders', requireLogin, async (req, res) => {
     }
 });
 
+// operazione di modifica ordine
+app.post('/api/update-order', requireLogin, async (req, res) => {
+    const { id, ...datiDaAggiornare } = req.body;
+
+    try {
+        const { error } = await supabase
+            .from('ordini')
+            .update(datiDaAggiornare)
+            .eq('id', id);
+
+        if (error) throw error;
+
+        res.json({ success: true, message: "Ordine aggiornato con successo!" });
+    } catch (err) {
+        res.status(500).json({ success: false, message: err.message });
+    }
+});
 
 //########## OPERAZIONI X CLIENTE####################à
 
