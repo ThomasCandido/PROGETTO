@@ -154,3 +154,32 @@ button[type="reset"]:hover {
     background-color: #bdc3c7;
     color: #333;
 }
+
+/* =========================================
+    RESPONSIVE (Smartphone & Tablet)
+   ========================================= */
+@media screen and (max-width: 768px) {
+    fieldset {
+        /* Griglia ad 1 colonna singola */
+        grid-template-columns: 1fr; 
+    }
+
+    /*Riduco un po' i margini e i padding su schermi piccoli per guadagnare spazio */
+    main {
+        margin: 20px 15px; 
+    }
+    
+    .form-aggiunta-cliente {
+        padding: 20px;
+    }
+
+    /* Per evitare che i bottoni vengano tagliati o stiano stretti su display molto piccoli */
+    .form-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .form-actions button {
+        width: 100%; /* I bottoni prendono tutta la larghezza */
+    }
+}

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuratore Felpe - Gestionale</title>
+    <link rel="stylesheet" href="CSS/pc/configuratore.css">
+</head>
+<body>
+
+    <main>
+        <h1>Personalizza la tua Felpa</h1>
+        
+        <div class="configuratore-container">
+            
+            <div class="preview-area">
+    
+                <div class="view-toggle">
+                    <button id="btn-fronte" class="toggle-btn active">Fronte</button>
+                    <button id="btn-retro" class="toggle-btn">Retro</button>
+                </div>
+
+                <div id="vista-fronte" class="vista-container active-view">
+                    <img src="allegati/Fronte-Felpa.png" alt="Fronte Felpa" class="felpa-base">
+                    <div id="area-centro" class="print-area center"></div>
+                    <div id="area-manica-sx" class="print-area sleeve-left"></div>
+                    <div id="area-manica-dx" class="print-area sleeve-right"></div>
+                </div>
+
+                <div id="vista-retro" class="vista-container hidden-view">
+                    <img src="allegati/Retro-Felpa.png" alt="Retro Felpa" class="felpa-base">
+                    <div id="area-retro-centro" class="print-area back-center"></div>
+                </div>
+            </div>
+
+            <div class="controls-area">
+    
+                <fieldset>
+                    <legend>Aggiungi Testo</legend>
+                    
+                    <div class="form-group">
+                        <input type="text" id="testo-input" placeholder="Scrivi il testo qui...">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Stile Carattere (Font):</label>
+                        <select id="font-testo">
+                            <option value="Arial, sans-serif">Arial (Classico)</option>
+                            <option value="'Courier New', monospace">Courier (Macchina da scrivere)</option>
+                            <option value="'Times New Roman', serif">Times New Roman (Elegante)</option>
+                            <option value="Impact, sans-serif">Impact (Spesso e d'impatto)</option>
+                            <option value="'Brush Script MT', cursive">Brush Script (Corsivo a mano)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Posizione Testo:</label>
+                        <select id="pos-testo">
+                            <optgroup label="Fronte">
+                                <option value="area-manica-sx">Manica Sinistra</option>
+                                <option value="area-manica-dx">Manica Destra</option>
+                            </optgroup>
+                            <optgroup label="Retro">
+                                <option value="area-retro-centro">Schiena Centrale</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                    
+                    <button id="btn-aggiungi-testo" class="action-btn">Applica Testo</button>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Aggiungi Immagine/Logo</legend>
+                    
+                    <div class="form-group">
+                        <input type="file" id="img-input" accept="image/*">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Posizione Immagine:</label>
+                        <select id="pos-img">
+                            <optgroup label="Fronte">
+                                <option value="area-centro">Centro (Petto)</option>
+                            </optgroup>
+                            <optgroup label="Retro">
+                                <option value="area-retro-centro">Schiena Centrale</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                </fieldset>
+
+                <button id="btn-reset" class="reset-btn">Svuota Felpa</button>
+            </div>
+            
+        </div>
+    </main>
+
+    <script src="JS/configuratore.js"></script>
+</body>
+</html>

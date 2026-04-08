@@ -1,0 +1,190 @@
+/* Layout principale diviso a metà: anteprima e controlli */
+.configuratore-container {
+    display: flex;
+    gap: 30px;
+    max-width: 1000px;
+    margin: 20px auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* --- ANTEPRIMA FELPA --- */
+.preview-area {
+    position: relative; 
+    width: 50%;
+    background-color: #f4f4f4;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column; 
+    justify-content: flex-start;
+    align-items: center;
+    overflow: hidden;
+}
+
+/* --- GESTIONE VISTE FRONTE/RETRO E BOTTONI --- */
+.view-toggle {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 15px 0;
+    width: 100%;
+    z-index: 10;
+}
+
+.toggle-btn {
+    padding: 8px 20px;
+    border: 2px solid #3498db;
+    background-color: transparent;
+    color: #3498db;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s;
+}
+
+.toggle-btn.active {
+    background-color: #3498db;
+    color: white;
+}
+
+.vista-container {
+    position: relative;
+    width: 100%;
+    display: none; 
+    justify-content: center;
+    align-items: center;
+}
+
+.vista-container.active-view {
+    display: flex; 
+}
+
+.felpa-base {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Stile base delle aree in cui apparirà la stampa */
+.print-area {
+    position: absolute;
+    border: 1px dashed rgba(0, 0, 0, 0.2); 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; 
+}
+
+.print-area img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.print-area p {
+    font-size: 24px;
+    color: #333;
+    text-align: center;
+    word-wrap: break-word;
+    margin: 0; 
+}
+
+/* Posizionamento AREE (Da aggiustare in base alla tua immagine) */
+.center {
+    top: 30%;
+    left: 35%;
+    width: 30%;
+    height: 40%;
+}
+
+/* I contenitori scendono in verticale lungo il braccio */
+.sleeve-left {
+    top: 35%;
+    left: 8%;
+    width: 15%;
+    height: 40%;
+    transform: rotate(15deg); /* Solo una leggera pendenza */
+}
+
+.sleeve-right {
+    top: 35%;
+    right: 8%;
+    width: 15%;
+    height: 40%;
+    transform: rotate(-15deg);
+}
+
+/* Forziamo il testo a scriversi in verticale! */
+#area-manica-sx p, #area-manica-dx p {
+    writing-mode: vertical-rl;
+    text-orientation: upright; /* Le lettere rimangono dritte ma impilate */
+    font-size: 22px;
+    letter-spacing: 5px; /* Spazio tra le lettere per maggiore leggibilità */
+}
+
+.back-center {
+    top: 30%;
+    left: 30%;
+    width: 40%;
+    height: 50%;
+}
+
+/* --- CONTROLLI --- */
+.controls-area {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+fieldset {
+    border: 1px solid #dcdde1;
+    border-radius: 6px;
+    padding: 15px;
+    background-color: #fafbfc;
+}
+
+.form-group {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group input, .form-group select {
+    padding: 10px;
+    border: 1px solid #bdc3c7;
+    border-radius: 4px;
+}
+
+.action-btn {
+    background-color: #3498db;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.reset-btn {
+    background-color: #e74c3c;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/* Responsive per Smartphone */
+@media screen and (max-width: 768px) {
+    .configuratore-container {
+        flex-direction: column;
+    }
+    .preview-area, .controls-area {
+        width: 100%;
+    }
+}
