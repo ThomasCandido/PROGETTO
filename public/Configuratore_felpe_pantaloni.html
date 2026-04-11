@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuratore Abbigliamento Personalizzato - Tipografia</title>
+    <link rel="stylesheet" href="CSS/pc/configuratore.css">
+    <script src="JS/configuratore.js"></script>
+    
+</head>
+<body>
+
+<div class="main-container">
+
+    <div class="preview-area">
+        <div class="product-visualizer" id="visualizer">
+            <img id="base-image" src="allegati/Fronte-Felpa.png" alt="Prodotto">
+            
+            <div id="overlay-container"></div>
+        </div>
+
+        <div class="view-selectors">
+            <button id="btn-front" class="active">Fronte</button>
+            <button id="btn-back">Retro</button>
+        </div>
+    </div>
+
+    <div class="controls-panel">
+        <h2>Personalizza</h2>
+
+        <div class="product-selectors">
+            <button id="select-hoodie" class="active">Felpa</button>
+            <button id="select-shorts">Pantaloncino</button>
+        </div>
+
+        <div id="controls-hoodie" class="custom-controls active">
+            <div class="control-group for-front">
+                <label>Immagine Petto (Fronte)</label>
+                <input type="file" id="upload-hoodie-front" accept="image/*">
+            </div>
+            <div class="control-group for-front">
+                <label>Testo Manica Sinistra (Fronte)</label>
+                <input type="text" id="text-hoodie-front-l" placeholder="MIA SCRITTA">
+            </div>
+            <div class="control-group for-front">
+                <label>Testo Manica Destra (Fronte)</label>
+                <input type="text" id="text-hoodie-front-r" placeholder="MIA SCRITTA">
+            </div>
+
+            <div class="control-group for-back" style="display: none;">
+                <label>Immagine Schiena (Retro)</label>
+                <input type="file" id="upload-hoodie-back" accept="image/*">
+            </div>
+        </div>
+
+        <div id="controls-shorts" class="custom-controls">
+            <div class="control-group for-front">
+                <label>Testo Gamba Sinistra (Fronte)</label>
+                <input type="text" id="text-shorts-front-l" placeholder="SCRITTA GAMBA">
+            </div>
+            <div class="control-group for-front">
+                <label>Testo Gamba Destra (Fronte)</label>
+                <input type="text" id="text-shorts-front-r" placeholder="SCRITTA GAMBA">
+            </div>
+
+            <p class="for-back" style="display: none; color: #777; font-style: italic;">
+                Non ci sono opzioni di personalizzazione sul retro del pantaloncino.
+            </p>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
