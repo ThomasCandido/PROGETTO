@@ -26,8 +26,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const emailInput = document.getElementById('email');
     const emailErrore = document.getElementById('email-errore');
 
-    // 2. Creiamo la RegEx (La formula magica per le email)
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    // 2. Creiamo la RegEx (La formula per le email)
+    const emailRegex = /(\w+)@(\w+\.\w+)+/;
+    /* \w è uno shortcut per [a-zA-Z0-9_] */
 
     // 3. Aggiungiamo una sentinella che ascolta ogni volta che l'utente DIGITA ('input')
     emailInput.addEventListener('input', function() {
@@ -37,12 +38,12 @@ document.addEventListener('DOMContentLoaded', function() {
             emailErrore.style.display = 'none';
             emailInput.style.borderColor = '#bdc3c7'; // Il colore base del tuo CSS
         } 
-        // Se l'email inserita RISPETTA la formula magica (è valida)
+        // Se l'email inserita RISPETTA la formula (è valida)
         else if (emailRegex.test(emailInput.value)) {
             emailErrore.style.display = 'none';
             emailInput.style.borderColor = '#27ae60'; // Diventa verde!
         } 
-        // Se l'email NON RISPETTA la formula (es. manca il .it)
+        // Se l'email NON RISPETTA la formula (è invalida)
         else {
             emailErrore.style.display = 'block';      // Mostra il testo rosso
             emailInput.style.borderColor = '#e74c3c'; // Il bordo diventa rosso
@@ -76,4 +77,4 @@ document.addEventListener('DOMContentLoaded', function() {
         e.target.value = formattato;
     });
 
-}); // <-- L'unica parentesi di chiusura del DOMContentLoaded si trova qui, alla fine di tutto!
+});
