@@ -37,8 +37,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // --- GESTIONE INVIO (Unica per Aggiungi e Modifica) ---
+   // --- GESTIONE INVIO (Unica per Aggiungi e Modifica) ---
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
+
+        // Recuperiamo il ruolo dal localStorage (settato al login)
+        const isAdmin = localStorage.getItem('isAdmin') === 'true';
 
         const formData = {
             societa: document.getElementById('societa').value,
@@ -46,10 +50,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             telefono: document.getElementById('telefono').value,
             nome: document.getElementById('nome').value,
             cognome: document.getElementById('cognome').value,
-            password: document.getElementById('password').value
+            password: document.getElementById('password').value // Sarà stringa vuota se non toccata
         };
 
-        // Decidiamo l'endpoint in base alla modalità
         const url = isEditMode ? '/api/update-profile' : '/register';
 
         try {
@@ -59,8 +62,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 body: JSON.stringify(formData)
             });
 
-            // Se è registrazione normale (/register) il server manda un alert HTML
             if (!isEditMode) {
+                // REGISTRAZIONE NUOVA (Gestita dall'Admin o Form pubblico)
                 const html = await response.text();
                 document.open();
                 document.write(html);
@@ -68,13 +71,21 @@ document.addEventListener('DOMContentLoaded', async () => {
                 return;
             }
 
-            // Se è modifica profilo, gestiamo la risposta JSON
+            // MODIFICA PROFILO (Successo)
             const resJson = await response.json();
             if (resJson.success) {
-                alert("Profilo aggiornato con successo!");
-                window.location.href = 'storico_ordini_home.html';
+                alert("✅ Profilo aggiornato con successo!");
+
+                // REDIRECT INTELLIGENTE
+                if (isAdmin) {
+                    // Se sono admin, torno alla gestione clienti
+                    window.location.href = 'lista_clienti.html';
+                } else {
+                    // Se sono cliente, torno alla mia dashboard
+                    window.location.href = 'storico_ordini_home.html';
+                }
             } else {
-                alert("Errore: " + resJson.message);
+                alert("❌ Errore: " + resJson.message);
             }
         } catch (err) {
             alert("Errore di connessione al server.");

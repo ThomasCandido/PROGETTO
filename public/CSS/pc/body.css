@@ -21,3 +21,40 @@ body {
     
     transition: background-color 0.5s ease, color 0.5s ease;
 }
+
+
+/* Sfondo del pop-up: fisso, copre tutto, sfocato */
+.mod_pop {
+    display: none; /* Nascosto di default */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); /* Sfondo scuro semitrasparente */
+    backdrop-filter: blur(8px); /* IL TOCCO DI CLASSE: Sfocatura sfondo */
+    z-index: 10000; /* Sopra a tutto */
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+/* L'immagine dentro il pop-up */
+.mod_pop img {
+    max-width: 90%;
+    max-height: 90%;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    cursor: default; /* Non deve sembrare cliccabile */
+}
+
+/* Tasto chiusura */
+.close-modal {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    color: white;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+}

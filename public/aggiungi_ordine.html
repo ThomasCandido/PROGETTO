@@ -6,12 +6,10 @@
     <meta name="author" content="Thomas Candido - Gabriele Iannone">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
 
-    <!-- css-->
     <link rel="stylesheet" href="CSS/pc/body.css">
     <link rel="stylesheet" href="CSS/pc/aggiungi_ordine.css">
     <link rel="stylesheet" href="CSS/pc/menu_bar.css">
 
-    <!-- javascript-->
     <script src="https://upload-widget.cloudinary.com/global/all.js" type="text/javascript"></script>
     <script src="JS/menu_bar.js"></script>
     <script src="JS/tema.js"></script>
@@ -71,7 +69,7 @@
                     <th>Taglia</th>
                     <th>Quantità</th>
                     <th>Prezzo Cl.</th>
-                    <th>Prezzo Az.</th>
+                    <th id="th_prezzo_az" class="admin-only">Prezzo Az.</th>
                     <th>Note</th>
                     <th>Anteprima</th> 
                     <th>Azioni</th>
@@ -81,7 +79,8 @@
         </table>
     
         <div class="azioni_tabella">
-            <button type="button" class="btn_salva" onclick="salvaTuttoNelDatabase()" title="Salva tutto nel database">SALVA &#128722;</button>
+            <div class="totale_box"><strong>Totale Complessivo: <span id="totale_ordine_display">€0.00</span></strong></div>
+            <button type="button" class="btn_salva" onclick="apriModalPagamento()" title="Procedi al pagamento e salvataggio">PAGA E SALVA 🛒</button>
             <button type="button" class="btn_refresh" onclick="svuotaTabella()" title="Svuota tabella">SVUOTA TABELLA &#128228;</button>
         </div>
     </div>
@@ -111,13 +110,24 @@
 
                     <tr>
                         <td><input type="text" id="f_marchio" placeholder="Marchio" required></td>
-                        <td><input type="text" id="f_tipologia" placeholder="Tipologia" required></td>
+                        <td>
+                            <select id="f_tipologia" required>
+                                <option value="" selected disabled>Tipologia</option>
+                                <option value="T-shirt">T-shirt</option>
+                                <option value="Felpa">Felpa</option>
+                                <option value="Pantalone">Pantalone</option>
+                                <option value="Scarpa">Scarpa</option>
+                            </select>
+                        </td>
                         <td><input type="color" id="f_colore" title="Colore"></td>
                         <td>
                             <select id="f_taglia" required>
                                 <option value="" selected disabled>Taglia</option>
-                                <option value="S">S</option><option value="M">M</option>
-                                <option value="L">L</option><option value="XL">XL</option>
+                                <option value="UNISEX">UNISEX</option>
+                                <option value="S">S</option>
+                                <option value="M">M</option>
+                                <option value="L">L</option>
+                                <option value="XL">XL</option>
                             </select>
                         </td>
                     </tr>
@@ -125,7 +135,7 @@
                     <tr>
                         <td><input type="number" id="f_quantita" placeholder="Qtà" min="1" required></td>
                         <td colspan="1"><input type="number" id="f_prezzo_cl" step="0.01" placeholder="€ Cliente" required></td>
-                        <td colspan="2"><input type="number" id="f_prezzo_az" step="0.01" placeholder="€ Azienda"></td>
+                        <td colspan="2" class="admin-only"><input type="number" id="f_prezzo_az" step="0.01" placeholder="€ Azienda"></td>
                     </tr>
 
                     <tr>
@@ -149,5 +159,47 @@
         </form>
     </div>
 
+
+
+    <!-- Metodo di pagamento-->
+     <div id="modalPagamento" class="modal-pay">
+            <div class="modal-pay-content">
+        <div class="n26-header">
+            <img src="allegati/carta.jpg" alt="N26" width="60">
+            <span>Pagamento Protetto</span>
+        </div>
+
+
+        <div class="pay-summary">
+            <p>Importo da autorizzare: <strong id="totale_modal_pay">€0.00</strong></p>
+        </div>
+        
+        <div class="form-pay">
+            <label>Titolare della carta</label>
+            <input type="text" id="card_name" placeholder="Nome e Cognome">
+            
+            <label>Numero della carta (PAN)</label>
+            <input type="text" id="card_number" maxlength="19" placeholder="0000 0000 0000 0000">
+            
+            <div class="pay-row">
+                <div class="pay-col">
+                    <label>Scadenza</label>
+                    <input type="text" id="card_expiry" maxlength="5" placeholder="MM/AA">
+                </div>
+                <div class="pay-col">
+                    <label>CVV</label>
+                    <input type="text" id="card_cvv" maxlength="3" placeholder="123">
+                </div>
+            </div>
+            
+            <p id="pay-error" style="color: #e74c3c; font-size: 12px; display: none;">⚠️ Dati carta non validi</p>
+            
+            <div class="pay-actions">
+                <button type="button" class="btn-cancel" onclick="chiudiPagamento()">Annulla</button>
+                <button type="button" class="btn-confirm" onclick="processaPagamento()">Acquista Ora</button>
+            </div>
+        </div>
+        </div>
+    </div>
 </body>
 </html>

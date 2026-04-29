@@ -153,7 +153,149 @@
 }
 
 
-/* --- MEDIA QUERY PER SMARTPHONE (OTTIMIZZAZIONE MASSIMA SPAZIO) --- */
+
+/* STILI X DIV DEL METODO DI PAGAMENTO */
+/* ==========================================
+   METODO DI PAGAMENTO (MODAL)
+   ========================================== */
+
+.modal-pay {
+    display: none; /* Verrà cambiato in 'flex' via JS */
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    
+    /* CENTRAGGIO PERFETTO */
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-pay-content {
+    background-color: white;
+    padding: 25px;
+    border-radius: 20px;
+    
+    /* GRANDEZZA CONTENUTA */
+    width: 380px; 
+    max-width: 90%; /* Per non uscire dai bordi su smartphone */
+    
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    
+    box-sizing: border-box; /* Evita che il padding allarghi il div */
+    position: relative;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+    
+    /* Gestione altezza per schermi piccoli */
+    max-height: 95vh;
+    overflow-y: auto;
+}
+
+/* Header del Modal (Logo + Testo) */
+.n26-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
+}
+
+
+/* Campi del Form Pagamento */
+.form-pay label {
+    display: block;
+    font-size: 11px;
+    font-weight: bold;
+    color: #666;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+}
+
+.form-pay input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-sizing: border-box;
+    font-size: 14px;
+    background-color: #f9f9f9;
+}
+
+/* Riga Scadenza + CVV */
+.pay-row {
+    display: flex;
+    gap: 15px;
+}
+
+.pay-col {
+    flex: 1;
+}
+
+/* Bottoni Azione */
+.pay-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.btn-confirm {
+    flex: 2;
+    background: #36a39d;
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+.btn-confirm:hover {
+    background: #2d8681;
+}
+
+.btn-cancel {
+    flex: 1;
+    background: #f0f0f0;
+    color: #666;
+    border: none;
+    padding: 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+}
+.totale_box {
+    background: #f8f9fa;
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+    color: #2c3e50;
+    text-align: right; /* Lo spinge a destra come volevi */
+}
+
+#totale_ordine_display {
+    color: #27ae60; /* Verde per il prezzo */
+    font-size: 1.4rem;
+}
+
+.pay-summary {
+    text-align: center;
+    background: #eef2f3;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
 /* --- MEDIA QUERY PER SMARTPHONE (OTTIMIZZATA A SCHEDE) --- */
 @media screen and (max-width: 768px) {
 

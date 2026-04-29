@@ -1,0 +1,13 @@
+DI SEGUITO AL FINE DI EFFETTUARE TESTING SI LASCINO ACCOUTN FITTIZZI DA PROVARE NEL DB
+admin@admin.com,admin2026,Thomas Candido,Admin
+marco.rossi@rossisport.it,12345678,Rossi Sport S.r.l.,Cliente
+info@pizzeriadasporto.it,12345678,Pizza & Stampe,Cliente
+g.verdi@musicshop.it,12345678,Verdi Note Musicali,Cliente
+sara.b@fashionlab.it,12345678,Fashion Lab Boutique,Cliente
+ordini@powergym.it,12345678,Power Gym & Fitness,Cliente
+luca.bianchi@fotostudio.it,12345678,Foto Bianchi Studio,Cliente
+elena.n@eventiplus.it,12345678,Eventi Plus Agency,Cliente
+
+# da far testare in fase di presentazione
+tech@startupbox.it,12345678,Startup Box S.p.A.,Cliente
+10,bar.centrale@email.it,12345678,Bar Centrale Piazza,Cliente

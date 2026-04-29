@@ -50,13 +50,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // ORDINAMENTO
         ordini.sort((a, b) => {
-            if (sortType === 'date-new') {
+            if (sortType === 'date-new') 
+            {
                 return parseData(b) - parseData(a);
-            } 
-            else if (sortType === 'price-asc') {
+            }
+            else if (sortType === 'id-asc') 
+            {
+                return parseId(a) - parseId(b); 
+            }
+            else if (sortType === 'price-asc') 
+            {
                 return parsePrezzo(a) - parsePrezzo(b); 
             } 
-            else if (sortType === 'price-desc') {
+            else if (sortType === 'price-desc') 
+            {
                 return parsePrezzo(b) - parsePrezzo(a);
             }
             return 0;
@@ -78,15 +85,35 @@ document.addEventListener('DOMContentLoaded', () => {
         return new Date(anno, mese - 1, giorno).getTime();
     }
 
+    function parseId(element) 
+    {
+        // Cerchiamo il testo dentro l'elemento con classe .id_ord
+        const idStr = element.querySelector('.id_ord b').innerText; // Es: "cod:0001"
+        // Dividiamo la stringa al simbolo ":" e prendiamo la parte dopo (il numero)
+        const soloNumero = idStr.split(':')[1]; 
+        
+        return parseInt(soloNumero); // Converte "0001" in numero 1
+    }
+
     function parsePrezzo(element) 
     {
+        // Prendiamo tutti i <li> della card
         const dettagli = Array.from(element.querySelectorAll('.dettagli li'));
-        const rigaPrezzo = dettagli.find(li => li.innerText.includes('Prezzo Cliente'));
+    
+        // Cerchiamo la riga che contiene la parola "Prezzo", ignorando maiuscole/minuscole
+        const rigaPrezzo = dettagli.find(li => li.innerText.toLowerCase().includes('prezzo'));
+    
         if (rigaPrezzo) 
         {
-            const prezzoStr = rigaPrezzo.innerText.split('€')[1].trim();
-            return parseFloat(prezzoStr);
+            // Questa regex estrae solo numeri e virgole/punti
+            const match = rigaPrezzo.innerText.match(/[\d,.]+/);
+            if (match) 
+            {
+                // Puliamo il numero: cambiamo la virgola in punto per parseFloat
+                const valorePulito = match[0].replace(',', '.');
+                return parseFloat(valorePulito) || 0;
+            }
         }
-        return 0;
-    }
+    return 0; // Fallback se non trova nulla
+}
 });

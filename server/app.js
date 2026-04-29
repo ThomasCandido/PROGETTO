@@ -8,19 +8,18 @@ const app = express();
 
 // CONFIGURAZIONE INIZIALE
 const PORT = 3000;
-const HOST = '0.0.0.0'; // Accesso da tutti i dispositivi in rete locale
-const ROOT = path.join(__dirname, '..', 'public'); // Punto di riferimento per i file frontend
+const HOST = '0.0.0.0'; 
+const ROOT = path.join(__dirname, '..', 'public'); 
 
 // COLLEGAMENTO DATABASE
 const supabase = createClient(
     'https://ecviettbvamsjguurxwp.supabase.co',
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVjdmlldHRidmFtc2pndXVyeHdwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQzODU3ODksImV4cCI6MjA4OTk2MTc4OX0.JGChyJfmIxJd-N406otnTtF1cJKn9_GC0RLtd8FU1Kw' // La tua chiave
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVjdmlldHRidmFtc2pndXVyeHdwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQzODU3ODksImV4cCI6MjA4OTk2MTc4OX0.JGChyJfmIxJd-N406otnTtF1cJKn9_GC0RLtd8FU1Kw'
 );
 
 // MIDDLEWARE (Configurazione comportamento) ---
 app.use(express.json()); 
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(ROOT)); // Fondamentale per far funzionare CSS e immagini!
 
 app.use(session({
     secret: 'segreto-gestionale-2026',
@@ -28,111 +27,91 @@ app.use(session({
     saveUninitialized: true
 }));
 
-
-// ROTTA VERSO LA PRIMA PAGINA:ovvero login.html appena si digita http.//localhost:3000
-app.get('/', (req, res) => {
-    res.sendFile(path.join(ROOT, 'login.html'));
-});
-
-
-// Protezione generale Accesso solo chi è loggato
+// --- LE TUE FUNZIONI DI PROTEZIONE ---
 const requireLogin = (req, res, next) => {
-    if (!req.session.utenteId) 
-    {
+    if (!req.session.utenteId) {
         return res.status(401).json({ success: false, message: "Utente non autorizzato!" });
     }
     next();
 };
-// FULL ACCESS specifica per ADMIN
+
 const requireAdmin = (req, res, next) => {
-    if (!req.session.utenteId || !req.session.isAdmin) 
-    {
+    if (!req.session.utenteId || !req.session.isAdmin) {
         return res.redirect('/storico_ordini_home.html');
     }
     next();
 };
 
-// IMPLEMENTAZIONI FUNZIONALITA' SERVER X LOGIN
+// ============================================================
+// 1. ROTTE HTML PROTETTE (Spostate qui per sicurezza)
+// ============================================================
 
-// se in login sei admin hai accesso alla lista clienti
 app.get('/lista_clienti.html', requireAdmin, (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'public', 'lista_clienti.html'));
+    res.sendFile(path.join(ROOT, 'lista_clienti.html'));
 });
 
-// Admin registra nuovi Clienti e Cliente modifica se stesso (Entrambi possono entrare)
 app.get('/aggiungi_cliente.html', requireLogin, (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'public', 'aggiungi_cliente.html'));
+    res.sendFile(path.join(ROOT, 'aggiungi_cliente.html'));
 });
 
+app.get('/storico_ordini_home.html', requireLogin, (req, res) => {
+    res.sendFile(path.join(ROOT, 'storico_ordini_home.html'));
+});
 
-// distribuzione di tutti i file css e javascript per chi ha ottenuto le pagine 
-app.use(express.static(path.join(__dirname, '..', 'public'))); 
+// ============================================================
+// 2. DISTRIBUZIONE FILE STATICI (CSS, JS, IMMAGINI)
+// ============================================================
+app.use(express.static(ROOT)); 
 
+// ============================================================
+// 3. IMPLEMENTAZIONI FUNZIONALITA' SERVER
+// ============================================================
 
-// Operazione di Login(ACCESSO alla piattaforma)
+app.get('/', (req, res) => {
+    res.sendFile(path.join(ROOT, 'login.html'));
+});
+
+// Operazione di Login
 app.post('/login', async (req, res) => {
-
-    // presa dei valori di email e passsword spediti
     const { email, password } = req.body;
-
-    try 
-    {
-        // check controllo nel DB
-        const { data: utente, error } = await supabase.from('utenti').select('*').eq('email', email).single();
+    console.log("--- TENTATIVO DI LOGIN ---");
+    try {
+        const { data: utente, error } = await supabase
+            .from('utenti')
+            .select('*')
+            .eq('email', email)
+            .single();
         
-        if (error || !utente) 
-        {
-            // return di allert utente non trovato e redirect in login
+        if (error || !utente) {
             return res.send("<script>alert('Utente non trovato'); window.location.href='/login.html';</script>");
         }
         
-        // matching tra password trovata e passwird inserita
         const match = await bcrypt.compare(password, utente.password);
-        if (match == true) 
-        {
-            // logica di separazione admin  e cliente
+        if (match) {
             req.session.utenteId = utente.id;
-            req.session.isAdmin = utente.is_admin;
+            req.session.isAdmin = (utente.is_admin === true || utente.is_admin === 'true');
+            req.session.clienteId = utente.is_admin ? null : utente.id;
 
-            // presa dei dati utente
-            if (!utente.is_admin) 
-            {
-                const { data: cl } = await supabase.from('clienti').select('id').eq('id_utente', utente.id).single();
-                req.session.clienteId = cl ? cl.id : null;
-            }
-
-            // Inviamo JS per aggiornare localStorage e reindirizzare
-            //logica di di reindirizzamento
             res.send(`
                 <script>
-                    localStorage.setItem('isAdmin', '${utente.is_admin}');
-                    window.location.href = '${utente.is_admin ? '/lista_clienti.html' : '/storico_ordini_home.html'}';
+                    localStorage.clear();
+                    localStorage.setItem('isAdmin', '${req.session.isAdmin}');
+                    window.location.href = '${req.session.isAdmin ? '/lista_clienti.html' : '/storico_ordini_home.html'}';
                 </script>
             `);
-        } else 
-        { 
+        } else { 
             res.send("<script>alert('Password errata'); window.location.href='/login.html';</script>"); 
         }
-    } 
-    catch (err) 
-    {
-        // altrimenti internal error server
+    } catch (err) {
         res.status(500).send("Errore server: " + err.message); 
     }
 });
 
-
-//Operazione di Registrazione
+// Operazione di Registrazione
 app.post('/register', async (req, res) => {
-
     const { email, password, nome, cognome, societa, telefono } = req.body;
-
     try {
-
-        //Crittografia della password
         const hashedPassword = await bcrypt.hash(password, 10);
-
-        // Inserimento nella tabella 'utenti'
         const { data: newUser, error: userError } = await supabase
             .from('utenti')
             .insert([{ email, password: hashedPassword, is_admin: false }])
@@ -140,9 +119,8 @@ app.post('/register', async (req, res) => {
         
         if (userError) throw userError;
 
-        // Inserimento nella tabella 'clienti' collegata all'utente appena creato
         const { error: clienteError } = await supabase.from('clienti').insert([{ 
-            id_utente: newUser[0].id, 
+            id: newUser[0].id, 
             nome: nome || null, 
             cognome: cognome || null, 
             societa, 
@@ -152,60 +130,18 @@ app.post('/register', async (req, res) => {
 
         if (clienteError) throw clienteError;
 
-        // 4. Successo: Risposta con Script (Stile Login)
         res.send(`
             <script>
-                alert('✅ Registrazione completata con Successo! Ora puoi accedere.');
+                alert('✅ Registrazione completata! Ora puoi accedere.');
                 window.location.href = '/login.html';
             </script>
         `);
-
     } catch (err) { 
-        // 5. Errore: Rimandiamo l'utente indietro con il messaggio di errore
-        console.error("Errore registrazione:", err.message);
-        res.send(`
-            <script>
-                alert('❌ Errore durante la registrazione: ${err.message}');
-                window.history.back();
-            </script>
-        `);
+        res.send(`<script>alert('❌ Errore: ${err.message}'); window.history.back();</script>`);
     }
 });
 
-
-// Operazione di Logout
-app.get('/logout', (req, res) => {
-    req.session.destroy(() => res.redirect('/login.html'));
-});
-
-
-// Operazione di Modifica Profilo
-
-app.get('/api/get-profile', requireLogin, async (req, res) => {
-    try {
-        const { data: utente, error: utenteError } = await supabase
-            .from('utenti').select('email').eq('id', req.session.utenteId).single();
-
-        if (utenteError) throw utenteError;
-
-        const { data: cliente, error: clienteError } = await supabase
-            .from('clienti').select('*').eq('id_utente', req.session.utenteId).single();
-
-        if (clienteError && clienteError.code !== 'PGRST116') throw clienteError;
-
-        res.json({
-            success: true,
-            data: { 
-                ...(cliente || {}), 
-                email: utente.email, 
-                is_admin: req.session.isAdmin 
-            }
-        });
-    } catch (err) { 
-        res.status(500).json({ success: false, message: err.message }); 
-    }
-});
-
+// Operazione di Modifica Profilo (FIXED)
 app.post('/api/update-profile', requireLogin, async (req, res) => {
     const { email, password, nome, cognome, societa, telefono } = req.body;
     const utenteId = req.session.utenteId;
@@ -215,19 +151,152 @@ app.post('/api/update-profile', requireLogin, async (req, res) => {
         if (password && password.trim() !== "") {
             updateUtente.password = await bcrypt.hash(password, 10);
         }
-        await supabase.from('utenti').update(updateUtente).eq('id', utenteId);
+        
+        // Update utenti
+        const { error: errUt } = await supabase.from('utenti').update(updateUtente).eq('id', utenteId);
+        if (errUt) throw errUt;
 
-        await supabase.from('clienti')
+        // Update clienti
+        const { error: errCl } = await supabase.from('clienti')
             .update({ nome, cognome, societa, email_contatto: email, telefono })
-            .eq('id_utente', utenteId);
+            .eq('id', utenteId);
+        if (errCl) throw errCl;
 
-        res.json({ success: true, message: "Profilo aggiornato!" });
+        res.json({ success: true, message: "Profilo aggiornato!", isAdmin: req.session.isAdmin });
     } catch (err) { 
-        res.status(500).json({ success: false, message: err.message }); 
+        res.status(500).json({ success: false, message: "Errore: " + err.message }); 
     }
 });
 
-// RECUPERO PASSWORD E ACCENSIONE ---
+// Recupero Profilo per il form
+app.get('/api/get-profile', async (req, res) => {
+    const userId = req.session.utenteId; 
+    if (!userId) return res.status(401).json({ success: false, message: "Non autenticato" });
+
+    const { data, error } = await supabase
+        .from('clienti')
+        .select('*, utenti(is_admin, email)')
+        .eq('id', userId)
+        .single();
+
+    if (error || !data) return res.status(404).json({ success: false, message: "Profilo non trovato" });
+
+    const profiloCompleto = {
+        ...data,
+        email: data.utenti ? data.utenti.email : '',
+        is_admin: data.utenti ? data.utenti.is_admin : false
+    };
+    res.json({ success: true, data: profiloCompleto });
+});
+
+// Visualizzazione Ordini
+app.get('/api/get-orders', requireLogin, async (req, res) => {
+    try {
+        let query = supabase.from('ordini').select('*, clienti(societa)'); 
+        if (!req.session.isAdmin) query = query.eq('id_cliente', req.session.clienteId);
+
+        const { data, error } = await query.order('data_ordine', { ascending: false });
+        if (error) throw error;
+        res.json({ success: true, data });
+    } catch (err) {
+        res.status(500).json({ success: false, message: err.message });
+    }
+});
+
+// Eliminazione Ordini
+app.delete('/api/delete-orders', requireLogin, async (req, res) => {
+    const { ids } = req.body; 
+    try {
+        let query = supabase.from('ordini').delete().in('id', ids);
+        if (!req.session.isAdmin) query = query.eq('id_cliente', req.session.clienteId);
+        const { error } = await query;
+        if (error) throw error;
+        res.json({ success: true, message: "Ordini eliminati!" });
+    } catch (err) {
+        res.status(500).json({ success: false, message: err.message });
+    }
+});
+
+// Salvataggio Ordini (Configuratore)
+app.post('/api/save-orders', async (req, res) => {
+    try {
+        const ordini = req.body;
+        if (!ordini || ordini.length === 0) return res.status(400).json({ success: false, message: "Lista vuota" });
+        const { error } = await supabase.from('ordini').insert(ordini);
+        if (error) throw error;
+        res.json({ success: true, message: "Ordini salvati!" });
+    } catch (err) {
+        res.status(500).json({ success: false, message: err.message });
+    }
+});
+
+// Modifica Singolo Ordine
+app.post('/api/update-order', requireLogin, async (req, res) => {
+    const { id, ...datiRicevuti } = req.body;
+    const utenteId = req.session.utenteId;
+    const isAdmin = req.session.isAdmin;
+
+    try {
+        // 1. Recuperiamo lo stato attuale dell'ordine dal DB
+        const { data: ordineAttuale, error: errFetch } = await supabase
+            .from('ordini')
+            .select('stato, id_cliente')
+            .eq('id', id)
+            .single();
+
+        if (errFetch || !ordineAttuale) throw new Error("Ordine non trovato.");
+
+        // 2. LOGICA DI CONTROLLO
+        if (!isAdmin) {
+            // Un cliente può modificare SOLO i suoi ordini
+            if (ordineAttuale.id_cliente !== req.session.clienteId) {
+                return res.status(403).json({ success: false, message: "Non hai i permessi per questo ordine." });
+            }
+
+            // Un cliente può modificare solo se lo stato è "Ordinato"
+            if (ordineAttuale.stato !== 'Ordinato') {
+                return res.status(403).json({ success: false, message: "L'ordine è in lavorazione e non può più essere modificato." });
+            }
+
+            // PULIZIA DATI: Rimuoviamo i campi che il cliente NON deve toccare
+            delete datiRicevuti.prezzo_cliente;
+            delete datiRicevuti.prezzo_azienda;
+            delete datiRicevuti.stato;
+            delete datiRicevuti.id_cliente; 
+            delete datiRicevuti.data_ordine;
+        }
+
+        // 3. ESEGUIAMO L'AGGIORNAMENTO (con i dati filtrati)
+        const { error: errUpdate } = await supabase
+            .from('ordini')
+            .update(datiRicevuti)
+            .eq('id', id);
+
+        if (errUpdate) throw errUpdate;
+
+        res.json({ success: true, message: "Ordine aggiornato correttamente!" });
+
+    } catch (err) {
+        console.error("Errore Update Ordine:", err.message);
+        res.status(500).json({ success: false, message: err.message });
+    }
+});
+
+// API per Admin: Recupero lista società
+app.get('/api/get-all-clients', requireAdmin, async (req, res) => {
+    try {
+        const { data, error } = await supabase
+            .from('clienti')
+            .select('id, societa')
+            .order('societa', { ascending: true });
+        if (error) throw error;
+        res.json({ success: true, data });
+    } catch (err) {
+        res.status(500).json({ success: false, message: err.message });
+    }
+});
+
+// Recupero Password
 app.post('/recupero-diretto', async (req, res) => {
     const { email } = req.body;
     try {
@@ -237,110 +306,12 @@ app.post('/recupero-diretto', async (req, res) => {
     } catch (err) { res.json({ success: false, message: "Errore database." }); }
 });
 
-
-//  VISUALIZZAZIONE DEGLI ORDINI DAL DATABASE
-app.get('/api/get-orders', requireLogin, async (req, res) => {
-    try {
-        let query = supabase
-            .from('ordini')
-            .select('*, clienti(societa)'); 
-            // nota: operazione di join x avere campo società
-
-        if (!req.session.isAdmin) 
-        {
-            query = query.eq('id_cliente', req.session.clienteId);
-        }
-
-        // ordinamento dati secondo il più recente
-        const { data, error } = await query.order('data_ordine', { ascending: false });
-        if (error) throw error;
-
-        // DEBUG:
-        console.log("Dati inviati al frontend:", JSON.stringify(data[0], null, 2));
-
-        res.json({ success: true, data });
-    } catch (err) {
-        res.status(500).json({ success: false, message: err.message });
-    }
+// Logout
+app.get('/logout', (req, res) => {
+    req.session.destroy(() => res.redirect('/login.html'));
 });
 
-// API per eliminare uno o più ordini
-app.delete('/api/delete-orders', requireLogin, async (req, res) => {
-    const { ids } = req.body; 
-
-    try {
-        let query = supabase.from('ordini').delete().in('id', ids);
-
-        if (!req.session.isAdmin) 
-        {
-            // --- MODIFICA: Filtro per clienteId (tabella clienti) ---
-            query = query.eq('id_cliente', req.session.clienteId);
-        }
-
-        const { error } = await query;
-
-        if (error) throw error;
-
-        res.json({ success: true, message: "Ordini eliminati con successo!" });
-    } catch (err) {
-        res.status(500).json({ success: false, message: "Errore eliminazione: " + err.message });
-    }
-});
-
-//AGGIUNGI ORDINE
-// API per Admin: scaricare la lista di tutte le società X INS.ORDINE
-app.get('/api/get-all-clients', requireAdmin, async (req, res) => {
-    try {
-        const { data, error } = await supabase
-            .from('clienti')
-            .select('id, societa')
-            .order('societa', { ascending: true });
-
-        if (error) throw error;
-        res.json({ success: true, data });
-    } catch (err) {
-        res.status(500).json({ success: false, message: err.message });
-    }
-});
-
-// API per salvare l'array di ordini nel database
-app.post('/api/save-orders', requireLogin, async (req, res) => {
-    try {
-        const { error } = await supabase
-            .from('ordini')
-            .insert(req.body); // req.body è l'array di oggetti inviato dal JS
-
-        if (error) throw error;
-        res.json({ success: true, message: "Ordini inseriti con successo!" });
-    } catch (err) {
-        res.status(500).json({ success: false, message: "Errore salvataggio: " + err.message });
-    }
-});
-
-// operazione di modifica ordine
-app.post('/api/update-order', requireLogin, async (req, res) => {
-    const { id, ...datiDaAggiornare } = req.body;
-
-    try {
-        const { error } = await supabase
-            .from('ordini')
-            .update(datiDaAggiornare)
-            .eq('id', id);
-
-        if (error) throw error;
-
-        res.json({ success: true, message: "Ordine aggiornato con successo!" });
-    } catch (err) {
-        res.status(500).json({ success: false, message: err.message });
-    }
-});
-
-//########## OPERAZIONI X CLIENTE####################à
-
-
-
-
-
+// AVVIO SERVER
 app.listen(PORT, HOST, () => {
     console.log(`🚀 Server attivo su http://localhost:${PORT}`);
 });

@@ -110,6 +110,7 @@
                     
                     <div id="filterMenu" class="filter-dropdown">
                         <p class="filter-title">Ordina per:</p>
+                        <label class="filter-option"><input type="radio" name="sort" value="id-asc">🔢 ID Crescente</label>
                         <label class="filter-option"><input type="radio" name="sort" value="date-new" checked> 📅 Più recenti</label>
                         <label class="filter-option"><input type="radio" name="sort" value="price-asc"> 📈 Prezzo crescente</label>
                         <label class="filter-option"><input type="radio" name="sort" value="price-desc"> 📉 Prezzo decrescente</label>
@@ -148,6 +149,12 @@
         <button id="btn_elimina_multiplo" class="botton_fluttuante btn_elimina" title="Elimina Selezionati">&#128465;</button>
         <a href="aggiungi_ordine.html" class="botton_fluttuante btn_aggiungi" title="Aggiungi Nuovo Ordine">+</a>
     
+
+        <!-- pop up visualizza allegato-->
+        <div id="modalAllegato" class="mod_pop" onclick="chiudiPopup()">
+            <span class="close-modal">&times;</span>
+            <img id="img_pop-up" src="" alt="Allegato">
+        </div>
     </body>
 </html>
 

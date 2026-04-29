@@ -1,47 +1,48 @@
-
-if (localStorage.getItem('isAdmin') === 'true') {
-    document.documentElement.classList.add('is-admin');
-}
-
 document.addEventListener('DOMContentLoaded', async () => {
     try {
         const response = await fetch('/api/get-profile');
         const result = await response.json();
 
-        if (result.success) 
-        {
+        if (result.success) {
             const utente = result.data;
+            const isAdmin = utente.is_admin;
 
-            if (utente.is_admin) {
-                // is admin
-                localStorage.setItem('isAdmin', 'true');
+            // SINCRONIZZAZIONE RUOLO
+            localStorage.setItem('isAdmin', isAdmin ? 'true' : 'false');
+            if (isAdmin) {
                 document.documentElement.classList.add('is-admin');
-            } 
-            else 
-            {
-                // no admin
-                localStorage.setItem('isAdmin', 'false');
+            } else {
                 document.documentElement.classList.remove('is-admin');
             }
 
+            // 2. POPOLAMENTO DATI (Inclusa Email)
+            const inputEmail = document.getElementById('f_email');
             const inputCliente = document.getElementById('f_cliente');
 
-            if (inputCliente && !utente.is_admin) {
-                // Inseriamo il nome della società recuperato dal database
-                inputCliente.value = utente.societa || ''; 
-                
-                // Impediamo la modifica (readOnly permette l'invio del form)
-                inputCliente.readOnly = true; 
-                
-                // Miglioriamo l'aspetto visivo per indicare il blocco
-                inputCliente.style.backgroundColor = "#e9ecef"; 
-                inputCliente.style.cursor = "not-allowed";
-                inputCliente.title = "Il nome azienda è bloccato dal tuo profilo.";
+            // Se siamo nella pagina profilo, riempiamo l'email (che ora arriva dal server)
+            if (inputEmail) {
+                inputEmail.value = utente.email || '';
+            }
+
+            // 3. LOGICA SPECIFICA PER CLIENTE
+            if (!isAdmin) {
+                // Nascondi tasto statistiche (se presente nella pagina)
+                const btnStats = document.getElementById('openStats');
+                if (btnStats) btnStats.style.display = 'none';
+
+                // Nascondi campi costo azienda (usando la classe universale)
+                document.querySelectorAll('.admin-only').forEach(el => el.remove());
+
+                // Blocca nome società
+                if (inputCliente) {
+                    inputCliente.value = utente.societa || ''; 
+                    inputCliente.readOnly = true; 
+                    inputCliente.style.backgroundColor = "#e9ecef"; 
+                    inputCliente.style.cursor = "not-allowed";
+                }
             }
         }
     } catch (err) {
-        console.error("Errore critico durante la verifica della sessione:", err);
-        // In caso di errore di rete, per sicurezza non mostriamo nulla da admin
-        document.documentElement.classList.remove('is-admin');
+        console.error("Errore sessione:", err);
     }
 });

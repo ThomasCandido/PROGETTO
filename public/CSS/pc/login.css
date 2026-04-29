@@ -1,21 +1,36 @@
 /* REGOLE CSS X LOGIN*/
-
-body{
-    padding-top: 100px;
+html
+{
+    overflow: hidden;
+}
+body {
+    margin: 0;
+    padding: 0;
     display: flex;
     justify-content: center;
     align-items: center;
+    min-height: 100vh; /* Occupa tutta l'altezza dello schermo */
+    
+    /* GESTIONE SFONDO */
+    /* Assicurati che il percorso sia corretto: se il CSS è in CSS/pc/, devi uscire due volte */
+    background-image: url('../../allegati/SFONDO_LOGIN.png'); 
+    background-size: cover; /* L'immagine copre tutto lo spazio disponibile */
+    background-position: center; /* L'immagine viene centrata */
+    background-repeat: no-repeat; /* Evita che l'immagine si duplichi */
+    background-attachment: fixed; /* Lo sfondo non scorre con la pagina */
 }
 
-
 .login_cnt {
-    background-color: white;
+    /* Ho aggiunto un po' di trasparenza (0.95) per far intravedere lo sfondo 
+       ma mantenere la leggibilità perfetta */
+    background-color: rgba(255, 255, 255, 0.95); 
     padding: 40px;
-    border-radius: 10%; 
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); /* Ombra morbida per staccarlo dallo sfondo */
+    border-radius: 20px; /* '10%' su un rettangolo a volte deforma, 20px è più pulito */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); /* Ombra più marcata per staccare dal disegno */
     width: 100%;
     max-width: 380px;
     box-sizing: border-box; 
+    backdrop-filter: blur(5px); /* Effetto sfocato moderno sullo sfondo dietro il box */
 }
 
 .login-header {
