@@ -3,10 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Configuratore Abbigliamento Personalizzato - Tipografia</title>
-    <link rel="stylesheet" href="CSS/pc/configuratore.css">
-    <script src="JS/configuratore.js"></script>
+    <title>Configuratore Abbigliamento Personalizzato</title>
     
+    <link rel="stylesheet" href="CSS/pc/configuratore.css">
+    
+    <link rel="preload" href="fonts/anton.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="fonts/permanent-marker.woff2" as="font" type="font/woff2" crossorigin>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+    <script src="JS/configuratore.js" defer></script>
 </head>
 <body>
 
@@ -14,9 +19,11 @@
 
     <div class="preview-area">
         <div class="product-visualizer" id="visualizer">
+            <div id="color-layer"></div>
             <img id="base-image" src="allegati/Fronte-Felpa.png" alt="Prodotto">
-            
-            <div id="overlay-container"></div>
+            <div id="canvas-wrapper">
+                <canvas id="fabric-canvas" width="500" height="500"></canvas>
+            </div>
         </div>
 
         <div class="view-selectors">
@@ -33,42 +40,129 @@
             <button id="select-shorts">Pantaloncino</button>
         </div>
 
+        <div class="control-group" style="margin-top: 20px;">
+            <label>Colore Prodotto</label>
+            <input type="color" id="product-color" value="#ffffff">
+        </div>
+
         <div id="controls-hoodie" class="custom-controls active">
             <div class="control-group for-front">
                 <label>Immagine Petto (Fronte)</label>
                 <input type="file" id="upload-hoodie-front" accept="image/*">
             </div>
+            
             <div class="control-group for-front">
                 <label>Testo Manica Sinistra (Fronte)</label>
-                <input type="text" id="text-hoodie-front-l" placeholder="MIA SCRITTA">
+                <input type="text" id="text-hoodie-front-l" placeholder="Scrivi qui...">
+                <div class="text-options">
+                    <select id="font-hoodie-front-l">
+                        <optgroup label="I Nostri Font Premium">
+                            <option value="'Anton', Impact, sans-serif">Anton (Sportivo/Numeri)</option>
+                            <option value="'Permanent Marker', 'Brush Script MT', cursive">Permanent Marker (Streetwear)</option>
+                        </optgroup>
+                        <optgroup label="Semplici e Puliti">
+                            <option value="Arial">Arial</option>
+                            <option value="'Trebuchet MS', sans-serif">Trebuchet MS</option>
+                        </optgroup>
+                        <optgroup label="Classici ed Eleganti">
+                            <option value="Georgia, serif">Georgia</option>
+                        </optgroup>
+                    </select>
+                    <select id="orient-hoodie-front-l">
+                        <option value="angled" selected>Lungo la manica</option>
+                        <option value="horizontal">Orizzontale</option>
+                        <option value="vertical">Verticale (Lettere impilate)</option>
+                    </select>
+                </div>
             </div>
+
             <div class="control-group for-front">
                 <label>Testo Manica Destra (Fronte)</label>
-                <input type="text" id="text-hoodie-front-r" placeholder="MIA SCRITTA">
+                <input type="text" id="text-hoodie-front-r" placeholder="Scrivi qui...">
+                <div class="text-options">
+                    <select id="font-hoodie-front-r">
+                        <optgroup label="I Nostri Font Premium">
+                            <option value="'Anton', Impact, sans-serif">Anton (Sportivo/Numeri)</option>
+                            <option value="'Permanent Marker', 'Brush Script MT', cursive">Permanent Marker (Streetwear)</option>
+                        </optgroup>
+                        <optgroup label="Semplici e Puliti">
+                            <option value="Arial">Arial</option>
+                            <option value="'Trebuchet MS', sans-serif">Trebuchet MS</option>
+                        </optgroup>
+                        <optgroup label="Classici ed Eleganti">
+                            <option value="Georgia, serif">Georgia</option>
+                        </optgroup>
+                    </select>
+                    <select id="orient-hoodie-front-r">
+                        <option value="angled" selected>Lungo la manica</option>
+                        <option value="horizontal">Orizzontale</option>
+                        <option value="vertical">Verticale (Lettere impilate)</option>
+                    </select>
+                </div>
             </div>
 
             <div class="control-group for-back" style="display: none;">
-                <label>Immagine Schiena (Retro)</label>
-                <input type="file" id="upload-hoodie-back" accept="image/*">
+                <p style="color: #777; font-style: italic;">
+                    Il retro della felpa è a tinta unita e non è personalizzabile.
+                </p>
             </div>
         </div>
 
-        <div id="controls-shorts" class="custom-controls">
+        <div id="controls-shorts" class="custom-controls" style="display: none;">
             <div class="control-group for-front">
                 <label>Testo Gamba Sinistra (Fronte)</label>
-                <input type="text" id="text-shorts-front-l" placeholder="SCRITTA GAMBA">
+                <input type="text" id="text-shorts-front-l" placeholder="Scrivi qui...">
+                <div class="text-options">
+                    <select id="font-shorts-front-l">
+                        <optgroup label="I Nostri Font Premium">
+                            <option value="'Anton', Impact, sans-serif">Anton (Sportivo/Numeri)</option>
+                            <option value="'Permanent Marker', 'Brush Script MT', cursive">Permanent Marker (Streetwear)</option>
+                        </optgroup>
+                        <optgroup label="Semplici e Puliti">
+                            <option value="Arial">Arial</option>
+                            <option value="'Trebuchet MS', sans-serif">Trebuchet MS</option>
+                        </optgroup>
+                        <optgroup label="Classici ed Eleganti">
+                            <option value="Georgia, serif">Georgia</option>
+                        </optgroup>
+                    </select>
+                    <select id="orient-shorts-front-l">
+                        <option value="horizontal" selected>Orizzontale</option>
+                        <option value="vertical">Verticale (Lettere impilate)</option>
+                    </select>
+                </div>
             </div>
+
             <div class="control-group for-front">
                 <label>Testo Gamba Destra (Fronte)</label>
-                <input type="text" id="text-shorts-front-r" placeholder="SCRITTA GAMBA">
+                <input type="text" id="text-shorts-front-r" placeholder="Scrivi qui...">
+                <div class="text-options">
+                    <select id="font-shorts-front-r">
+                        <optgroup label="I Nostri Font Premium">
+                            <option value="'Anton', Impact, sans-serif">Anton (Sportivo/Numeri)</option>
+                            <option value="'Permanent Marker', 'Brush Script MT', cursive">Permanent Marker (Streetwear)</option>
+                        </optgroup>
+                        <optgroup label="Semplici e Puliti">
+                            <option value="Arial">Arial</option>
+                            <option value="'Trebuchet MS', sans-serif">Trebuchet MS</option>
+                        </optgroup>
+                        <optgroup label="Classici ed Eleganti">
+                            <option value="Georgia, serif">Georgia</option>
+                        </optgroup>
+                    </select>
+                    <select id="orient-shorts-front-r">
+                        <option value="horizontal" selected>Orizzontale</option>
+                        <option value="vertical">Verticale (Lettere impilate)</option>
+                    </select>
+                </div>
             </div>
 
             <p class="for-back" style="display: none; color: #777; font-style: italic;">
-                Non ci sono opzioni di personalizzazione sul retro del pantaloncino.
+                Il retro del pantaloncino è a tinta unita e non è personalizzabile.
             </p>
         </div>
-    </div>
 
+    </div>
 </div>
 
 </body>

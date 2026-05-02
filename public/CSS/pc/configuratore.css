@@ -1,12 +1,30 @@
 /* --- style.css --- */
+
+/* --- IMPORTAZIONE FONT LOCALI (Self-Hosted) --- */
+
+@font-face {
+    font-family: 'Anton';
+    /* Nota il percorso: fa due passi indietro (../../) per uscire da CSS/pc/ e poi entra in fonts/ */
+    src: url('../public/fonts/anton.woff2') format('woff2'); 
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap; /* Mostra subito il font di fallback in attesa di caricare questo */
+}
+
+@font-face {
+    font-family: 'Permanent Marker';
+    src: url('../public/fonts/permanent-marker.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #f4f7f6;
     margin: 0;
     padding: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
     min-height: 100vh;
 }
 
@@ -18,9 +36,9 @@ body {
     overflow: hidden;
     width: 100%;
     max-width: 1100px;
+    margin: 0 auto; 
 }
 
-/* Area di Anteprima Centrale */
 .preview-area {
     flex: 2;
     padding: 40px;
@@ -31,136 +49,102 @@ body {
     border-right: 1px solid #eee;
 }
 
+/* LA MAGIA DEI LIVELLI */
 .product-visualizer {
     position: relative;
-    width: 100%;
-    max-width: 500px;
+    width: 500px;
     height: 500px;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: contain;
-    transition: background-image 0.3s ease;
 }
 
-/* Elementi sovrapposti per la personalizzazione */
-.overlay {
+/* Livello 1: Il colore che prende la forma della maschera */
+#color-layer {
     position: absolute;
-    pointer-events: none;
-    max-width: 100%;
-    max-height: 100%;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-color: #ffffff;
+    -webkit-mask-size: contain;
+    -webkit-mask-position: center;
+    -webkit-mask-repeat: no-repeat;
+    mask-size: contain;
+    mask-position: center;
+    mask-repeat: no-repeat;
+    z-index: 1;
+    transition: background-color 0.3s;
 }
 
-/* Immagini utente caricate */
-.user-image {
-    max-width: 40%;
+/* Livello 2: Le ombre e i dettagli del tessuto (si fondono col colore sotto) */
+#base-image {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
     object-fit: contain;
+    z-index: 2;
+    mix-blend-mode: multiply;
+    pointer-events: none; /* Impedisce di cliccarla per sbaglio */
 }
 
-/* Testi utente */
-.user-text {
-    font-size: 20px;
-    font-weight: bold;
-    color: cadetblue;
-    text-transform: uppercase;
-    white-space: nowrap;
+/* Livello 3: Fabric.js Canvas */
+#canvas-wrapper {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 3;
+}
+.canvas-container {
+    margin: 0 auto;
 }
 
-/* Posizionamenti Felpa Fronte */
-#hoodie-front-image { top: 35%; left: 50%; transform: translate(-50%, -50%); }
-#hoodie-front-text-l { top: 25%; left: 15%; transform: rotate(-30deg); }
-#hoodie-front-text-r { top: 25%; right: 15%; transform: rotate(30deg); }
+/* Resto della UI */
+.view-selectors { margin-top: 30px; display: flex; gap: 15px; }
+.view-selectors button { padding: 10px 20px; background-color: #e0e0e0; border: none; border-radius: 6px; cursor: pointer; transition: background 0.2s; }
+.view-selectors button.active { background-color: cadetblue; color: #fff; }
 
-/* Posizionamenti Felpa Retro */
-#hoodie-back-image { top: 35%; left: 50%; transform: translate(-50%, -50%); }
-
-/* Posizionamenti Pantaloncino Fronte */
-#shorts-front-text-l { top: 60%; left: 25%; transform: rotate(-15deg); }
-#shorts-front-text-r { top: 60%; right: 25%; transform: rotate(15deg); }
-
-.view-selectors {
-    margin-top: 30px;
-    display: flex;
-    gap: 15px;
-}
-
-.view-selectors button {
-    padding: 10px 20px;
-    background-color: #e0e0e0;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background 0.2s;
-}
-
-.view-selectors button.active {
-    background-color: cadetblue;
-    color: #fff;
-}
-
-/* Pannello di Controllo Laterale */
-.controls-panel {
-    flex: 1;
-    padding: 40px;
-}
-
+.controls-panel { flex: 1; padding: 40px; }
 h2 { margin-top: 0; color: #333; }
 .control-group { margin-bottom: 25px; }
 label { display: block; margin-bottom: 8px; font-weight: 600; color: #555; }
-input[type="text"], input[type="file"] {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    box-sizing: border-box;
-}
+input[type="text"], input[type="file"] { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
 
-/* Bottoni per selezionare il capo */
-.product-selectors {
+.product-selectors { display: flex; gap: 10px; margin-bottom: 30px; }
+.product-selectors button { flex: 1; padding: 15px; background-color: #fff; border: 2px solid cadetblue; color: cadetblue; font-size: 16px; font-weight: bold; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
+.product-selectors button.active { background-color: cadetblue; color: #fff; }
+
+/* --- Stili per le opzioni dei testi (Font e Orientamento) --- */
+.text-options {
     display: flex;
     gap: 10px;
-    margin-bottom: 30px;
+    margin-top: 8px;
 }
 
-.product-selectors button {
+.text-options select {
     flex: 1;
-    padding: 15px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
     background-color: #fff;
-    border: 2px solid cadetblue;
-    color: cadetblue;
-    font-size: 16px;
-    font-weight: bold;
-    border-radius: 8px;
+    font-family: inherit;
+    font-size: 14px;
+    color: #555;
     cursor: pointer;
-    transition: all 0.2s;
 }
 
-.product-selectors button.active {
-    background-color: cadetblue;
-    color: #fff;
+.text-options select:focus {
+    outline: none;
+    border-color: cadetblue;
 }
 
-/* Mostra/Nascondi le sezioni di personalizzazione */
-.custom-controls { display: none; }
-.custom-controls.active { display: block; }
+/* --- RESPONSIVE DESIGN PER SCHERMI PICCOLI --- */
+@media (max-width: 1150px) {
+    .main-container {
+        flex-direction: column; /* Incolonna l'immagine e i controlli in verticale */
+        width: 100%;
+        max-width: 600px; /* Stringe il contenitore per farlo sembrare un'app */
+    }
 
-/* Stile per l'immagine fissa nell'HTML */
-#base-image {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 1;
-    mix-blend-mode: multiply; /* Il trucco magico per il cambio colore */
-}
+    .preview-area {
+        border-right: none;
+        border-bottom: 1px solid #eee; /* Sposta la linea separatrice sotto */
+        padding: 20px;
+    }
 
-/* Stile per il livello trasparente che contiene loghi e testi */
-#overlay-container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 10;
+    .controls-panel {
+        padding: 20px;
+    }
 }
