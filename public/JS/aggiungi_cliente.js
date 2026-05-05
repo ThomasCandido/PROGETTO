@@ -36,8 +36,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    // --- GESTIONE INVIO (Unica per Aggiungi e Modifica) ---
-   // --- GESTIONE INVIO (Unica per Aggiungi e Modifica) ---
+    // --- GESTIONE INVIO (Aggiunta e Modifica) ---
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
@@ -53,7 +52,15 @@ document.addEventListener('DOMContentLoaded', async () => {
             password: document.getElementById('password').value // Sarà stringa vuota se non toccata
         };
 
-        const url = isEditMode ? '/api/update-profile' : '/register';
+        // SCELTA DELLA ROTTA CORRETTA (Qui c'era l'errore del tuo collega!)
+        let url = '';
+        if (isEditMode) {
+            url = '/api/update-profile';
+        } else if (isAdmin) {
+            url = '/api/admin-add-client'; // Usa la nostra API se chi inserisce è l'Admin!
+        } else {
+            url = '/register'; // Usa quella vecchia se si iscrive un utente normale
+        }
 
         try {
             const response = await fetch(url, {
@@ -62,8 +69,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 body: JSON.stringify(formData)
             });
 
-            if (!isEditMode) {
-                // REGISTRAZIONE NUOVA (Gestita dall'Admin o Form pubblico)
+            // Se è la vecchia registrazione pubblica (che restituisce quel blocco HTML)
+            if (!isEditMode && !isAdmin) {
                 const html = await response.text();
                 document.open();
                 document.write(html);
@@ -71,17 +78,16 @@ document.addEventListener('DOMContentLoaded', async () => {
                 return;
             }
 
-            // MODIFICA PROFILO (Successo)
+            // Se è la nostra API Admin o l'Update Profilo (che restituiscono un bel JSON pulito)
             const resJson = await response.json();
+            
             if (resJson.success) {
-                alert("✅ Profilo aggiornato con successo!");
+                alert(isEditMode ? "✅ Profilo aggiornato con successo!" : "✅ Cliente aggiunto con successo!");
 
                 // REDIRECT INTELLIGENTE
                 if (isAdmin) {
-                    // Se sono admin, torno alla gestione clienti
                     window.location.href = 'lista_clienti.html';
                 } else {
-                    // Se sono cliente, torno alla mia dashboard
                     window.location.href = 'storico_ordini_home.html';
                 }
             } else {

@@ -58,6 +58,14 @@ app.get('/storico_ordini_home.html', requireLogin, (req, res) => {
     res.sendFile(path.join(ROOT, 'storico_ordini_home.html'));
 });
 
+app.get('/aggiungi_ordine.html', requireLogin, (req, res) => {
+    res.sendFile(path.join(ROOT, 'aggiungi_ordine.html'));
+});
+
+app.get('/Configuratore_felpe_pantaloncini.html', requireLogin, (req, res) => {
+    res.sendFile(path.join(ROOT, 'Configuratore_felpe_pantaloncini.html'));
+});
+
 // ============================================================
 // 2. DISTRIBUZIONE FILE STATICI (CSS, JS, IMMAGINI)
 // ============================================================
@@ -278,6 +286,70 @@ app.post('/api/update-order', requireLogin, async (req, res) => {
 
     } catch (err) {
         console.error("Errore Update Ordine:", err.message);
+        res.status(500).json({ success: false, message: err.message });
+    }
+});
+
+// API per Admin: Recupero lista COMPLETA dei clienti per la tabella
+app.get('/api/get-full-clients', requireAdmin, async (req, res) => {
+    try {
+        const { data, error } = await supabase
+            .from('clienti')
+            .select('*, utenti(email, is_admin)')
+            .order('societa', { ascending: true });
+            
+        if (error) throw error;
+        res.json({ success: true, data });
+    } catch (err) {
+        res.status(500).json({ success: false, message: err.message });
+    }
+});
+
+// API per Admin: Aggiunta di un nuovo cliente dal gestionale
+app.post('/api/admin-add-client', requireAdmin, async (req, res) => {
+    const { email, password, nome, cognome, societa, telefono } = req.body;
+    
+    try {
+        const hashedPassword = await bcrypt.hash(password, 10);
+        
+        const { data: newUser, error: userError } = await supabase
+            .from('utenti')
+            .insert([{ email, password: hashedPassword, is_admin: false }])
+            .select();
+        
+        if (userError) throw userError;
+
+        const { error: clienteError } = await supabase.from('clienti').insert([{ 
+            id: newUser[0].id, 
+            nome: nome || null, 
+            cognome: cognome || null, 
+            societa: societa || null, 
+            email_contatto: email, 
+            telefono: telefono || null
+        }]);
+
+        if (clienteError) throw clienteError;
+
+        res.json({ success: true, message: "Cliente aggiunto con successo!" });
+        
+    } catch (err) { 
+        console.error("Errore aggiunta cliente:", err);
+        res.status(500).json({ success: false, message: "Errore: " + err.message });
+    }
+});
+
+// API per Admin: Eliminazione di un cliente
+app.delete('/api/delete-client', requireAdmin, async (req, res) => {
+    const { id } = req.body;
+    try {
+        // Nota: Eliminando l'utente, se hai impostato le chiavi esterne in Supabase 
+        // con "ON DELETE CASCADE", si elimineranno in automatico anche i record 
+        // collegati in 'clienti' e 'ordini'.
+        const { error } = await supabase.from('utenti').delete().eq('id', id);
+        
+        if (error) throw error;
+        res.json({ success: true, message: "Cliente eliminato con successo!" });
+    } catch (err) {
         res.status(500).json({ success: false, message: err.message });
     }
 });
