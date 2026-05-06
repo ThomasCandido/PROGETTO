@@ -14,72 +14,6 @@ hr {
     margin: 10px 20px;
 }
 
-/* =========================================
-    BARRA DI RICERCA
-   ========================================= */
-.ricerca_cliente {
-    background-color: #ffffff;
-    padding: 20px;
-    margin: 20px;
-    border-radius: 8px; /* Stessi angoli arrotondati del form */
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05); /* Stessa ombra */
-}
-
-.ricerca_cliente form {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap; /* Permette di andare a capo su schermi piccoli */
-    gap: 15px; /* Spazio tra gli elementi */
-}
-
-.ricerca_cliente label {
-    font-size: 14px;
-    font-weight: 600;
-    color: #34495e;
-}
-
-.ricerca_cliente input[type="text"] {
-    padding: 10px;
-    border: 1px solid #bdc3c7;
-    border-radius: 4px;
-    font-size: 15px;
-    transition: border-color 0.3s;
-    flex-grow: 1; /* Fa allargare la barra di ricerca per riempire lo spazio */
-    min-width: 200px;
-}
-
-.ricerca_cliente input[type="text"]:focus {
-    outline: none;
-    border-color: #3498db;
-    box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
-}
-
-.ricerca_cliente button {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    font-size: 15px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s;
-    background-color: #27ae60; /* Verde principale */
-    color: white;
-}
-
-.ricerca_cliente button:hover {
-    background-color: #219150;
-}
-
-/* Bottone "Aggiungi Nuovo Cliente" con colore secondario */
-.ricerca_cliente a button {
-    background-color: #ecf0f1; 
-    color: #34495e;
-}
-
-.ricerca_cliente a button:hover {
-    background-color: #bdc3c7;
-    color: #333;
-}
 
 /* =========================================
    LAYOUT FLASHCARD CLIENTI
@@ -145,20 +79,21 @@ hr {
 /*CAMPI EDITABILI QUANDO MODIFICO IL CLIENTE*/
 
 .campo-editabile {
-    flex-grow: 1;          /* Fa occupare all'input tutto lo spazio a destra rimanente */
+    flex-grow: 1;          
     border: 1px dashed transparent;
     background: transparent;
     font-size: 0.95rem;
     font-family: inherit;
     color: inherit;
-    padding: 6px 8px;      /* Dà un po' di respiro al testo */
+    padding: 6px 8px;      
     border-radius: 6px;
     transition: all 0.3s ease;
     outline: none;
     margin-left: 5px;
+    width: 100%; /* Assicura che riempiano lo spazio */
+    box-sizing: border-box;
 }
 
-/* Aspetto quando clicchi sulla matita e i campi si attivano */
 .campo-editabile.attivo {
     border: 1px solid #3498db;
     background: #f4fbfc;
@@ -192,22 +127,22 @@ hr {
 .card-cliente .dettagli {
     display: flex;
     flex-direction: column;
-    gap: 8px; /* Spazio tra una riga e l'altra */
+    gap: 8px; 
     list-style-type: none; 
     padding: 0; 
     margin: 0;
 }
 
 .card-cliente .dettagli li {
-    display: flex;         /* Allinea etichetta e input sulla stessa riga */
-    align-items: center;   /* Centra tutto verticalmente */
+    display: flex;         
+    align-items: center;   
     color: #333;
 }
 
 .card-cliente .dettagli strong {
     color: #2c3e50;
-    width: 90px;
-    flex-shrink: 0;        /* Impedisce all'etichetta di restringersi su schermi piccoli */
+    width: 90px; /* Larghezza fissa per le etichette "Referente:", "Email:" ecc. */
+    flex-shrink: 0;        
 }
 
 .card-cliente a {
@@ -277,6 +212,38 @@ hr {
     background-color: #f4fbfc; /* Azzurrino molto chiaro */
     transform: translateY(-5px); /* Solleva leggermente la card */
     box-shadow: 0 6px 12px rgba(95, 158, 160, 0.2); /* Ombra colorata */
+}
+
+
+/*TENDINA DI ORDINAMENTO*/
+
+.tendina-ordinamento {
+    padding: 10px 15px;
+    border: 1px solid #dcdde1;
+    border-radius: 8px; /* Stessi angoli arrotondati della ricerca */
+    font-size: 14px;
+    color: #2c3e50;
+    background-color: #f8f9fa;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.3s ease;
+    font-family: inherit;
+}
+
+.tendina-ordinamento:hover,
+.tendina-ordinamento:focus {
+    border-color: cadetblue;
+    background-color: #ffffff;
+    box-shadow: 0 0 5px rgba(95, 158, 160, 0.3); /* Leggero alone cadetblue */
+}
+
+/* Regola per affiancare correttamente la tendina su schermi piccoli */
+@media (max-width: 600px) {
+    .tendina-ordinamento {
+        margin-left: 0;
+        margin-top: 10px;
+        width: 100%;
+    }
 }
 
 /* MEDIA QUERY PER SMARTPHONE */

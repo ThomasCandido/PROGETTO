@@ -150,6 +150,49 @@ window.filtraClienti = function() {
     disegnaGriglia(clientiFiltrati);
 };
 
+
+window.ordinaClienti = function() {
+    const criterio = document.getElementById('filtroOrdinamento').value;
+    
+    // Se l'utente torna su "Ordina per..." (valore vuoto), non facciamo nulla
+    if (!criterio) return;
+
+    // Ordiniamo l'array globale tuttiIClienti
+    tuttiIClienti.sort((a, b) => {
+        let valA = "";
+        let valB = "";
+
+        // Scegliamo quale campo confrontare in base alla selezione
+        if (criterio.includes('societa')) {
+            valA = (a.societa || "Privato").toLowerCase();
+            valB = (b.societa || "Privato").toLowerCase();
+        } else if (criterio.includes('cognome')) {
+            valA = (a.cognome || "").toLowerCase();
+            valB = (b.cognome || "").toLowerCase();
+        } else if (criterio.includes('nome')) {
+            valA = (a.nome || "").toLowerCase();
+            valB = (b.nome || "").toLowerCase();
+        }
+
+        // Determiniamo se è crescente (asc) o decrescente (desc)
+        // localeCompare garantisce che l'ordine alfabetico italiano (con accenti ecc.) sia perfetto
+        if (criterio.includes('asc')) {
+            return valA.localeCompare(valB);
+        } else {
+            return valB.localeCompare(valA);
+        }
+    });
+
+    // Ridisegniamo le card. 
+    // Se hai già una funzione filtraClienti() attiva, la chiamiamo per mantenere
+    // attiva un'eventuale ricerca testuale in corso, altrimenti chiamiamo disegnaGriglia
+    if (typeof window.filtraClienti === 'function') {
+        window.filtraClienti();
+    } else {
+        disegnaGriglia(tuttiIClienti);
+    }
+};
+
 //ELIMINAZIONE SINGOLA
 window.eliminaClienteDalDb = async function(id) {
     if (confirm("Sei sicuro di voler eliminare questo cliente dal database? L'operazione non può essere annullata.")) {
