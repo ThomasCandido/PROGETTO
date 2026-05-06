@@ -99,6 +99,36 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+//CONTROLLO IN TEMPO REALE DEI CAMPI EMAIL E TELEFONO NELLE CARD
+
+document.addEventListener('input', function(e) {
+    
+    // 1. FORMATTAZIONE TELEFONO (se l'ID inizia con "tel-")
+    if (e.target && e.target.id && e.target.id.startsWith('tel-')) {
+        let numeri = e.target.value.replace(/\D/g, '');
+        let formattato = '';
+        
+        if (numeri.length > 0) formattato += numeri.substring(0, 3);
+        if (numeri.length > 3) formattato += '-' + numeri.substring(3, 6);
+        if (numeri.length > 6) formattato += '-' + numeri.substring(6, 10);
+        
+        e.target.value = formattato;
+    }
+
+    // 2. VALIDAZIONE EMAIL VISIVA (se l'ID inizia con "email-")
+    if (e.target && e.target.id && e.target.id.startsWith('email-')) {
+        const emailRegex = /(\w+)@(\w+\.\w+)+/;
+        
+        if (e.target.value === '') {
+            e.target.style.borderColor = 'transparent'; // Colore neutro per campo vuoto
+        } else if (emailRegex.test(e.target.value)) {
+            e.target.style.borderColor = '#27ae60'; // Verde se valida
+        } else {
+            e.target.style.borderColor = '#e74c3c'; // Rosso se non valida
+        }
+    }
+});
+
 //BARRA DI RICERCA
 window.filtraClienti = function() {
     const termine = document.getElementById('barraRicerca').value.toLowerCase();
@@ -143,6 +173,8 @@ window.eliminaClienteDalDb = async function(id) {
     }
 };
 
+
+//Funzione per modificare e salvare i dati del cliente
 window.toggleModifica = async function(btn, id) {
     const inModifica = btn.innerHTML.includes('💾');
     const inputs = document.querySelectorAll(`input[id$="-${id}"]`);
@@ -160,12 +192,35 @@ window.toggleModifica = async function(btn, id) {
         btn.style.borderColor = '#f39c12';
         
     } else {
-        // SALVA LE MODIFICHE NEL DATABASE
+        // RECUPERA I DATI E I CAMPI ATTUALI
+        const inputNome = document.getElementById(`nome-${id}`);
+        const inputEmail = document.getElementById(`email-${id}`);
+        const inputTel = document.getElementById(`tel-${id}`);
+        
+        // --- 🚨 NUOVI CONTROLLI DI VALIDAZIONE 🚨 ---
+        const emailRegex = /(\w+)@(\w+\.\w+)+/;
+        
+        // Controllo Email
+        if (!emailRegex.test(inputEmail.value)) {
+            alert("❌ Errore: Inserisci un'email valida che contenga '@' e un dominio (es. '.it' o '.com').");
+            inputEmail.focus();
+            return; // Ferma il salvataggio e non prosegue
+        }
+        
+        // Controllo Telefono (verifichiamo che se inserito, abbia almeno 9-10 cifre)
+        const numeriTel = inputTel.value.replace(/\D/g, ''); // Prende solo i numeri
+        if (numeriTel.length > 0 && numeriTel.length < 9) {
+            alert("❌ Errore: Il numero di telefono è troppo corto. Inserisci un recapito valido.");
+            inputTel.focus();
+            return; // Ferma il salvataggio
+        }
+        // --------------------------------------------
+
         const datiAggiornati = {
             id: id,
-            referente: document.getElementById(`nome-${id}`).value,
-            email: document.getElementById(`email-${id}`).value,
-            telefono: document.getElementById(`tel-${id}`).value
+            referente: inputNome.value,
+            email: inputEmail.value,
+            telefono: inputTel.value
         };
 
         try {
@@ -179,10 +234,11 @@ window.toggleModifica = async function(btn, id) {
             const result = await response.json();
 
             if (result.success) {
-                // Se il db si aggiorna, blocca di nuovo i campi
+                // Se il db si aggiorna, ripristina la grafica
                 inputs.forEach(input => {
                     input.setAttribute('readonly', 'true');
                     input.classList.remove('attivo');
+                    input.style.borderColor = 'transparent'; // Resetta i colori verde/rosso
                 });
                 
                 // Ripristina il pulsante a matita

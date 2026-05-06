@@ -142,22 +142,27 @@ hr {
     border-color: #dcdde1;
 }
 
+/*CAMPI EDITABILI QUANDO MODIFICO IL CLIENTE*/
+
 .campo-editabile {
+    flex-grow: 1;          /* Fa occupare all'input tutto lo spazio a destra rimanente */
     border: 1px dashed transparent;
     background: transparent;
     font-size: 0.95rem;
     font-family: inherit;
     color: inherit;
-    width: calc(100% - 105px);
-    padding: 4px;
-    border-radius: 4px;
+    padding: 6px 8px;      /* Dà un po' di respiro al testo */
+    border-radius: 6px;
     transition: all 0.3s ease;
     outline: none;
+    margin-left: 5px;
 }
+
+/* Aspetto quando clicchi sulla matita e i campi si attivano */
 .campo-editabile.attivo {
     border: 1px solid #3498db;
     background: #f4fbfc;
-    box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
 }
 
 /* Header della card: Società a sx, ID a dx */
@@ -185,26 +190,24 @@ hr {
 
 /* Elenco delle informazioni di contatto */
 .card-cliente .dettagli {
-    display: grid;
-    grid-template-columns: 1fr; /* Una colonna per avere i testi ben allineati */
-    gap: 12px;
-    font-size: 0.95rem;
-    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px; /* Spazio tra una riga e l'altra */
     list-style-type: none; 
     padding: 0; 
-    margin-top: 0;
+    margin: 0;
 }
 
 .card-cliente .dettagli li {
-    white-space: normal; 
-    line-height: 1.4;
+    display: flex;         /* Allinea etichetta e input sulla stessa riga */
+    align-items: center;   /* Centra tutto verticalmente */
     color: #333;
 }
 
 .card-cliente .dettagli strong {
     color: #2c3e50;
-    display: inline-block;
     width: 90px;
+    flex-shrink: 0;        /* Impedisce all'etichetta di restringersi su schermi piccoli */
 }
 
 .card-cliente a {
@@ -214,15 +217,6 @@ hr {
 
 .card-cliente a:hover {
     text-decoration: underline;
-}
-.azioni-fluttuanti {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    z-index: 1000;
 }
 
 .botton_fluttuante {
