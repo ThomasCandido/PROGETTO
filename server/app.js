@@ -357,12 +357,50 @@ app.delete('/api/delete-client', requireAdmin, async (req, res) => {
         // Nota: Eliminando l'utente, se hai impostato le chiavi esterne in Supabase 
         // con "ON DELETE CASCADE", si elimineranno in automatico anche i record 
         // collegati in 'clienti' e 'ordini'.
-        const { error } = await supabase.from('utenti').delete().eq('id', id);
+        const { error } = await supabase.from('utenti').delete().eq('id', Number(id));
         
         if (error) throw error;
         res.json({ success: true, message: "Cliente eliminato con successo!" });
     } catch (err) {
         res.status(500).json({ success: false, message: err.message });
+    }
+});
+
+// API per Admin: Modifica rapida di un cliente dalla flashcard
+app.put('/api/admin-update-client', requireAdmin, async (req, res) => {
+    const { id, referente, email, telefono } = req.body;
+    
+    try {
+        // Dividiamo il "Referente" in nome e cognome (presumendo che il primo spazio divida i due)
+        const [nome, ...cognomi] = (referente || "").trim().split(" ");
+        const cognome = cognomi.join(" ");
+
+        // 1. Aggiorniamo la tabella 'clienti'
+        const { error: errorClienti } = await supabase
+            .from('clienti')
+            .update({ 
+                nome: nome || null, 
+                cognome: cognome || null, 
+                email_contatto: email, 
+                telefono: telefono || null 
+            })
+            .eq('id', id);
+
+        if (errorClienti) throw errorClienti;
+
+        // 2. Aggiorniamo l'email anche nella tabella 'utenti' (per mantenere coerente il login)
+        const { error: errorUtenti } = await supabase
+            .from('utenti')
+            .update({ email: email })
+            .eq('id', id);
+
+        if (errorUtenti) throw errorUtenti;
+
+        res.json({ success: true, message: "Cliente aggiornato con successo!" });
+        
+    } catch (err) { 
+        console.error("Errore aggiornamento cliente:", err);
+        res.status(500).json({ success: false, message: "Errore: " + err.message });
     }
 });
 

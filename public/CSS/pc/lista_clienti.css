@@ -86,27 +86,78 @@ hr {
    ========================================= */
 .griglia-clienti {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    /* Ingrandite le card passando da minmax(320px) a minmax(400px) */
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
     gap: 30px; 
     padding: 5px 20px;
     margin: 20px auto;
-    max-width: 1200px;
+    max-width: 1400px; /* Allargato il contenitore massimo */
 }
-
 .card-cliente {
     display: flex;
     flex-direction: column;
     background-color: white;
     border: 1px solid grey;
-    padding: 20px;
+    padding: 30px; /* Padding aumentato per dare più respiro (prima era 20px) */
     border-radius: 15px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.05);
     transition: all 0.5s ease;
 }
-
 /* Effetto sollevamento quando passi col mouse */
 .card-cliente:hover {
     transform: translateY(-10px); 
+}
+
+.card-cliente .intestazione {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #f1f2f6;
+    padding-bottom: 10px;
+}
+
+.azioni-card {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-modifica-card {
+    background-color: transparent;
+    border: 1px solid transparent;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: all 0.2s ease;
+    padding: 5px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-modifica-card:hover {
+    transform: scale(1.1);
+    background-color: #f1f2f6;
+    border-color: #dcdde1;
+}
+
+.campo-editabile {
+    border: 1px dashed transparent;
+    background: transparent;
+    font-size: 0.95rem;
+    font-family: inherit;
+    color: inherit;
+    width: calc(100% - 105px);
+    padding: 4px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    outline: none;
+}
+.campo-editabile.attivo {
+    border: 1px solid #3498db;
+    background: #f4fbfc;
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
 }
 
 /* Header della card: Società a sx, ID a dx */
@@ -164,6 +215,56 @@ hr {
 .card-cliente a:hover {
     text-decoration: underline;
 }
+.azioni-fluttuanti {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    z-index: 1000;
+}
+
+.botton_fluttuante {
+    display: flex;
+    position: fixed;
+    width: 60px;
+    height: 60px;
+    border-radius: 15%;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px;
+    color: white;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    z-index: 1000;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    right: 30px;
+    bottom: 30px;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.botton_fluttuante:hover {
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
+}
+
+.btn_aggiungi { background-color: cadetblue; }
+.btn_aggiungi:hover { background-color: #4a7c7d; }
+
+.btn_elimina {
+    background-color: rgb(215, 49, 49);
+    visibility: hidden;
+    transform: scale(0); /* Animazione pop-up */
+    bottom: 110px; /* Si posiziona sopra il bottone aggiungi */
+}
+
+.btn_elimina.mostra {
+    visibility: visible;
+    transform: scale(1); /* Animazione pop-up */
+}
+
+.btn_elimina:hover { background-color: #c0392b; }
 
 /* =========================================
    CHECKBOX SELEZIONE CLIENTI
