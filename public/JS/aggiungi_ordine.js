@@ -425,27 +425,35 @@ window.chiudiConfiguratore = function() {
 };
 
 // Questa funzione viene chiamata DAL configuratore quando ha finito di caricare la foto!
-window.salvaImmagineConfiguratore = function(cloudinaryUrl, tipologia, colore) {
+// Questa funzione viene chiamata DAL configuratore quando ha finito di caricare la foto!
+window.salvaImmagineConfiguratore = function(cloudinaryUrl, tipologia, colore, taglia, quantita) {
     // 1. Salva l'URL dell'immagine
     document.getElementById('f_image_url').value = cloudinaryUrl;
 
-    // 2. Autocompila la Tipologia (se proviene dal configuratore)
+    // 2. Autocompila la Tipologia e SBLOCCA le taglie
     if (tipologia) {
         document.getElementById('f_tipologia').value = tipologia;
-        // FONDAMENTALE: aggiorniamo subito le taglie in base alla tipologia scelta!
         aggiornaTaglieDinamiche(); 
     }
 
-    // 3. Autocompila il Colore esatto
+    // 3. Autocompila il Colore 
     if (colore) {
         document.getElementById('f_colore').value = colore;
     }
 
-    // 4. Ricalcola i prezzi e chiude
-    aggiornaPrezziAutomatici(); // Ricalcola il prezzo con il +35%
+    // 4. Autocompila Quantità e Taglia
+    if (quantita) {
+        document.getElementById('f_quantita').value = quantita;
+    }
+    if (taglia) {
+        document.getElementById('f_taglia').value = taglia; 
+    }
+
+    // 5. Ricalcola i prezzi col +35% e chiude
+    aggiornaPrezziAutomatici(); 
     chiudiConfiguratore();
     
-    alert("✅ Grafica generata! Tipologia e colore sono stati inseriti automaticamente nell'ordine.");
+    alert("✅ Grafica generata! Tipologia, Colore, Taglia e Quantità sono stati inseriti automaticamente.");
 };
 
 

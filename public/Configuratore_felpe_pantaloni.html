@@ -40,9 +40,28 @@
             <button id="select-shorts">Pantaloncino</button>
         </div>
 
-        <div class="control-group" style="margin-top: 20px;">
-            <label>Colore Prodotto</label>
-            <input type="color" id="product-color" value="#ffffff">
+        <div class="control-group" style="margin-top: 20px; display: flex; gap: 15px; align-items: flex-end;">
+            
+            <!-- 1. Colonna Colore -->
+            <div style="flex: 1;">
+                <label for="product-color" style="font-size: 0.9em;">Colore</label>
+                <input type="color" id="product-color" value="#ffffff" style="width: 100%; height: 38px; cursor: pointer; padding: 0; border: 1px solid #ccc; border-radius: 4px;">
+            </div>
+
+            <!-- 2. Colonna Taglia -->
+            <div style="flex: 1;">
+                <label for="conf-taglia" style="font-size: 0.9em;">Taglia</label>
+                <select id="conf-taglia" style="width: 100%; height: 38px; padding: 5px; border-radius: 4px; border: 1px solid #ccc;">
+                    <!-- Verrà popolato in automatico dal JavaScript -->
+                </select>
+            </div>
+
+            <!-- 3. Colonna Quantità -->
+            <div style="flex: 1;">
+                <label for="conf-quantita" style="font-size: 0.9em;">Quantità</label>
+                <input type="number" id="conf-quantita" value="1" min="1" style="width: 100%; height: 38px; padding: 5px; border-radius: 4px; border: 1px solid #ccc;">
+            </div>
+            
         </div>
 
         <div id="controls-hoodie" class="custom-controls active">

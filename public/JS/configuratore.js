@@ -18,6 +18,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const controlsHoodie = document.getElementById('controls-hoodie');
     const controlsShorts = document.getElementById('controls-shorts');
 
+    // Campi per taglia e quantità
+    const tagliaSelect = document.getElementById('conf-taglia');
+    const quantitaInput = document.getElementById('conf-quantita');
+
 
     // 2. CONFIGURAZIONE INIZIALE MASCHERE CSS (MASKING)
     // Contenitore del testo affinché tagli via visivamente tutto
@@ -106,6 +110,20 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+
+    // --- NUOVA FUNZIONE: Aggiorna il menu delle taglie in base al prodotto ---
+    function aggiornaTaglieConfiguratore() {
+        if(!tagliaSelect) return; // Sicurezza
+        tagliaSelect.innerHTML = '<option value="" selected disabled>Scegli Taglia...</option><option value="UNISEX">UNISEX</option>';
+        if (activeProduct === 'hoodie') { 
+            ['XS', 'S', 'M', 'L', 'XL', 'XXL'].forEach(t => tagliaSelect.innerHTML += `<option value="${t}">${t}</option>`);
+        } else { 
+            for (let i = 35; i <= 52; i++) {
+                tagliaSelect.innerHTML += `<option value="${i}">${i}</option>`;
+            }
+        }
+    }
+
     /**
      * Gestisce il passaggio tra i vari prodotti (Felpa -> Pantaloncino) 
      * o le varie viste (Fronte -> Retro), salvando il lavoro in corso.
@@ -120,6 +138,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // 3. Aggiorna l'interfaccia visiva (Immagini e Colori)
         updateVisuals();
+        aggiornaTaglieConfiguratore();
         
         // 4. Pulisce la lavagna e, se avevamo salvato qualcosa in precedenza per 
         // questa specifica vista, la ricarica dal file JSON in memoria
@@ -297,12 +316,20 @@ document.addEventListener('DOMContentLoaded', function() {
     // 10. AVVIO INIZIALE
     // Esegue il primo rendering dell'applicazione all'apertura della pagina
     updateVisuals();
+    aggiornaTaglieConfiguratore();
     
     // =========================================================================
     // 11. GENERAZIONE FOTO E UPLOAD CLOUDINARY CON FABRIC.JS (NUOVA VERSIONE!)
     // =========================================================================
     
     document.getElementById('btn-conferma-salva').addEventListener('click', async () => {
+
+        // RECUPERA TAGLIA E QUANTITA' E CONTROLLA
+        const tagliaScelta = tagliaSelect ? tagliaSelect.value : null;
+        const quantitaScelta = quantitaInput ? quantitaInput.value : 1;
+        if (!tagliaScelta) return alert("⚠️ Attenzione: Seleziona una taglia prima di confermare l'ordine!");
+        if (!quantitaScelta || quantitaScelta < 1) return alert("⚠️ Attenzione: Inserisci una quantità valida!");
+        
         const btn = document.getElementById('btn-conferma-salva');
         btn.innerText = "⏳ Composizione immagine in corso...";
         btn.disabled = true;
@@ -368,14 +395,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 const data = await res.json();
                 
                 // 6. Invia l'URL a "aggiungi_ordine.html"
+                // 6. Invia 5 parametri a "aggiungi_ordine.html"
                 if(data.secure_url && window.parent && window.parent.salvaImmagineConfiguratore) {
-                    // Traduciamo la selezione in italiano per farla combaciare col menu a tendina
                     let tipologiaScelta = (activeProduct === 'hoodie') ? 'Felpa' : 'Pantalone';
-                    
-                    // Passiamo URL, Tipologia e Colore al file principale!
-                    window.parent.salvaImmagineConfiguratore(data.secure_url, tipologiaScelta, currentColor);
+                    window.parent.salvaImmagineConfiguratore(data.secure_url, tipologiaScelta, currentColor, tagliaScelta, quantitaScelta);
                 } else {
-                    alert("Errore: impossibile comunicare con il carrello principale.");
                 }
                 
                 // Ripristina il bottone
