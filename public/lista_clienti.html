@@ -68,8 +68,17 @@
         <form class="ricerca" onsubmit="return false;">
             <input type="text" id="barraRicerca" placeholder="Cerca cliente, e-mail, telefono..." onkeyup="filtraClienti()">
             <button type="button" title="Cerca">&#8981;</button>
+            
+            <select id="filtroOrdinamento" class="tendina-ordinamento" onchange="ordinaClienti()">
+                <option value="">↕️ Ordina per...</option>
+                <option value="societa-asc">🏢 Società (Crescente)</option>
+                <option value="societa-desc">🏢 Società (Decrescente)</option>
+                <option value="cognome-asc">👤 Cognome (Crescente)</option>
+                <option value="cognome-desc">👤 Cognome (Decrescente)</option>
+                <option value="nome-asc">👤 Nome (Crescente)</option>
+                <option value="nome-desc">👤 Nome (Decrescente)</option>
+            </select>
         </form>
-
         <br><br>
 
 
