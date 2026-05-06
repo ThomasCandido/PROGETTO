@@ -121,13 +121,39 @@
                         </td>
                         <td><input type="color" id="f_colore" title="Colore"></td>
                         <td>
+                            <!-- vedi qui-->
                             <select id="f_taglia" required>
                                 <option value="" selected disabled>Taglia</option>
                                 <option value="UNISEX">UNISEX</option>
-                                <option value="S">S</option>
-                                <option value="M">M</option>
-                                <option value="L">L</option>
-                                <option value="XL">XL</option>
+                                <optgroup label="Abbigliamento">
+                                    <option value="XS">XS</option>
+                                    <option value="S">S</option>
+                                    <option value="M">M</option>
+                                    <option value="L">L</option>
+                                    <option value="XL">XL</option>
+                                    <option value="XXL">XXL</option>
+                                </optgroup>
+    
+                                <optgroup label="Calzature / Pantaloni">
+                                    <option value="35">35</option>
+                                    <option value="36">36</option>
+                                    <option value="37">37</option>
+                                    <option value="38">38</option>
+                                    <option value="39">39</option>
+                                    <option value="40">40</option>
+                                    <option value="41">41</option>
+                                    <option value="42">42</option>
+                                    <option value="43">43</option>
+                                    <option value="44">44</option>
+                                    <option value="45">45</option>
+                                    <option value="46">46</option>
+                                    <option value="47">47</option>
+                                    <option value="48">48</option>
+                                    <option value="49">49</option>
+                                    <option value="50">50</option>
+                                    <option value="51">51</option>
+                                    <option value="52">52</option>
+                                </optgroup>
                             </select>
                         </td>
                     </tr>
@@ -146,12 +172,17 @@
 
                     <tr>
                         <td colspan="4">
+                            <!-- vedi qui-->
                             <div class="campi_sotto">
                                 <input type="hidden" id="f_image_url">
+                                <!-- nuovo bottone-->
+                                <button type="button" class="bottone_ic" id="btn_apri_configuratore" title="Apri Configuratore 3D">🎨</button>
                                 <button type="button" class="bottone_ic" id="upload_widget_opener" title="Allega Foto su Cloudinary">&#128206;</button>
                                 <button type="reset" class="bottone_ic" title="Reset Form">&#x21BB;</button>
                                 <button type="button" class="bottone_ic" onclick="aggiungiRigaTabella()" title="Aggiungi a Riepilogo">&#10133;</button>
                             </div>
+
+                             
                         </td>
                     </tr>
                 </tbody>
@@ -199,6 +230,21 @@
                 <button type="button" class="btn-confirm" onclick="processaPagamento()">Acquista Ora</button>
             </div>
         </div>
+        </div>
+    </div>
+
+    <!-- vedi qui-->
+    <!-- configuratore-->
+     <div id="modalConfiguratore" class="modal-pay" style="display:none; z-index: 9999; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); align-items: center; justify-content: center;">
+        <div class="modal-pay-content" style="width: 95%; max-width: 1200px; height: 95vh; padding: 0; background: white; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column;">
+            
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background: cadetblue; color: white;">
+                <h2 style="margin: 0; font-size: 20px;">🎨 Personalizza Capo</h2>
+                <button type="button" onclick="chiudiConfiguratore()" style="background: white; color: cadetblue; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold;">X Chiudi</button>
+            </div>
+            
+            <iframe id="iframeConfiguratore" src="" style="width: 100%; height: 100%; border: none;"></iframe>
+            
         </div>
     </div>
 </body>

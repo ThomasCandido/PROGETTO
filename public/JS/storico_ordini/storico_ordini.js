@@ -3,17 +3,15 @@ const list_stati = ["Ordinato", "In Lavorazione", "Evaso", "Archiviato"];
 
 // 2. AGGIORNAMENTO GRAFICO (Senza ricaricare tutto)
 function aggiornaCardGraficamente(id, nuovoStato) {
-    const checkbox = document.querySelector(`input[name="ordine_sel"][value="${id}"]`);
-    if (!checkbox) return;
-
-    const card = checkbox.closest('li');
+    // 1. Troviamo la card in modo sicuro grazie al nuovo ID
+    const card = document.getElementById(`card_${id}`);
     if (!card) return;
 
-    // Aggiorna testo
+    // 2. Aggiorna testo
     const labelStato = card.querySelector('.stato b');
     if (labelStato) labelStato.innerText = nuovoStato;
 
-    // Aggiorna semaforo
+    // 3. Aggiorna semaforo
     const pallina = card.querySelector('.semaforo_stato');
     if (pallina) {
         let colore = "#e74c3c";
@@ -23,14 +21,27 @@ function aggiornaCardGraficamente(id, nuovoStato) {
         pallina.style.backgroundColor = colore;
     }
 
-    // Feedback visivo
+    // 4. --- GESTIONE DINAMICA DEL LUCCHETTO ---
+    const isAdmin = localStorage.getItem('isAdmin') === 'true';
+    if (!isAdmin && nuovoStato !== 'Ordinato') {
+        const divSelezione = card.querySelector('.selezione');
+        if (divSelezione) {
+            // Se lo stato cambia, distruggiamo la checkbox e mettiamo il lucchetto in diretta!
+            divSelezione.innerHTML = `<span title="Non puoi più annullare questo ordine" style="cursor:not-allowed; font-size: 1.2em;">🔒</span>`;
+        }
+    }
+
+    // 5. Feedback visivo
     card.style.transition = "background-color 0.5s";
     card.style.backgroundColor = "#fff9c4"; 
     setTimeout(() => card.style.backgroundColor = "", 1000);
 }
 
 // 3. LOGICA DEL TIMER
-async function eseguiCicloSimulazione(idOrdine, statoIniziale) {
+async function eseguiCicloSimulazione(ordine) {
+    let idOrdine = ordine.id;
+    let statoIniziale = ordine.stato || "Ordinato";
+    
     let indice = list_stati.indexOf(statoIniziale);
     if (indice === -1) indice = 0;
 
@@ -52,6 +63,10 @@ async function eseguiCicloSimulazione(idOrdine, statoIniziale) {
 
             if (res.ok) {
                 console.log(`[Auto] Ordine ${idOrdine} -> ${prossimoStato}`);
+                
+                // 🪄 LA MAGIA: Aggiorniamo la memoria invisibile dell'ordine!
+                ordine.stato = prossimoStato; 
+                
                 aggiornaCardGraficamente(idOrdine, prossimoStato);
             }
         } catch (err) { console.error("Errore simulazione:", err); break; }
@@ -73,6 +88,7 @@ async function caricaOrdiniDalDatabase() {
 
             result.data.forEach(ordine => {
                 const li = document.createElement('li');
+                li.id = `card_${ordine.id}`;
 
                 // Colore Stato
                 let coloreStato = "#e74c3c";
@@ -84,9 +100,20 @@ async function caricaOrdiniDalDatabase() {
                 const map = ntc.name(ordine.colore);
                 const name_color = map[1];
 
+                // LOGICA CHECKBOX: L'admin vede sempre il check. Il cliente lo vede SOLO se l'ordine è "Ordinato".
+                let checkboxHTML = '';
+                if (isAdmin || ordine.stato === 'Ordinato' || !ordine.stato) 
+                {
+                    checkboxHTML = `<input type="checkbox" name="ordine_sel" value="${ordine.id}">`;
+                } 
+                else 
+                {
+                    checkboxHTML = `<span title="Non puoi più annullare questo ordine" style="cursor:not-allowed; font-size: 1.2em;">🔒</span>`;
+                }
+
                 li.innerHTML = `
                     <div class="selezione">
-                        <input type="checkbox" name="ordine_sel" value="${ordine.id}">
+                        ${checkboxHTML}
                     </div>
                     <div class="info">
                         <p class="id_ord"><b>cod:${ordine.id.toString().padStart(4, '0')}</b></p>
@@ -133,7 +160,7 @@ async function caricaOrdiniDalDatabase() {
 
             // Avvio timer
             result.data.forEach(o => {
-                if (o.stato !== "Archiviato") eseguiCicloSimulazione(o.id, o.stato || "Ordinato");
+                if (o.stato !== "Archiviato") eseguiCicloSimulazione(o); // 👈 Ora passiamo l'intero oggetto (o)
             });
 
         } else {

@@ -297,4 +297,95 @@ document.addEventListener('DOMContentLoaded', function() {
     // 10. AVVIO INIZIALE
     // Esegue il primo rendering dell'applicazione all'apertura della pagina
     updateVisuals();
+    
+    // =========================================================================
+    // 11. GENERAZIONE FOTO E UPLOAD CLOUDINARY CON FABRIC.JS (NUOVA VERSIONE!)
+    // =========================================================================
+    
+    document.getElementById('btn-conferma-salva').addEventListener('click', async () => {
+        const btn = document.getElementById('btn-conferma-salva');
+        btn.innerText = "⏳ Composizione immagine in corso...";
+        btn.disabled = true;
+
+        try {
+            // 1. Deseleziona eventuali grafiche (rimuove i quadratini azzurri)
+            canvas.discardActiveObject();
+            canvas.renderAll();
+
+            // 2. Prepara il percorso dell'immagine base e il colore
+            const imgPath = imageFiles[activeProduct][activeView];
+            const currentColor = productColors[activeProduct];
+
+            // 3. Facciamo caricare la foto base a Fabric.js "dietro le quinte"
+            fabric.Image.fromURL(imgPath, async function(baseImg) {
+                
+                // Ridimensioniamo l'immagine per farla coprire tutto il canvas
+                baseImg.scaleToWidth(canvas.width);
+                baseImg.set({
+                    left: 0, top: 0, selectable: false
+                });
+
+                // Applichiamo il filtro colore per tingere la felpa mantenendo lo sfondo trasparente
+                const filter = new fabric.Image.filters.BlendColor({
+                    color: currentColor,
+                    mode: 'multiply'
+                });
+                baseImg.filters.push(filter);
+                baseImg.applyFilters();
+
+                // Creiamo un canvas invisibile per esportare la foto
+                const exportCanvas = new fabric.Canvas(null, { width: canvas.width, height: canvas.height });
+                
+                // Sfondo del riquadro bianco puro
+                exportCanvas.backgroundColor = '#ffffff'; 
+
+                exportCanvas.add(baseImg); 
+
+                // Trasferiamo tutti i loghi e testi personalizzati
+                canvas.getObjects().forEach(obj => {
+                    const clone = fabric.util.object.clone(obj);
+                    exportCanvas.add(clone);
+                });
+
+                exportCanvas.renderAll();
+
+                // 4. Scatta la foto in formato PNG
+                const base64Image = exportCanvas.toDataURL({
+                    format: 'png',
+                    quality: 1
+                });
+
+                // 5. Carica l'immagine su Cloudinary
+                btn.innerText = "☁️ Caricamento sul server protetto...";
+                const formData = new FormData();
+                formData.append('file', base64Image);
+                formData.append('upload_preset', 'joajwzcg'); // Assicurati che sia il tuo preset corretto!
+
+                const res = await fetch('https://api.cloudinary.com/v1_1/dfjburbax/image/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await res.json();
+                
+                // 6. Invia l'URL a "aggiungi_ordine.html"
+                if(data.secure_url && window.parent && window.parent.salvaImmagineConfiguratore) {
+                    window.parent.salvaImmagineConfiguratore(data.secure_url);
+                } else {
+                    alert("Errore: impossibile comunicare con il carrello principale.");
+                }
+                
+                // Ripristina il bottone
+                btn.innerText = "✅ CONFERMA E ALLEGA ALL'ORDINE";
+                btn.disabled = false;
+            });
+
+        } catch (error) {
+            console.error(error);
+            alert("Errore durante il salvataggio della grafica.");
+            btn.innerText = "✅ CONFERMA E ALLEGA ALL'ORDINE";
+            btn.disabled = false;
+        }
+    });
+
+    
 });

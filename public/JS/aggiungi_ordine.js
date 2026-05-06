@@ -83,8 +83,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
+    //VEDI QUI
     document.getElementById("upload_widget_opener").addEventListener("click", () => myWidget.open());
     document.getElementById('f_tipologia').addEventListener('change', aggiornaPrezziAutomatici);
+    document.getElementById('f_tipologia').addEventListener('change', aggiornaTaglieDinamiche);
 });
 
 // ==========================================
@@ -135,6 +137,36 @@ function aggiornaPrezziAutomatici() {
         // Se non c'è tipologia selezionata, svuotiamo i campi
         if (campoPrezzoCl) campoPrezzoCl.value = "";
         if (campoPrezzoAz) campoPrezzoAz.value = "";
+    }
+}
+
+//VEDI QUI
+// ==========================================
+// 7. GESTIONE TAGLIE DINAMICHE
+// ==========================================
+function aggiornaTaglieDinamiche() 
+{
+    const tipologiaSelezionata = document.getElementById('f_tipologia').value;
+    const tendinaTaglie = document.getElementById('f_taglia');
+    
+    // 1. Svuotiamo sempre la tendina e inseriamo le opzioni base (Scegli e UNISEX)
+    tendinaTaglie.innerHTML = `
+        <option value="" selected disabled>Scegli Taglia</option>
+        <option value="UNISEX">UNISEX</option>
+    `;
+
+    // 2. Se è Felpa o T-shirt, aggiungiamo le lettere
+    if (tipologiaSelezionata === 'T-shirt' || tipologiaSelezionata === 'Felpa') {
+        const taglieLettere = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
+        taglieLettere.forEach(taglia => {
+            tendinaTaglie.innerHTML += `<option value="${taglia}">${taglia}</option>`;
+        });
+    } 
+    // 3. Se è Pantalone o Scarpa, aggiungiamo i numeri (da 35 a 52)
+    else if (tipologiaSelezionata === 'Pantalone' || tipologiaSelezionata === 'Scarpa') {
+        for (let i = 35; i <= 52; i++) {
+            tendinaTaglie.innerHTML += `<option value="${i}">${i}</option>`;
+        }
     }
 }
 // ==========================================
@@ -277,9 +309,42 @@ function chiudiPagamento() {
     document.getElementById('modalPagamento').style.display = 'none';
 }
 
+//VEDI QUI
 function processaPagamento() {
-    // Validazione base carta (già fatta nel tuo precedente)
-    alert("💳 Pagamento Autorizzato!");
+    const titolare = document.getElementById('card_name').value.trim();
+    const numeroCarta = document.getElementById('card_number').value.replace(/\s/g, ''); 
+    const scadenza = document.getElementById('card_expiry').value.trim();
+    const cvv = document.getElementById('card_cvv').value.trim();
+
+    // 1. Controllo base: ha lasciato qualcosa vuoto?
+    if (!titolare || !numeroCarta || !scadenza || !cvv) 
+    {
+        return alert("⚠️ Attenzione: Devi compilare tutti i campi per procedere al pagamento.");
+    }
+
+    // 2. Controllo Numero Carta: esattamente 16 cifre numeriche
+    const regexCarta = /^[0-9]{16}$/;
+    if (!regexCarta.test(numeroCarta)) 
+    {
+        return alert("⚠️ Errore Carta: Il numero della carta deve contenere esattamente 16 numeri (senza spazi o lettere).");
+    }
+
+    // 3. Controllo Scadenza: formato MM/AA
+    const regexScadenza = /^(0[1-9]|1[0-2])\/\d{2}$/;
+    if (!regexScadenza.test(scadenza)) 
+    {
+        return alert("⚠️ Errore Scadenza: Inserisci la data nel formato MM/AA (es. 11/26 per Novembre 2026).");
+    }
+
+    // 4. Controllo CVV: esattamente 3 cifre numeriche
+    const regexCVV = /^[0-9]{3}$/;
+    if (!regexCVV.test(cvv)) 
+    {
+        return alert("⚠️ Errore CVV: Il codice di sicurezza deve essere di 3 numeri.");
+    }
+
+    // --- SE ARRIVA FINO A QUI, TUTTI I CONTROLLI SONO SUPERATI ---
+    alert("💳 Pagamento Autorizzato con successo!");
     chiudiPagamento();
     salvaTuttoNelDatabase();
 }
@@ -337,3 +402,25 @@ async function salvaTuttoNelDatabase() {
         alert("Errore salvataggio database.");
     }
 }
+
+// funzionalità x configuratore vedi dopo con gabriele VEDI QUI
+// Apri il popup
+document.getElementById('btn_apri_configuratore').addEventListener('click', () => {
+    // Carica il file html del configuratore nell'iframe
+    document.getElementById('iframeConfiguratore').src = "Configuratore_felpe_pantaloni.html";
+    document.getElementById('modalConfiguratore').style.display = 'flex';
+});
+
+// Chiudi il popup
+window.chiudiConfiguratore = function() {
+    document.getElementById('modalConfiguratore').style.display = 'none';
+    document.getElementById('iframeConfiguratore').src = ""; // Lo svuota per resettarlo
+};
+
+// Questa funzione viene chiamata DAL configuratore quando ha finito di caricare la foto!
+window.salvaImmagineConfiguratore = function(cloudinaryUrl) {
+    document.getElementById('f_image_url').value = cloudinaryUrl;
+    aggiornaPrezziAutomatici(); // Ricalcola il prezzo con il +35%
+    chiudiConfiguratore();
+    alert("✅ Grafica generata e allegata all'ordine con successo!");
+};

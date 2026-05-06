@@ -216,7 +216,15 @@ app.delete('/api/delete-orders', requireLogin, async (req, res) => {
     const { ids } = req.body; 
     try {
         let query = supabase.from('ordini').delete().in('id', ids);
-        if (!req.session.isAdmin) query = query.eq('id_cliente', req.session.clienteId);
+        
+        if (!req.session.isAdmin) {
+            // REGOLE CLIENTE:
+            // 1. Deve essere il suo ordine
+            query = query.eq('id_cliente', req.session.clienteId);
+            // 2. LO STATO DEVE ESSERE ANCORA "Ordinato"!
+            query = query.eq('stato', 'Ordinato');
+        }
+        
         const { error } = await query;
         if (error) throw error;
         res.json({ success: true, message: "Ordini eliminati!" });
@@ -261,15 +269,19 @@ app.post('/api/update-order', requireLogin, async (req, res) => {
                 return res.status(403).json({ success: false, message: "Non hai i permessi per questo ordine." });
             }
 
-            // Un cliente può modificare solo se lo stato è "Ordinato"
-            if (ordineAttuale.stato !== 'Ordinato') {
+            // CONTROLLO SMART: Sta modificando solo lo stato (timer) o i dati dell'ordine (tasto Modifica)?
+            // Controlliamo quante "chiavi" ci sono nei dati inviati.
+            const chiaviInviate = Object.keys(datiRicevuti);
+            const staAggiornandoSoloStato = chiaviInviate.length === 1 && chiaviInviate[0] === 'stato';
+
+            // Se sta cercando di cambiare i dettagli (quantità, taglia) e non è più "Ordinato" -> BLOCCO!
+            if (!staAggiornandoSoloStato && ordineAttuale.stato !== 'Ordinato') {
                 return res.status(403).json({ success: false, message: "L'ordine è in lavorazione e non può più essere modificato." });
             }
 
             // PULIZIA DATI: Rimuoviamo i campi che il cliente NON deve toccare
             delete datiRicevuti.prezzo_cliente;
             delete datiRicevuti.prezzo_azienda;
-            delete datiRicevuti.stato;
             delete datiRicevuti.id_cliente; 
             delete datiRicevuti.data_ordine;
         }
