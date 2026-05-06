@@ -263,7 +263,13 @@ function aggiornaTabellaUI() {
             ${isAdmin ? `<td>€${parseFloat(o.prezzo_azienda || 0).toFixed(2)}</td>` : ''}
             
             <td>${o.note}</td>
-            <td style="text-align:center;">${o.image_path ? '🖼️' : '-'}</td>
+            
+           <td style="text-align:center;">
+                ${o.image_path 
+                    ? `<img src="${o.image_path}" alt="Anteprima" onclick="mostraAnteprima('${o.image_path}')" title="Clicca per ingrandire" style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px; border: 1px solid #ccc; cursor: zoom-in; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.5)'" onmouseout="this.style.transform='scale(1)'">` 
+                    : '-'}
+            </td>
+            
             <td>
                 <button type="button" class="btn_rimuovi" onclick="rimuoviRiga(${index})" title="Rimuovi">❌</button>
             </td>
@@ -273,6 +279,7 @@ function aggiornaTabellaUI() {
 
     aggiornaTotaleCalcolato();
 }
+
 function rimuoviRiga(i) {
     ordiniInAttesa.splice(i, 1);
     aggiornaTabellaUI();
@@ -418,9 +425,67 @@ window.chiudiConfiguratore = function() {
 };
 
 // Questa funzione viene chiamata DAL configuratore quando ha finito di caricare la foto!
-window.salvaImmagineConfiguratore = function(cloudinaryUrl) {
+window.salvaImmagineConfiguratore = function(cloudinaryUrl, tipologia, colore) {
+    // 1. Salva l'URL dell'immagine
     document.getElementById('f_image_url').value = cloudinaryUrl;
+
+    // 2. Autocompila la Tipologia (se proviene dal configuratore)
+    if (tipologia) {
+        document.getElementById('f_tipologia').value = tipologia;
+        // FONDAMENTALE: aggiorniamo subito le taglie in base alla tipologia scelta!
+        aggiornaTaglieDinamiche(); 
+    }
+
+    // 3. Autocompila il Colore esatto
+    if (colore) {
+        document.getElementById('f_colore').value = colore;
+    }
+
+    // 4. Ricalcola i prezzi e chiude
     aggiornaPrezziAutomatici(); // Ricalcola il prezzo con il +35%
     chiudiConfiguratore();
-    alert("✅ Grafica generata e allegata all'ordine con successo!");
+    
+    alert("✅ Grafica generata! Tipologia e colore sono stati inseriti automaticamente nell'ordine.");
+};
+
+
+
+// ==========================================
+// 8. POP-UP ANTEPRIMA IMMAGINE (LIGHTBOX)
+// ==========================================
+window.mostraAnteprima = function(url_immagine) {
+    // 1. Crea uno sfondo scuro trasparente che copre tutto lo schermo
+    const overlay = document.createElement('div');
+    overlay.style.position = 'fixed';
+    overlay.style.top = '0';
+    overlay.style.left = '0';
+    overlay.style.width = '100%';
+    overlay.style.height = '100%';
+    overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.8)'; // Nero all'80%
+    overlay.style.zIndex = '10000'; // Lo mette sopra a TUTTO il resto
+    overlay.style.display = 'flex';
+    overlay.style.flexDirection = 'column';
+    overlay.style.alignItems = 'center';
+    overlay.style.justifyContent = 'center';
+    overlay.style.cursor = 'zoom-out'; // Cursore con la lente col "-"
+
+    // 2. Crea l'immagine in grande
+    const img = document.createElement('img');
+    img.src = url_immagine;
+    img.style.maxWidth = '90%';
+    img.style.maxHeight = '85vh'; // Occupa al massimo l'85% dell'altezza dello schermo
+    img.style.borderRadius = '8px';
+    img.style.boxShadow = '0 10px 25px rgba(0,0,0,0.6)';
+    img.style.border = '3px solid white';
+
+    
+
+    // 4. Magia: se l'utente clicca sullo sfondo, il pop-up si autodistrugge!
+    overlay.onclick = function() {
+        document.body.removeChild(overlay);
+    };
+
+    // 5. Monta i pezzi e incollali sulla pagina
+    overlay.appendChild(img);
+    document.body.appendChild(overlay);
 };

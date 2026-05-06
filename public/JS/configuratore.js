@@ -369,7 +369,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 // 6. Invia l'URL a "aggiungi_ordine.html"
                 if(data.secure_url && window.parent && window.parent.salvaImmagineConfiguratore) {
-                    window.parent.salvaImmagineConfiguratore(data.secure_url);
+                    // Traduciamo la selezione in italiano per farla combaciare col menu a tendina
+                    let tipologiaScelta = (activeProduct === 'hoodie') ? 'Felpa' : 'Pantalone';
+                    
+                    // Passiamo URL, Tipologia e Colore al file principale!
+                    window.parent.salvaImmagineConfiguratore(data.secure_url, tipologiaScelta, currentColor);
                 } else {
                     alert("Errore: impossibile comunicare con il carrello principale.");
                 }

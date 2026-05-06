@@ -24,7 +24,15 @@
                 </div>
                 <div class="form-group">
                     <label for="password">Password</label>
-                    <input type="password" id="password" name="password" placeholder="Inserisci password" required>
+                    <div class="password-container" style="position: relative; display: flex; align-items: center;">
+                        <input type="password" id="password" name="password" placeholder="Inserisci la tua password" required style="width: 100%; padding-right: 40px;">
+    
+                        <!-- Il bottone dell'occhiello posizionato a destra -->
+                        <button type="button" id="mostra-password" style="position: absolute; right: 10px; background: none; border: none; cursor: pointer; padding: 0;">
+                            <img id="icona-password" src="allegati/occhio-chiuso.png" alt="Mostra password" width="24">
+                        </button>
+    
+                    </div>
                 </div>
                 <button type="submit" class="btn-login">Accedi</button>
             </form>

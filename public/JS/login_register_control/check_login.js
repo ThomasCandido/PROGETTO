@@ -27,3 +27,28 @@ function validaLogin()
 
     return true;
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    
+    // Peschiamo gli elementi dalla pagina HTML
+    const passwordInput = document.getElementById('password');
+    const btnMostraPassword = document.getElementById('mostra-password');
+    const iconaPassword = document.getElementById('icona-password');
+
+    // Aggiungiamo il controllo al click sul bottone
+    btnMostraPassword.addEventListener('click', function() {
+        
+        // Se in questo momento la password è nascosta...
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text'; // ...mostra il testo[cite: 7]
+            iconaPassword.src = 'allegati/occhio-aperto.png'; // ...e cambia l'icona in occhio aperto[cite: 7]
+            iconaPassword.alt = 'Nascondi password'; //[cite: 7]
+        } else {
+            // Se invece era già visibile, la nascondiamo di nuovo
+            passwordInput.type = 'password'; //[cite: 7]
+            iconaPassword.src = 'allegati/occhio-chiuso.png'; // ...e rimettiamo l'occhio chiuso[cite: 7]
+            iconaPassword.alt = 'Mostra password'; //[cite: 7]
+        }
+        
+    });
+});
