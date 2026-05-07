@@ -103,7 +103,7 @@ label { display: block; margin-bottom: 8px; font-weight: 600; color: #555; }
 input[type="text"], input[type="file"] { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
 
 .product-selectors { display: flex; gap: 10px; margin-bottom: 30px; }
-.product-selectors button { flex: 1; padding: 15px; background-color: #fff; border: 2px solid cadetblue; color: cadetblue; font-size: 16px; font-weight: bold; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
+.product-selectors button { flex: 1; padding: 10px; background-color: #fff; border: 2px solid cadetblue; color: cadetblue; font-size: 14px; font-weight: bold; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
 .product-selectors button.active { background-color: cadetblue; color: #fff; }
 
 /* --- Stili per le opzioni dei testi (Font e Orientamento) --- */

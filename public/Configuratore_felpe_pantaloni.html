@@ -38,6 +38,7 @@
         <div class="product-selectors">
             <button id="select-hoodie" class="active">Felpa</button>
             <button id="select-shorts">Pantaloncino</button>
+            <button id="select-tshirt">Maglia</button>
         </div>
 
         <div class="control-group" style="margin-top: 20px; display: flex; gap: 15px; align-items: flex-end;">
@@ -180,6 +181,40 @@
                 Il retro del pantaloncino è a tinta unita e non è personalizzabile.
             </p>
         </div>
+        
+        <div id="controls-tshirt" class="custom-controls" style="display: none;">
+            <div class="control-group for-front">
+                <label>Immagine Petto (Fronte)</label>
+                <input type="file" id="upload-tshirt-front" accept="image/*">
+            </div>
+    
+            <div class="control-group for-front">
+                <label>Testo Centrale (Orizzontale)</label>
+                <input type="text" id="text-tshirt-front-center" placeholder="Scrivi il testo centrale...">
+                <div class="text-options">
+                    <select id="font-tshirt-front-center">
+                        <optgroup label="I Nostri Font Premium">
+                            <option value="'Anton', Impact, sans-serif">Anton (Sportivo/Numeri)</option>
+                            <option value="'Permanent Marker', 'Brush Script MT', cursive">Permanent Marker (Streetwear)</option>
+                        </optgroup>
+                        <optgroup label="Semplici e Puliti">
+                            <option value="Arial">Arial</option>
+                            <option value="'Trebuchet MS', sans-serif">Trebuchet MS</option>
+                        </optgroup>
+                    </select>
+                    <select id="orient-tshirt-front-center">
+                        <option value="horizontal" selected>Orizzontale</option>
+                        <option value="vertical">Verticale</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="control-group for-back" style="display: none;">
+                <p style="color: #777; font-style: italic;">Il retro della maglia non è personalizzabile.</p>
+            </div>
+        </div>
+
+
         <button id="btn-conferma-salva" style="width: 100%; padding: 15px; background: #28a745; color: white; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; margin-top: 20px;">✅ CONFERMA E ALLEGA ALL'ORDINE</button>
     </div>
 </div>

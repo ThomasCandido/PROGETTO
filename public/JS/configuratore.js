@@ -11,12 +11,14 @@ document.addEventListener('DOMContentLoaded', function() {
     // Bottoni per la navigazione e selezione del prodotto
     const btnHoodie = document.getElementById('select-hoodie');
     const btnShorts = document.getElementById('select-shorts');
+    const btnTshirt = document.getElementById('select-tshirt');
     const btnFront = document.getElementById('btn-front');
     const btnBack = document.getElementById('btn-back');
     
     // Pannelli laterali che contengono i campi di input specifici
     const controlsHoodie = document.getElementById('controls-hoodie');
     const controlsShorts = document.getElementById('controls-shorts');
+    const controlsTshirt = document.getElementById('controls-tshirt');
 
     // Campi per taglia e quantità
     const tagliaSelect = document.getElementById('conf-taglia');
@@ -41,12 +43,13 @@ document.addEventListener('DOMContentLoaded', function() {
     let activeView = 'front'; // Vista attualmente visibile ('front' o 'back')
 
     // Oggetto che memorizza i colori separatamente per non mischiarli tra i due capi
-    const productColors = { hoodie: '#ffffff', shorts: '#ffffff' };
+    const productColors = { hoodie: '#ffffff', shorts: '#ffffff', tshirt: '#ffffff' };
 
     // Percorsi delle immagini (assicurarsi che siano PNG trasparenti)
     const imageFiles = {
         hoodie: { front: 'allegati/Fronte-Felpa.png', back: 'allegati/Retro-Felpa.png' },
-        shorts: { front: 'allegati/Fronte-Pantalone.png', back: 'allegati/Retro-Pantalone.png' }
+        shorts: { front: 'allegati/Fronte-Pantalone.png', back: 'allegati/Retro-Pantalone.png' },
+        tshirt: { front: 'allegati/Fronte-Maglia.png', back: 'allegati/Retro-Maglia.png' }
     };
 
     // 4. INIZIALIZZAZIONE FABRIC.JS E GESTIONE MEMORIA
@@ -58,7 +61,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // così quando torna indietro ritrova tutto al suo posto.
     const canvasStates = {
         hoodie: { front: null, back: null },
-        shorts: { front: null, back: null }
+        shorts: { front: null, back: null },
+        tshirt: { front: null, back: null }
     };
 
     // 5. FUNZIONI PRINCIPALI DI AGGIORNAMENTO SCHERMO
@@ -91,15 +95,17 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     /**
-     * Mostra o nasconde i pannelli laterali (Fronte/Retro e Felpa/Pantaloncino)
+     * Mostra o nasconde i pannelli laterali (Fronte/Retro e Felpa/Pantaloncino/Maglia)
      * in base a ciò che l'utente ha selezionato.
      */
     function updateUI() {
         // Mostra solo il contenitore principale del prodotto attivo
         controlsHoodie.style.display = (activeProduct === 'hoodie') ? 'block' : 'none';
         controlsShorts.style.display = (activeProduct === 'shorts') ? 'block' : 'none';
+        controlsTshirt.style.display = (activeProduct === 'tshirt') ? 'block' : 'none';
 
-        const activePanel = (activeProduct === 'hoodie') ? controlsHoodie : controlsShorts;
+        const activePanel = (activeProduct === 'hoodie') ? controlsHoodie : 
+            (activeProduct === 'shorts') ? controlsShorts : controlsTshirt;
         
         // Accende o spegne i gruppi di input in base alla vista (Fronte o Retro)
         activePanel.querySelectorAll('.for-front').forEach(el => {
@@ -182,6 +188,15 @@ document.addEventListener('DOMContentLoaded', function() {
         btnBack.classList.add('active'); btnFront.classList.remove('active');
         switchState(activeProduct, 'back');
     });
+
+    btnTshirt.addEventListener('click', () => {
+    btnTshirt.classList.add('active'); 
+    btnHoodie.classList.remove('active'); 
+    btnShorts.classList.remove('active');
+    btnFront.classList.add('active'); 
+    btnBack.classList.remove('active');
+    switchState('tshirt', 'front');
+});
 
     // 7. GESTIONE LOGICA TESTI E IMMAGINI CON FABRIC.JS
 
@@ -275,6 +290,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Collega gli input di upload file
     setupImageUpload('upload-hoodie-front');
+    setupImageUpload('upload-tshirt-front');
 
     // Collega i campi di testo passando: ID_input, ID_font, ID_orient, ID_interno_fabric, Y_iniziale, X_iniziale, Rotazione_iniziale
     setupDynamicText('text-hoodie-front-l', 'font-hoodie-front-l', 'orient-hoodie-front-l', 'hoodie-L', 240, 410, 50);  
@@ -283,6 +299,7 @@ document.addEventListener('DOMContentLoaded', function() {
     setupDynamicText('text-shorts-front-l', 'font-shorts-front-l', 'orient-shorts-front-l', 'shorts-L', 300, 340, 0);   
     setupDynamicText('text-shorts-front-r', 'font-shorts-front-r', 'orient-shorts-front-r', 'shorts-R', 300, 160, 0);
 
+    setupDynamicText('text-tshirt-front-center', 'font-tshirt-front-center', 'orient-tshirt-front-center', 'tshirt-C', 220, 250, 0);
     // 9. EVENTI EXTRA E SINCRONIZZAZIONE TASTIERA
     // Permette di eliminare un oggetto cliccato con "Canc" o "Backspace"
     // e svuota contemporaneamente la relativa casella input in HTML per non creare disallineamenti
@@ -299,7 +316,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     'hoodie-L': 'text-hoodie-front-l',
                     'hoodie-R': 'text-hoodie-front-r',
                     'shorts-L': 'text-shorts-front-l',
-                    'shorts-R': 'text-shorts-front-r'
+                    'shorts-R': 'text-shorts-front-r',
+                    'tshirt-C': 'text-tshirt-front-center'
                 };
                 
                 // Se l'oggetto aveva un ID che tracciamo, svuotiamo la relativa casella
@@ -397,7 +415,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 // 6. Invia l'URL a "aggiungi_ordine.html"
                 // 6. Invia 5 parametri a "aggiungi_ordine.html"
                 if(data.secure_url && window.parent && window.parent.salvaImmagineConfiguratore) {
-                    let tipologiaScelta = (activeProduct === 'hoodie') ? 'Felpa' : 'Pantalone';
+                    let tipologiaScelta = (activeProduct === 'hoodie') ? 'Felpa' : 
+                        (activeProduct === 'shorts') ? 'Pantalone' : 'Maglia';
+                    
+                    // Passiamo URL, Tipologia e Colore al file principale!
                     window.parent.salvaImmagineConfiguratore(data.secure_url, tipologiaScelta, currentColor, tagliaScelta, quantitaScelta);
                 } else {
                 }
