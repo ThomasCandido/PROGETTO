@@ -1,34 +1,25 @@
 document.addEventListener('DOMContentLoaded', function() {
 
     // 1. RIFERIMENTI AGLI ELEMENTI HTML (DOM)
-    // Recuperiamo tutti gli elementi della pagina con cui dobbiamo interagire
-
-    const baseImage = document.getElementById('base-image'); // L'immagine PNG che fa da base (con le ombre)
-    const colorLayer = document.getElementById('color-layer'); // Il div che prenderà il colore a tinta unita
-    const colorPicker = document.getElementById('product-color'); // L'input per scegliere il colore
-    const canvasWrapper = document.getElementById('canvas-wrapper'); // Il contenitore della lavagna Fabric.js
+    const baseImage = document.getElementById('base-image');
+    const colorLayer = document.getElementById('color-layer');
+    const colorPicker = document.getElementById('product-color');
+    const canvasWrapper = document.getElementById('canvas-wrapper');
     
-    // Bottoni per la navigazione e selezione del prodotto
     const btnHoodie = document.getElementById('select-hoodie');
     const btnShorts = document.getElementById('select-shorts');
     const btnTshirt = document.getElementById('select-tshirt');
     const btnFront = document.getElementById('btn-front');
     const btnBack = document.getElementById('btn-back');
     
-    // Pannelli laterali che contengono i campi di input specifici
     const controlsHoodie = document.getElementById('controls-hoodie');
     const controlsShorts = document.getElementById('controls-shorts');
     const controlsTshirt = document.getElementById('controls-tshirt');
 
-    // Campi per taglia e quantità
     const tagliaSelect = document.getElementById('conf-taglia');
     const quantitaInput = document.getElementById('conf-quantita');
 
-
-    // 2. CONFIGURAZIONE INIZIALE MASCHERE CSS (MASKING)
-    // Contenitore del testo affinché tagli via visivamente tutto
-    // ciò che esce dai bordi dell'immagine.
-
+    // 2. CONFIGURAZIONE INIZIALE MASCHERE CSS
     canvasWrapper.style.webkitMaskSize = 'contain';
     canvasWrapper.style.webkitMaskPosition = 'center';
     canvasWrapper.style.webkitMaskRepeat = 'no-repeat';
@@ -36,78 +27,55 @@ document.addEventListener('DOMContentLoaded', function() {
     canvasWrapper.style.maskPosition = 'center';
     canvasWrapper.style.maskRepeat = 'no-repeat';
 
-    // 3. VARIABILI DI STATO DEL CONFIGURATORE
-    // Tengono traccia di cosa sta guardando e modificando l'utente in questo momento
+    // 3. VARIABILI DI STATO E RISORSE
+    let activeProduct = 'hoodie'; 
+    let activeView = 'front'; 
 
-    let activeProduct = 'hoodie'; // Prodotto attualmente visibile ('hoodie' o 'shorts')
-    let activeView = 'front'; // Vista attualmente visibile ('front' o 'back')
-
-    // Oggetto che memorizza i colori separatamente per non mischiarli tra i due capi
     const productColors = { hoodie: '#ffffff', shorts: '#ffffff', tshirt: '#ffffff' };
 
-    // Percorsi delle immagini (assicurarsi che siano PNG trasparenti)
     const imageFiles = {
         hoodie: { front: 'allegati/Fronte-Felpa.png', back: 'allegati/Retro-Felpa.png' },
         shorts: { front: 'allegati/Fronte-Pantalone.png', back: 'allegati/Retro-Pantalone.png' },
         tshirt: { front: 'allegati/Fronte-Maglia.png', back: 'allegati/Retro-Maglia.png' }
     };
 
-    // 4. INIZIALIZZAZIONE FABRIC.JS E GESTIONE MEMORIA
-
-    const canvas = new fabric.Canvas('fabric-canvas'); // Inizializza la lavagna interattiva
+    // 4. INIZIALIZZAZIONE FABRIC.JS E MEMORIA CANVAS
+    const canvas = new fabric.Canvas('fabric-canvas'); 
     
-    // Questo dizionario funziona come una "memoria RAM".
-    // Salva il design (loghi, testi, posizioni) quando l'utente cambia vista,
-    // così quando torna indietro ritrova tutto al suo posto.
     const canvasStates = {
         hoodie: { front: null, back: null },
         shorts: { front: null, back: null },
         tshirt: { front: null, back: null }
     };
 
-    // 5. FUNZIONI PRINCIPALI DI AGGIORNAMENTO SCHERMO
+    // 5. FUNZIONI DI AGGIORNAMENTO VISIVO
 
-    /**
-     * Aggiorna l'immagine base, applica le maschere per ritagliare colore e testi
-     * e ripristina il colore salvato per il prodotto corrente.
-     */
     function updateVisuals() {
         const imgPath = imageFiles[activeProduct][activeView];
         
-        // 1. Cambia l'immagine delle ombre
         baseImage.src = imgPath;
-        
-        // 2. Applica l'immagine PNG come "stampino" (maschera) per ritagliare il div del colore
         colorLayer.style.webkitMaskImage = `url('${imgPath}')`;
         colorLayer.style.maskImage = `url('${imgPath}')`;
-        
-        // 3. Applica lo stesso "stampino" per nascondere i testi che escono fuori dalla felpa
         canvasWrapper.style.webkitMaskImage = `url('${imgPath}')`;
         canvasWrapper.style.maskImage = `url('${imgPath}')`;
         
-        // 4. Recupera e applica il colore specifico di questo prodotto
         const currentColor = productColors[activeProduct];
         colorLayer.style.backgroundColor = currentColor;
-        colorPicker.value = currentColor; // Sincronizza anche la UI della tavolozza colori
+        colorPicker.value = currentColor;
 
-        // Aggiorna infine i pannelli laterali
         updateUI();
     }
 
-    /**
-     * Mostra o nasconde i pannelli laterali (Fronte/Retro e Felpa/Pantaloncino/Maglia)
-     * in base a ciò che l'utente ha selezionato.
-     */
     function updateUI() {
-        // Mostra solo il contenitore principale del prodotto attivo
+        // Mostra il pannello controlli del prodotto attivo
         controlsHoodie.style.display = (activeProduct === 'hoodie') ? 'block' : 'none';
         controlsShorts.style.display = (activeProduct === 'shorts') ? 'block' : 'none';
         controlsTshirt.style.display = (activeProduct === 'tshirt') ? 'block' : 'none';
 
         const activePanel = (activeProduct === 'hoodie') ? controlsHoodie : 
-            (activeProduct === 'shorts') ? controlsShorts : controlsTshirt;
+                          (activeProduct === 'shorts') ? controlsShorts : controlsTshirt;
         
-        // Accende o spegne i gruppi di input in base alla vista (Fronte o Retro)
+        // Mostra/nasconde i campi input in base a Fronte o Retro
         activePanel.querySelectorAll('.for-front').forEach(el => {
             el.style.display = (activeView === 'front') ? 'block' : 'none';
         });
@@ -116,10 +84,8 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-
-    // --- NUOVA FUNZIONE: Aggiorna il menu delle taglie in base al prodotto ---
     function aggiornaTaglieConfiguratore() {
-        if(!tagliaSelect) return; // Sicurezza
+        if(!tagliaSelect) return;
         tagliaSelect.innerHTML = '<option value="" selected disabled>Scegli Taglia...</option><option value="UNISEX">UNISEX</option>';
         if (activeProduct === 'hoodie') { 
             ['XS', 'S', 'M', 'L', 'XL', 'XXL'].forEach(t => tagliaSelect.innerHTML += `<option value="${t}">${t}</option>`);
@@ -130,79 +96,53 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    /**
-     * Gestisce il passaggio tra i vari prodotti (Felpa -> Pantaloncino) 
-     * o le varie viste (Fronte -> Retro), salvando il lavoro in corso.
-     */
+    // --- FUNZIONE CORE: GESTIONE CAMBIO STATO E BOTTONI ---
     function switchState(newProduct, newView) {
-        // 1. Congela la tela attuale in un file JSON e lo salva nella "memoria"
+        // Salva il design corrente prima di cambiare
         canvasStates[activeProduct][activeView] = canvas.toJSON(['customId']);
         
-        // 2. Aggiorna le variabili globali con la nuova scelta dell'utente
         activeProduct = newProduct;
         activeView = newView;
 
-        // 3. Aggiorna l'interfaccia visiva (Immagini e Colori)
+        // Gestione classi CSS 'active' per i bottoni Prodotto
+        document.querySelectorAll('.product-selectors button').forEach(btn => btn.classList.remove('active'));
+        if (activeProduct === 'hoodie') document.getElementById('select-hoodie').classList.add('active');
+        if (activeProduct === 'shorts') document.getElementById('select-shorts').classList.add('active');
+        if (activeProduct === 'tshirt') document.getElementById('select-tshirt').classList.add('active');
+
+        // Gestione classi CSS 'active' per i bottoni Vista
+        btnFront.classList.toggle('active', activeView === 'front');
+        btnBack.classList.toggle('active', activeView === 'back');
+
         updateVisuals();
         aggiornaTaglieConfiguratore();
         
-        // 4. Pulisce la lavagna e, se avevamo salvato qualcosa in precedenza per 
-        // questa specifica vista, la ricarica dal file JSON in memoria
+        // Ripristina il design salvato se esiste
         canvas.clear();
         if (canvasStates[activeProduct][activeView]) {
             canvas.loadFromJSON(canvasStates[activeProduct][activeView], () => canvas.renderAll());
         }
 
-        // 5. Azzera i campi input di testo testuali per evitare confusione (la tela ha già i suoi testi)
         document.querySelectorAll('input[type="text"]').forEach(input => input.value = '');
     }
 
-    // 6. ASSEGNAZIONE EVENTI (CLICK E CAMBIO COLORE)
+    // 6. ASSEGNAZIONE EVENTI
 
-    // Quando l'utente sceglie un nuovo colore dalla tavolozza
     colorPicker.addEventListener('input', () => {
         const selectedColor = colorPicker.value;
-        colorLayer.style.backgroundColor = selectedColor; // Applica il colore a schermo
-        productColors[activeProduct] = selectedColor; // Lo salva nella memoria del prodotto corrente
+        colorLayer.style.backgroundColor = selectedColor;
+        productColors[activeProduct] = selectedColor;
     });
 
-    // Click sui bottoni di selezione prodotto e vista
-    btnHoodie.addEventListener('click', () => {
-        btnHoodie.classList.add('active'); btnShorts.classList.remove('active');
-        btnFront.classList.add('active'); btnBack.classList.remove('active');
-        switchState('hoodie', 'front');
-    });
+    btnHoodie.addEventListener('click', () => switchState('hoodie', 'front'));
+    btnShorts.addEventListener('click', () => switchState('shorts', 'front'));
+    btnTshirt.addEventListener('click', () => switchState('tshirt', 'front'));
 
-    btnShorts.addEventListener('click', () => {
-        btnShorts.classList.add('active'); btnHoodie.classList.remove('active');
-        btnFront.classList.add('active'); btnBack.classList.remove('active');
-        switchState('shorts', 'front');
-    });
+    btnFront.addEventListener('click', () => switchState(activeProduct, 'front'));
+    btnBack.addEventListener('click', () => switchState(activeProduct, 'back'));
 
-    btnFront.addEventListener('click', () => {
-        btnFront.classList.add('active'); btnBack.classList.remove('active');
-        switchState(activeProduct, 'front');
-    });
+    // 7. LOGICA FABRIC.JS (CARICAMENTO E TESTI)
 
-    btnBack.addEventListener('click', () => {
-        btnBack.classList.add('active'); btnFront.classList.remove('active');
-        switchState(activeProduct, 'back');
-    });
-
-    btnTshirt.addEventListener('click', () => {
-    btnTshirt.classList.add('active'); 
-    btnHoodie.classList.remove('active'); 
-    btnShorts.classList.remove('active');
-    btnFront.classList.add('active'); 
-    btnBack.classList.remove('active');
-    switchState('tshirt', 'front');
-});
-
-    // 7. GESTIONE LOGICA TESTI E IMMAGINI CON FABRIC.JS
-
-    /**
-     * Abilita il caricamento di loghi e immagini personali sulla lavagna
-     */
     function setupImageUpload(inputId) {
         document.getElementById(inputId).addEventListener('change', function(e) {
             const file = e.target.files[0];
@@ -210,25 +150,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
             const reader = new FileReader();
             reader.onload = function(event) {
-                // Converte l'immagine e la inserisce nella Canvas di Fabric
                 fabric.Image.fromURL(event.target.result, function(img) {
-                    img.scaleToWidth(150); // Scala di default
+                    img.scaleToWidth(150);
                     img.set({
-                        left: canvas.width / 2, top: canvas.height / 2, // Centra nello schermo
+                        left: canvas.width / 2, top: canvas.height / 2,
                         originX: 'center', originY: 'center',
                         cornerColor: 'cadetblue', transparentCorners: false
                     });
                     canvas.add(img);
-                    canvas.setActiveObject(img); // La seleziona automaticamente per spostarla
+                    canvas.setActiveObject(img);
                 });
             };
-            reader.readAsDataURL(file); // Legge il file caricato
+            reader.readAsDataURL(file);
         });
     }
 
-    /**
-     * Genera e gestisce i testi dinamici. Contiene la logica per font, orientamento e reset.
-     */
     function setupDynamicText(inputId, fontId, orientId, customId, defaultTop, defaultLeft, defaultAngle) {
         const inputEl = document.getElementById(inputId);
         const fontEl = document.getElementById(fontId);
@@ -245,7 +181,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
             const currentFont = fontEl.value;
             const mode = orientEl.value;
-            
             let formattedText = rawText;
             let finalAngle = defaultAngle;
 
@@ -257,24 +192,13 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             if (existingText) {
-                existingText.set({ 
-                    text: formattedText,
-                    fontFamily: currentFont,
-                    angle: finalAngle,
-                    textAlign: 'center'
-                });
-                
-                if (rawText.length === 1) {
-                    existingText.set({ left: defaultLeft, top: defaultTop });
-                    existingText.setCoords(); 
-                }
+                existingText.set({ text: formattedText, fontFamily: currentFont, angle: finalAngle });
             } else {
                 const newText = new fabric.Text(formattedText, {
                     left: defaultLeft, top: defaultTop, angle: finalAngle,
                     fontFamily: currentFont, fill: '#000000', fontSize: 22, fontWeight: 'bold',
                     originX: 'center', originY: 'center', textAlign: 'center',
-                    customId: customId, 
-                    cornerColor: 'cadetblue', transparentCorners: false
+                    customId: customId, cornerColor: 'cadetblue', transparentCorners: false
                 });
                 canvas.add(newText);
             }
@@ -286,155 +210,82 @@ document.addEventListener('DOMContentLoaded', function() {
         orientEl.addEventListener('change', updateText);
     }
 
-    // 8. CONFIGURAZIONE E COLLEGAMENTO INPUT-CANVAS
-    
-    // Collega gli input di upload file
+    // Configurazione campi specifici
     setupImageUpload('upload-hoodie-front');
     setupImageUpload('upload-tshirt-front');
 
-    // Collega i campi di testo passando: ID_input, ID_font, ID_orient, ID_interno_fabric, Y_iniziale, X_iniziale, Rotazione_iniziale
     setupDynamicText('text-hoodie-front-l', 'font-hoodie-front-l', 'orient-hoodie-front-l', 'hoodie-L', 240, 410, 50);  
-    setupDynamicText('text-hoodie-front-r', 'font-hoodie-front-r', 'orient-hoodie-front-r', 'hoodie-R', 240, 90, -55);  
-    
+    setupDynamicText('text-hoodie-front-r', 'font-hoodie-front-r', 'orient-hoodie-front-r', 'hoodie-R', 240, 90, -55); 
+    setupDynamicText('text-hoodie-front-center', 'font-hoodie-front-center', 'orient-hoodie-front-center', 'hoodie-C', 220, 250, 0); 
     setupDynamicText('text-shorts-front-l', 'font-shorts-front-l', 'orient-shorts-front-l', 'shorts-L', 300, 340, 0);   
     setupDynamicText('text-shorts-front-r', 'font-shorts-front-r', 'orient-shorts-front-r', 'shorts-R', 300, 160, 0);
-
     setupDynamicText('text-tshirt-front-center', 'font-tshirt-front-center', 'orient-tshirt-front-center', 'tshirt-C', 220, 250, 0);
-    // 9. EVENTI EXTRA E SINCRONIZZAZIONE TASTIERA
-    // Permette di eliminare un oggetto cliccato con "Canc" o "Backspace"
-    // e svuota contemporaneamente la relativa casella input in HTML per non creare disallineamenti
 
+    // 9. RIMOZIONE OGGETTI
     document.addEventListener('keydown', function(e) {
-        if (e.key === 'Delete' || e.key === 'Backspace') {
+        if ((e.key === 'Delete' || e.key === 'Backspace') && e.target.tagName !== 'INPUT') {
             const activeObj = canvas.getActiveObject();
-            
-            // Assicuriamoci che l'utente non stia solo premendo backspace mentre scrive nell'input HTML
-            if (activeObj && e.target.tagName !== 'INPUT') {
-                
-                // Mappa per sapere quale input HTML corrisponde all'oggetto che stiamo per eliminare
+            if (activeObj) {
                 const inputMap = {
-                    'hoodie-L': 'text-hoodie-front-l',
-                    'hoodie-R': 'text-hoodie-front-r',
-                    'shorts-L': 'text-shorts-front-l',
-                    'shorts-R': 'text-shorts-front-r',
+                    'hoodie-L': 'text-hoodie-front-l', 'hoodie-R': 'text-hoodie-front-r', 'hoodie-C': 'text-hoodie-front-center',
+                    'shorts-L': 'text-shorts-front-l', 'shorts-R': 'text-shorts-front-r',
                     'tshirt-C': 'text-tshirt-front-center'
                 };
-                
-                // Se l'oggetto aveva un ID che tracciamo, svuotiamo la relativa casella
-                if (inputMap[activeObj.customId]) {
-                    document.getElementById(inputMap[activeObj.customId]).value = '';
-                }
-                
-                // Rimuove l'oggetto grafico
+                if (inputMap[activeObj.customId]) document.getElementById(inputMap[activeObj.customId]).value = '';
                 canvas.remove(activeObj);
             }
         }
     });
 
-    // 10. AVVIO INIZIALE
-    // Esegue il primo rendering dell'applicazione all'apertura della pagina
-    updateVisuals();
-    aggiornaTaglieConfiguratore();
-    
-    // =========================================================================
-    // 11. GENERAZIONE FOTO E UPLOAD CLOUDINARY CON FABRIC.JS (NUOVA VERSIONE!)
-    // =========================================================================
-    
+    // 10. SALVATAGGIO E UPLOAD
     document.getElementById('btn-conferma-salva').addEventListener('click', async () => {
-
-        // RECUPERA TAGLIA E QUANTITA' E CONTROLLA
         const tagliaScelta = tagliaSelect ? tagliaSelect.value : null;
         const quantitaScelta = quantitaInput ? quantitaInput.value : 1;
-        if (!tagliaScelta) return alert("⚠️ Attenzione: Seleziona una taglia prima di confermare l'ordine!");
-        if (!quantitaScelta || quantitaScelta < 1) return alert("⚠️ Attenzione: Inserisci una quantità valida!");
+        if (!tagliaScelta) return alert("⚠️ Seleziona una taglia!");
         
         const btn = document.getElementById('btn-conferma-salva');
-        btn.innerText = "⏳ Composizione immagine in corso...";
+        btn.innerText = "⏳ Elaborazione...";
         btn.disabled = true;
 
         try {
-            // 1. Deseleziona eventuali grafiche (rimuove i quadratini azzurri)
-            canvas.discardActiveObject();
-            canvas.renderAll();
-
-            // 2. Prepara il percorso dell'immagine base e il colore
+            canvas.discardActiveObject().renderAll();
             const imgPath = imageFiles[activeProduct][activeView];
             const currentColor = productColors[activeProduct];
 
-            // 3. Facciamo caricare la foto base a Fabric.js "dietro le quinte"
             fabric.Image.fromURL(imgPath, async function(baseImg) {
-                
-                // Ridimensioniamo l'immagine per farla coprire tutto il canvas
-                baseImg.scaleToWidth(canvas.width);
-                baseImg.set({
-                    left: 0, top: 0, selectable: false
-                });
-
-                // Applichiamo il filtro colore per tingere la felpa mantenendo lo sfondo trasparente
-                const filter = new fabric.Image.filters.BlendColor({
-                    color: currentColor,
-                    mode: 'multiply'
-                });
-                baseImg.filters.push(filter);
+                baseImg.scaleToWidth(canvas.width).set({ left: 0, top: 0, selectable: false });
+                baseImg.filters.push(new fabric.Image.filters.BlendColor({ color: currentColor, mode: 'multiply' }));
                 baseImg.applyFilters();
 
-                // Creiamo un canvas invisibile per esportare la foto
-                const exportCanvas = new fabric.Canvas(null, { width: canvas.width, height: canvas.height });
-                
-                // Sfondo del riquadro bianco puro
-                exportCanvas.backgroundColor = '#ffffff'; 
-
+                const exportCanvas = new fabric.Canvas(null, { width: canvas.width, height: canvas.height, backgroundColor: '#fff' });
                 exportCanvas.add(baseImg); 
-
-                // Trasferiamo tutti i loghi e testi personalizzati
-                canvas.getObjects().forEach(obj => {
-                    const clone = fabric.util.object.clone(obj);
-                    exportCanvas.add(clone);
-                });
-
+                canvas.getObjects().forEach(obj => exportCanvas.add(fabric.util.object.clone(obj)));
                 exportCanvas.renderAll();
 
-                // 4. Scatta la foto in formato PNG
-                const base64Image = exportCanvas.toDataURL({
-                    format: 'png',
-                    quality: 1
-                });
-
-                // 5. Carica l'immagine su Cloudinary
-                btn.innerText = "☁️ Caricamento sul server protetto...";
+                const base64Image = exportCanvas.toDataURL({ format: 'png', quality: 1 });
+                
                 const formData = new FormData();
                 formData.append('file', base64Image);
-                formData.append('upload_preset', 'joajwzcg'); // Assicurati che sia il tuo preset corretto!
+                formData.append('upload_preset', 'joajwzcg');
 
-                const res = await fetch('https://api.cloudinary.com/v1_1/dfjburbax/image/upload', {
-                    method: 'POST',
-                    body: formData
-                });
+                const res = await fetch('https://api.cloudinary.com/v1_1/dfjburbax/image/upload', { method: 'POST', body: formData });
                 const data = await res.json();
                 
-                // 6. Invia l'URL a "aggiungi_ordine.html"
-                // 6. Invia 5 parametri a "aggiungi_ordine.html"
                 if(data.secure_url && window.parent && window.parent.salvaImmagineConfiguratore) {
-                    let tipologiaScelta = (activeProduct === 'hoodie') ? 'Felpa' : 
-                        (activeProduct === 'shorts') ? 'Pantalone' : 'Maglia';
-                    
-                    // Passiamo URL, Tipologia e Colore al file principale!
-                    window.parent.salvaImmagineConfiguratore(data.secure_url, tipologiaScelta, currentColor, tagliaScelta, quantitaScelta);
-                } else {
+                    let tipologia = (activeProduct === 'hoodie') ? 'Felpa' : (activeProduct === 'shorts') ? 'Pantalone' : 'Maglia';
+                    window.parent.salvaImmagineConfiguratore(data.secure_url, tipologia, currentColor, tagliaScelta, quantitaScelta);
                 }
                 
-                // Ripristina il bottone
                 btn.innerText = "✅ CONFERMA E ALLEGA ALL'ORDINE";
                 btn.disabled = false;
             });
-
         } catch (error) {
-            console.error(error);
-            alert("Errore durante il salvataggio della grafica.");
-            btn.innerText = "✅ CONFERMA E ALLEGA ALL'ORDINE";
+            alert("Errore durante il salvataggio.");
             btn.disabled = false;
         }
     });
 
-    
+    // AVVIO
+    updateVisuals();
+    aggiornaTaglieConfiguratore();
 });
