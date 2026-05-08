@@ -23,7 +23,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (ids.length === 0) return;
 
         // Chiediamo conferma (sempre meglio non cancellare per errore!)
-        if (!confirm(`Sei sicuro di voler eliminare ${ids.length} ordine/i? L'azione è irreversibile.`)) {
+        if (!confirm(`Sei sicuro di voler eliminare ${ids.length} ordine/i? L'azione è irreversibile.`)) 
+        {
             return;
         }
 

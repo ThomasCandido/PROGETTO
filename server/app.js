@@ -153,7 +153,7 @@ app.post('/register', async (req, res) => {
     }
 });
 
-// Operazione di Modifica Profilo (FIXED)
+// Operazione di Modifica Profilo 
 app.post('/api/update-profile', requireLogin, async (req, res) => {
     const { email, password, nome, cognome, societa, telefono } = req.body;
     const utenteId = req.session.utenteId;
@@ -204,7 +204,11 @@ app.get('/api/get-profile', async (req, res) => {
 // Visualizzazione Ordini
 app.get('/api/get-orders', requireLogin, async (req, res) => {
     try {
+        
+        // query su tutti gli ordini
         let query = supabase.from('ordini').select('*, clienti(societa)'); 
+
+        // query in caso di login cliente ordini relativi soltanto a lui
         if (!req.session.isAdmin) query = query.eq('id_cliente', req.session.clienteId);
 
         const { data, error } = await query.order('data_ordine', { ascending: false });
@@ -221,11 +225,13 @@ app.delete('/api/delete-orders', requireLogin, async (req, res) => {
     try {
         let query = supabase.from('ordini').delete().in('id', ids);
         
-        if (!req.session.isAdmin) {
-            // REGOLE CLIENTE:
-            // 1. Deve essere il suo ordine
+        // Regola di base l'eliminazione dell'ordine da parte del cliente
+        // solo in cso in cui l'ordine è in stato ordinato
+
+        if (!req.session.isAdmin) 
+        {
+            
             query = query.eq('id_cliente', req.session.clienteId);
-            // 2. LO STATO DEVE ESSERE ANCORA "Ordinato"!
             query = query.eq('stato', 'Ordinato');
         }
         
@@ -252,6 +258,7 @@ app.post('/api/save-orders', async (req, res) => {
 
 // Modifica Singolo Ordine
 app.post('/api/update-order', requireLogin, async (req, res) => {
+
     const { id, ...datiRicevuti } = req.body;
     const utenteId = req.session.utenteId;
     const isAdmin = req.session.isAdmin;
@@ -273,8 +280,7 @@ app.post('/api/update-order', requireLogin, async (req, res) => {
                 return res.status(403).json({ success: false, message: "Non hai i permessi per questo ordine." });
             }
 
-            // CONTROLLO SMART: Sta modificando solo lo stato (timer) o i dati dell'ordine (tasto Modifica)?
-            // Controlliamo quante "chiavi" ci sono nei dati inviati.
+            // CONTROLLO SMART: che l'utente può modificare l'ordine solo se appena ordinato
             const chiaviInviate = Object.keys(datiRicevuti);
             const staAggiornandoSoloStato = chiaviInviate.length === 1 && chiaviInviate[0] === 'stato';
 
@@ -301,6 +307,8 @@ app.post('/api/update-order', requireLogin, async (req, res) => {
         res.json({ success: true, message: "Ordine aggiornato correttamente!" });
 
     } catch (err) {
+
+        // gestione errore di salvataggio
         console.error("Errore Update Ordine:", err.message);
         res.status(500).json({ success: false, message: err.message });
     }

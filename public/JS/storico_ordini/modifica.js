@@ -1,4 +1,6 @@
 async function ModificaCard(li, ordine) {
+
+
     // 1. DETERMINIAMO I PERMESSI
     const isAdmin = localStorage.getItem('isAdmin') === 'true' || localStorage.getItem('isAdmin') === true;
     const isEditable = isAdmin ? true : (ordine.stato === 'Ordinato');
@@ -119,11 +121,13 @@ async function salvaModifica(dati) {
         const res = await response.json();
         if (res.success) {
             alert("✅ Ordine aggiornato!");
+            console.log("Ordine aggiornato");
             location.reload(); 
         } else {
             alert("❌ Errore: " + res.message);
         }
     } catch (e) {
         alert("❌ Errore di connessione.");
+        console.log("Nessun aggiornamento dell'ordine");
     }
 }

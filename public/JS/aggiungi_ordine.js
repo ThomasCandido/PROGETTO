@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         } catch (e) { console.error("Errore profilo:", e); }
 
-        // VEDI QUI: Blocchiamo la data per il Cliente
+        // Blocchiamo la data per il Cliente
         const inputData = document.getElementById('f_data');
         if (inputData) {
             inputData.readOnly = true;
@@ -156,7 +156,7 @@ function aggiornaPrezziAutomatici() {
     }
 }
 
-//VEDI QUI
+
 // ==========================================
 // 7. GESTIONE TAGLIE DINAMICHE
 // ==========================================
@@ -241,7 +241,8 @@ function aggiungiRigaTabella() {
     campoCl.style.backgroundColor = ""; // Toglie il colore verde
     campoCl.readOnly = false; // Lo sblocca se era bloccato
 
-    if (campoAz) {
+    if (campoAz) 
+    {
         campoAz.value = "";
         campoAz.style.backgroundColor = "";
         campoAz.readOnly = false;
@@ -470,7 +471,7 @@ window.chiudiConfiguratore = function() {
     document.getElementById('iframeConfiguratore').src = ""; // Lo svuota per resettarlo
 };
 
-// Questa funzione viene chiamata DAL configuratore quando ha finito di caricare la foto!
+
 // Questa funzione viene chiamata DAL configuratore quando ha finito di caricare la foto!
 window.salvaImmagineConfiguratore = function(cloudinaryUrl, tipologia, colore, taglia, quantita) {
     // 1. Salva l'URL dell'immagine

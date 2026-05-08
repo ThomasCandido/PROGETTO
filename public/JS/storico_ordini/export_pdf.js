@@ -1,3 +1,5 @@
+
+// click del bottone genra pdf
 document.addEventListener('click', function (e) {
     const btn = e.target.closest('.btn_pdf');
     if (btn) {
@@ -7,8 +9,8 @@ document.addEventListener('click', function (e) {
 });
 
 function generaPDF(card) {
-    // 1. ESTRAZIONE DATI "INFALLIBILE" (Unisce la tua vecchia idea alla mia)
-    // Cerca la parola chiave, ma se non la trova, usa il numero della riga come facevi tu all'inizio!
+
+    // Cerca la parola chiave
     const getVal = (keyword, index) => {
         const righe = Array.from(card.querySelectorAll('.dettagli li'));
         
@@ -48,6 +50,19 @@ function generaPDF(card) {
     const prezzoUn  = getVal('prezz', 7);
     const note      = getVal('not', 9);
 
+
+    // NUOVO: Estrazione dell'immagine
+    const btnAllegato = card.querySelector('button[title="Allegato"]'); 
+    let imgUrl = null;
+
+    // Se il bottone esiste e ha il link dell'immagine salvato nel data-img, lo prendiamo!
+    if (btnAllegato && btnAllegato.getAttribute('data-img')) 
+    {
+        const linkCloudinary = btnAllegato.getAttribute('data-img');
+        // Aggiungiamo il timestamp per aggirare la cache CORS, come detto prima
+        imgUrl = `${linkCloudinary}?t=${new Date().getTime()}`;
+    }
+
     // Calcolo
     const qtaNum = parseInt(qtaStr) || 0;
     const prezzoNum = parseFloat(prezzoUn.replace('€', '').replace(',', '.').trim()) || 0;
@@ -77,9 +92,19 @@ function generaPDF(card) {
     // Per il giallo, è meglio il testo scuro, per gli altri bianco
     const coloreTestoStato = statoLower.includes("lavorazione") ? "#000" : "white";
 
-    // 2. CREAZIONE DEL CONTENITORE (Senza attaccarlo alla pagina web = zero lag!)
+    // 2. CREAZIONE DEL CONTENITORE 
     const container = document.createElement('div');
     container.className = 'pdf-document';
+
+
+    // Creazione del blocco immagine solo se l'immagine esiste
+    const bloccoImmagine = imgUrl ? `
+        <div style="margin-top: 15px; text-align: center; break-inside: avoid;">
+            <p style="font-size: 12px; color: cadetblue; font-weight: bold; text-transform: uppercase; margin-bottom: 10px;">Grafica Allegata</p>
+            
+            <img src="${imgUrl}" crossorigin="anonymous" style="max-width: 100%; max-height: 260px; object-fit: contain;">
+        </div>
+    ` : '';
 
     // Inserisco gli stili direttamente qui per assicurarmi che si formatti subito
     container.innerHTML = `
@@ -126,7 +151,9 @@ function generaPDF(card) {
                 ${note || "Nessuna nota aggiuntiva."}
             </div>
 
-            <div style="margin-top: 40px; display: flex; justify-content: flex-end;">
+            ${bloccoImmagine}
+
+            <div style="margin-top: 20px; display: flex; justify-content: flex-end;">
                 <div style="background-color: #f1f8f9; border: 2px solid cadetblue; padding: 15px 30px; border-radius: 8px; text-align: right;">
                     <p style="font-size: 11px; color: #777; margin: 0;">Prezzo Totale</p>
                     <p style="font-size: 24px; font-weight: bold; color: cadetblue; margin: 0;">€ ${totale}</p>
@@ -135,20 +162,49 @@ function generaPDF(card) {
         </div>
     `;
 
-    // 3. CONFIGURAZIONE CHE RISOLVE IL TAGLIO A META' E IL BIANCO
+    // 3. CONFIGURAZIONE x GENERAZIONE PDF
     const opt = {
         margin: 10,
         filename: `Bolla_${cod}.pdf`,
         image: { type: 'jpeg', quality: 0.98 },
+        pagebreak: { mode: 'avoid-all' },
         html2canvas: { 
             scale: 2, 
             useCORS: true,
-            scrollY: 0, // <--- IL VERO FIX: AZZERA LO SCORRIMENTO NELLA FOTO
+            allowTaint: true,
+            scrollY: 0,
             scrollX: 0
         },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
     };
 
-    // 4. GENERAZIONE DIRETTA (Senza aggiungere o rimuovere roba dal DOM)
-    html2pdf().from(container).set(opt).save();
+    // 4. GENERAZIONE DEL PDF (CON PRELOAD DELL'IMMAGINE)
+    
+    // Se c'è un'immagine da caricare...
+    if (imgUrl) {
+        // Creiamo un caricatore invisibile in memoria
+        const preloader = new Image();
+        preloader.crossOrigin = "anonymous";
+        
+        // Diciamo: "Quando hai FINITO di scaricare la foto al 100%..."
+        preloader.onload = function() {
+            // ...allora fai partire il PDF!
+            html2pdf().from(container.innerHTML).set(opt).save();
+        };
+        
+        // Se per caso Cloudinary va in errore o il link è rotto...
+        preloader.onerror = function() {
+            console.warn("Impossibile caricare l'immagine allegata, stampo il PDF senza.");
+            html2pdf().from(container.innerHTML).set(opt).save();
+        };
+        
+        // Ora diamo il via al download (questo innesca l'onload qui sopra)
+        preloader.src = imgUrl; 
+
+    } 
+    else 
+    {
+        // Se l'ordine NON aveva un'immagine allegata fin dall'inizio, stampa subito!
+        html2pdf().from(container.innerHTML).set(opt).save();
+    }
 }

@@ -13,7 +13,8 @@ function aggiornaCardGraficamente(id, nuovoStato) {
 
     // 3. Aggiorna semaforo
     const pallina = card.querySelector('.semaforo_stato');
-    if (pallina) {
+    if (pallina) 
+    {
         let colore = "#e74c3c";
         if (nuovoStato === 'In Lavorazione') colore = "#f1c40f";
         if (nuovoStato === 'Evaso') colore = "#2ecc71";
@@ -23,7 +24,8 @@ function aggiornaCardGraficamente(id, nuovoStato) {
 
     // 4. --- GESTIONE DINAMICA DEL LUCCHETTO ---
     const isAdmin = localStorage.getItem('isAdmin') === 'true';
-    if (!isAdmin && nuovoStato !== 'Ordinato') {
+    if (!isAdmin && nuovoStato !== 'Ordinato') 
+    {
         const divSelezione = card.querySelector('.selezione');
         if (divSelezione) {
             // Se lo stato cambia, distruggiamo la checkbox e mettiamo il lucchetto in diretta!
@@ -61,10 +63,11 @@ async function eseguiCicloSimulazione(ordine) {
                 body: JSON.stringify({ id: idOrdine, stato: prossimoStato })
             });
 
-            if (res.ok) {
+            if (res.ok) 
+            {
                 console.log(`[Auto] Ordine ${idOrdine} -> ${prossimoStato}`);
                 
-                // 🪄 LA MAGIA: Aggiorniamo la memoria invisibile dell'ordine!
+            
                 ordine.stato = prossimoStato; 
                 
                 aggiornaCardGraficamente(idOrdine, prossimoStato);
@@ -140,6 +143,7 @@ async function caricaOrdiniDalDatabase() {
                     <div class="azioni">
                         <button class="botton_elemem_lista" title="Allegato" 
                             style="display: ${ordine.image_path ? 'inline-block' : 'none'}"
+                            data-img="${ordine.image_path}"
                             onclick="apriPopupAllegato('${ordine.image_path}')">📎
                         </button>
                         <button class="botton_elemem_lista" title="Modifica">📝</button>
@@ -151,16 +155,16 @@ async function caricaOrdiniDalDatabase() {
                 const btn_mod = li.querySelector('button[title="Modifica"]');
                 if (btn_mod) btn_mod.onclick = () => ModificaCard(li, ordine);
                 
-                // Qui aggiungerai la tua funzione per il PDF
+                // Funzione PDF
                 const btn_pdf = li.querySelector('.btn_pdf');
                 if (btn_pdf) btn_pdf.onclick = () => console.log("Stampa PDF ordine:", ordine.id);
 
                 listaUl.appendChild(li);
             });
 
-            // Avvio timer
+            // Avvio timer x simulare avanzamnto ordine
             result.data.forEach(o => {
-                if (o.stato !== "Archiviato") eseguiCicloSimulazione(o); // 👈 Ora passiamo l'intero oggetto (o)
+                if (o.stato !== "Archiviato") eseguiCicloSimulazione(o);
             });
 
         } else {
