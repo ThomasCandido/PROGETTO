@@ -73,6 +73,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             inputData.style.backgroundColor = "#eee"; // Lo colora di grigio per far capire che è bloccato
         }
 
+        // blocco prezzo cliente 
+        const campoPrezzoCl = document.getElementById('f_prezzo_cl');
+        campoPrezzoCl.readOnly = true;
+
         // Nascondi visivamente tutto ciò che è per Admin (Costi azienda, ecc.)
         document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'none');
     }
