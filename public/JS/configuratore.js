@@ -85,9 +85,10 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function aggiornaTaglieConfiguratore() {
-        if(!tagliaSelect) return;
+        if(!tagliaSelect) return; // Sicurezza
         tagliaSelect.innerHTML = '<option value="" selected disabled>Scegli Taglia...</option><option value="UNISEX">UNISEX</option>';
-        if (activeProduct === 'hoodie') { 
+        
+        if (activeProduct === 'hoodie' || activeProduct === 'tshirt') { 
             ['XS', 'S', 'M', 'L', 'XL', 'XXL'].forEach(t => tagliaSelect.innerHTML += `<option value="${t}">${t}</option>`);
         } else { 
             for (let i = 35; i <= 52; i++) {
@@ -271,9 +272,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 const res = await fetch('https://api.cloudinary.com/v1_1/dfjburbax/image/upload', { method: 'POST', body: formData });
                 const data = await res.json();
                 
-                if(data.secure_url && window.parent && window.parent.salvaImmagineConfiguratore) {
-                    let tipologia = (activeProduct === 'hoodie') ? 'Felpa' : (activeProduct === 'shorts') ? 'Pantalone' : 'Maglia';
-                    window.parent.salvaImmagineConfiguratore(data.secure_url, tipologia, currentColor, tagliaScelta, quantitaScelta);
+                 if(data.secure_url && window.parent && window.parent.salvaImmagineConfiguratore) 
+                {
+                    
+                    let tipologiaScelta = (activeProduct === 'hoodie') ? 'Felpa' : 
+                        (activeProduct === 'shorts') ? 'Pantalone' : 'T-shirt';
+                    
+                    window.parent.salvaImmagineConfiguratore(data.secure_url, tipologiaScelta, currentColor, tagliaScelta, quantitaScelta);
+                } 
+                else 
+                {
+                    alert("Errore: impossibile comunicare con il carrello principale.");
                 }
                 
                 btn.innerText = "✅ CONFERMA E ALLEGA ALL'ORDINE";

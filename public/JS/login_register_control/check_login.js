@@ -1,3 +1,4 @@
+// Funzione di validazione Login check campi dati compilati correttamente
 function validaLogin() 
 {
     // Presa dei dati e pulizia
@@ -35,19 +36,22 @@ document.addEventListener('DOMContentLoaded', function() {
     const btnMostraPassword = document.getElementById('mostra-password');
     const iconaPassword = document.getElementById('icona-password');
 
-    // Aggiungiamo il controllo al click sul bottone
+    // Evento click del bottone
     btnMostraPassword.addEventListener('click', function() {
         
         // Se in questo momento la password è nascosta...
-        if (passwordInput.type === 'password') {
-            passwordInput.type = 'text'; // ...mostra il testo[cite: 7]
-            iconaPassword.src = 'allegati/occhio-aperto.png'; // ...e cambia l'icona in occhio aperto[cite: 7]
-            iconaPassword.alt = 'Nascondi password'; //[cite: 7]
-        } else {
+        if (passwordInput.type === 'password') 
+        {
+            passwordInput.type = 'text'; // ...mostra il testo
+            iconaPassword.src = 'allegati/occhio-aperto.png'; // ...e cambia l'icona in occhio aperto
+            iconaPassword.alt = 'Nascondi password';
+        } 
+        else 
+        {
             // Se invece era già visibile, la nascondiamo di nuovo
-            passwordInput.type = 'password'; //[cite: 7]
-            iconaPassword.src = 'allegati/occhio-chiuso.png'; // ...e rimettiamo l'occhio chiuso[cite: 7]
-            iconaPassword.alt = 'Mostra password'; //[cite: 7]
+            passwordInput.type = 'password';
+            iconaPassword.src = 'allegati/occhio-chiuso.png'; // ...e rimettiamo l'occhio chiuso
+            iconaPassword.alt = 'Mostra password';
         }
         
     });

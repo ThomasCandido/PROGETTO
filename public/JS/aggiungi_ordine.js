@@ -65,6 +65,14 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         } catch (e) { console.error("Errore profilo:", e); }
 
+        // VEDI QUI: Blocchiamo la data per il Cliente
+        const inputData = document.getElementById('f_data');
+        if (inputData) {
+            inputData.readOnly = true;
+            inputData.style.pointerEvents = 'none'; // Impedisce di cliccare sull'icona del calendario
+            inputData.style.backgroundColor = "#eee"; // Lo colora di grigio per far capire che è bloccato
+        }
+
         // Nascondi visivamente tutto ciò che è per Admin (Costi azienda, ecc.)
         document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'none');
     }
@@ -109,8 +117,16 @@ function aggiornaPrezziAutomatici() {
         // 1. AGGIORNIAMO IL PREZZO CLIENTE (Sempre presente)
         if (campoPrezzoCl) {
             campoPrezzoCl.value = prezzo_finale_cliente.toFixed(2);
-            campoPrezzoCl.readOnly = true; // Impediamo truffe sul prezzo
-            campoPrezzoCl.style.backgroundColor = "#d4edda"; // Sfondo verde chiaro (OK)
+            
+            if (isAdmin) {
+                // Se è Admin, il campo è editabile e bianco
+                campoPrezzoCl.readOnly = false;
+                campoPrezzoCl.style.backgroundColor = "#fff"; 
+            } else {
+                // Se è Cliente, il campo è bloccato e verde chiaro
+                campoPrezzoCl.readOnly = true;
+                campoPrezzoCl.style.backgroundColor = "#d4edda"; 
+            }
         }
 
         // 2. AGGIORNIAMO IL PREZZO AZIENDA (Solo se il campo esiste, cioè se è Admin)
@@ -271,6 +287,7 @@ function aggiornaTabellaUI() {
             </td>
             
             <td>
+                <button type="button" class="btn_modifica" onclick="caricaDatiPerModifica(${index})" title="Modifica" style="background: #3498db; border: none; cursor: pointer; padding: 5px 8px; border-radius: 4px; margin-right: 5px;">✏️</button>
                 <button type="button" class="btn_rimuovi" onclick="rimuoviRiga(${index})" title="Rimuovi">❌</button>
             </td>
         `;
@@ -285,6 +302,35 @@ function rimuoviRiga(i) {
     aggiornaTabellaUI();
 }
 
+window.caricaDatiPerModifica = function(index) {
+    const o = ordiniInAttesa[index];
+
+    // 1. Popoliamo i campi base
+    document.getElementById('f_marchio').value = o.marchio;
+    document.getElementById('f_quantita').value = o.quantita;
+    document.getElementById('f_note').value = o.note;
+    document.getElementById('f_image_url').value = o.image_path || "";
+    document.getElementById('f_colore').value = o.colore;
+    
+    // 2. Gestiamo le tendine dinamiche
+    document.getElementById('f_tipologia').value = o.tipologia;
+    aggiornaTaglieDinamiche(); // Rigeneriamo le opzioni (XS/S/M o 35/36...)
+    document.getElementById('f_taglia').value = o.taglia;
+
+    // 3. Ricalcoliamo i prezzi (importante se è cambiata la tipologia o la foto)
+    aggiornaPrezziAutomatici();
+
+    // 4. Rimuoviamo la riga dalla tabella
+    // Idea: quando "carichi" per modificare, la riga sparisce dalla tabella 
+    // e "torna" nel form. Quando cliccherai di nuovo su Aggiungi, tornerà in tabella corretta.
+    ordiniInAttesa.splice(index, 1);
+    aggiornaTabellaUI();
+
+    // 5. Opzionale: Scroll verso l'alto per far capire che i dati sono lì
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    
+    alert("✏️ Dati riportati nel modulo. Modificali e clicca 'Aggiungi' per aggiornare l'ordine.");
+};
 
 function svuotaTabella() {
     // Chiediamo conferma per sicurezza

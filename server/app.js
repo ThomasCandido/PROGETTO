@@ -36,14 +36,15 @@ const requireLogin = (req, res, next) => {
 };
 
 const requireAdmin = (req, res, next) => {
-    if (!req.session.utenteId || !req.session.isAdmin) {
-        return res.redirect('/storico_ordini_home.html');
+    if (!req.session.utenteId || !req.session.isAdmin) 
+    {
+       return res.redirect('/login.html');
     }
     next();
 };
 
 // ============================================================
-// 1. ROTTE HTML PROTETTE (Spostate qui per sicurezza)
+// 1. ROTTE HTML PROTETTE
 // ============================================================
 
 app.get('/lista_clienti.html', requireAdmin, (req, res) => {
@@ -71,10 +72,13 @@ app.get('/Configuratore_felpe_pantaloncini.html', requireLogin, (req, res) => {
 // ============================================================
 app.use(express.static(ROOT)); 
 
+
+
 // ============================================================
 // 3. IMPLEMENTAZIONI FUNZIONALITA' SERVER
 // ============================================================
 
+// default prima pagina mostrata
 app.get('/', (req, res) => {
     res.sendFile(path.join(ROOT, 'login.html'));
 });
