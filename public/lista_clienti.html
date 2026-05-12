@@ -34,7 +34,7 @@
             <li><a href="aggiungi_ordine.html">Aggiungi Ordine</a></li>
             <li><a href="storico_ordini_home.html">Storico Ordine</a></li>
             <li class="theme-item">
-    <button id="themeBtn" class="theme-button">🎨</button>
+            <button id="themeBtn" class="theme-button">🎨</button>
     
     <ul class="theme-dropdown" id="themeMenu">
         <li class="dropdown-header">Tema</li>
@@ -65,20 +65,22 @@
     </nav>
         <br><br>
         
-        <form class="ricerca" onsubmit="return false;">
-            <input type="text" id="barraRicerca" placeholder="Cerca cliente, e-mail, telefono..." onkeyup="filtraClienti()">
-            <button type="button" title="Cerca">&#8981;</button>
+        <div class="ricerca-completa">
+            <form class="ricerca" onsubmit="return false;">
+                <input type="text" id="barraRicerca" placeholder="Cerca cliente, e-mail, telefono..." onkeyup="filtraClienti()">
+                <button type="button" title="Cerca">&#8981;</button>
             
-            <select id="filtroOrdinamento" class="tendina-ordinamento" onchange="ordinaClienti()">
-                <option value="">↕️ Ordina per...</option>
-                <option value="societa-asc">🏢 Società (Crescente)</option>
-                <option value="societa-desc">🏢 Società (Decrescente)</option>
-                <option value="cognome-asc">👤 Cognome (Crescente)</option>
-                <option value="cognome-desc">👤 Cognome (Decrescente)</option>
-                <option value="nome-asc">👤 Nome (Crescente)</option>
-                <option value="nome-desc">👤 Nome (Decrescente)</option>
-            </select>
-        </form>
+                <select id="filtroOrdinamento" class="tendina-ordinamento" onchange="ordinaClienti()">
+                    <option value="">↕️ Ordina per...</option>
+                    <option value="societa-asc">🏢 Società (Crescente)</option>
+                    <option value="societa-desc">🏢 Società (Decrescente)</option>
+                    <option value="cognome-asc">👤 Cognome (Crescente)</option>
+                    <option value="cognome-desc">👤 Cognome (Decrescente)</option>
+                    <option value="nome-asc">👤 Nome (Crescente)</option>
+                    <option value="nome-desc">👤 Nome (Decrescente)</option>
+                </select>
+            </form>
+        </div>
         <br><br>
 
 

@@ -1,137 +1,178 @@
 <!DOCTYPE html>
 <html lang="it">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="author" content="Thomas Candido - Gabriele Iannone">
-        <title>Aggiungi Cliente - Gestionale Tipografia</title>
-        <link rel="stylesheet" href="CSS/pc/aggiungi_cliente.css">
-        <link rel="stylesheet" href="CSS/pc/menu_bar.css">
-        <link rel="stylesheet" href="CSS/pc/body.css">
-        <script src="JS/menu_bar.js"></script>
-        <script src="JS/tema.js"></script>
-        <script src = "JS/aggiungi_cliente.js"></script>
-        <script src="JS/visuale_utente.js"></script>
-        <script src="JS/password-email-phone.js"></script>
-        <script src="JS/lista-clienti.js"></script>
-        <script>
+
+<!--aggiungi_cliente.html
+    Pagina con doppia funzione:
+        - Aggiunta di un nuovo cliente
+        - Modifica del proprio profilo-->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Thomas Candido - Gabriele Iannone">
+    <title>Aggiungi Cliente - Gestionale Tipografia</title>
+
+    <!--Fogli di stile-->
+    <link rel="stylesheet" href="CSS/pc/aggiungi_cliente.css">
+    <link rel="stylesheet" href="CSS/pc/menu_bar.css">
+    <link rel="stylesheet" href="CSS/pc/body.css">
+
+    <!-- ── Script globali (caricati prima del body) ── -->
+    <script src="JS/menu_bar.js"></script>
+    <script src="JS/tema.js"></script>
+    <script src="JS/aggiungi_cliente.js"></script>
+    <script src="JS/visuale_utente.js"></script>
+    <script src="JS/password-email-phone.js"></script>
+    <script src="JS/lista-clienti.js"></script>
+
+    <!--Controllo ruolo admin
+         Aggiunge la classe 'is-admin' all'elemento <html> se l'utente
+         è un amministratore, rendendo visibili le voci admin-only nel CSS. -->
+    <script>
         if (localStorage.getItem('isAdmin') === 'true') {
             document.documentElement.classList.add('is-admin');
         }
-        </script>
+    </script>
+</head>
 
-    </head>
+<body>
 
-    <body>
-    <!-- MENU DI NAVIGAZIONE-->
+    <!-- BARRA DI NAVIGAZIONE-->
+     
     <nav>
+
+        <!-- Icona hamburger per la versione smartphone (3 linee) -->
         <div class="menu_lt" id="menu_smartphone">
             <span></span>
             <span></span>
             <span></span>
         </div>
+
         <ul class="menu" id="nav_menu">
+
+            <!-- Voci visibili solo agli amministratori -->
             <li class="admin-only"><a href="lista_clienti.html">Clienti</a></li>
             <li class="admin-only"><a href="aggiungi_cliente.html" class="active">Aggiungi Cliente</a></li>
+
+            <!-- Voci visibili a tutti gli utenti -->
             <li><a href="aggiungi_ordine.html">Aggiungi Ordine</a></li>
             <li><a href="storico_ordini_home.html">Storico Ordine</a></li>
+
+            <!-- ── Selettore tema chiaro/scuro ── -->
             <li class="theme-item">
-    <button id="themeBtn" class="theme-button">🎨</button>
-    
-    <ul class="theme-dropdown" id="themeMenu">
-        <li class="dropdown-header">Tema</li>
-        <li>
-            <label class="theme-option">
-                <input type="radio" name="theme" value="light" onchange="applyTheme('light')"> ☀️ Chiaro
-            </label>
-        </li>
-        <li>
-            <label class="theme-option">
-                <input type="radio" name="theme" value="dark" onchange="applyTheme('dark')"> 🌙 Scuro
-            </label>
-        </li>
-    </ul>
-</li>
-          
-<li class="user-item">
-    <img src="allegati/log.png" class="user-avatar" id="userBtn" alt="login" title="Menu Utente">
-    <ul class="user-dropdown" id="userMenu">
-        <li class="dropdown-header">Account</li>
-        <li><a href="aggiungi_cliente.html?edit=true">⚙️ Modifica Profilo</a></li>
-        <li><hr></li>
-        <li><a href="/logout" class="logout-link">🚪 Logout</a></li>
-    </ul>
-</li>
-                
+                <button id="themeBtn" class="theme-button">🎨</button>
+
+                <ul class="theme-dropdown" id="themeMenu">
+                    <li class="dropdown-header">Tema</li>
+                    <li>
+                        <label class="theme-option">
+                            <input type="radio" name="theme" value="light" onchange="applyTheme('light')"> ☀️ Chiaro
+                        </label>
+                    </li>
+                    <li>
+                        <label class="theme-option">
+                            <input type="radio" name="theme" value="dark" onchange="applyTheme('dark')"> 🌙 Scuro
+                        </label>
+                    </li>
+                </ul>
+            </li>
+
+            <!-- ── Menu utente (avatar + dropdown) ── -->
+            <li class="user-item">
+                <img src="allegati/log.png" class="user-avatar" id="userBtn" alt="login" title="Menu Utente">
+
+                <ul class="user-dropdown" id="userMenu">
+                    <li class="dropdown-header">Account</li>
+                    <!-- Reindirizza alla stessa pagina in modalità modifica profilo -->
+                    <li><a href="aggiungi_cliente.html?edit=true">⚙️ Modifica Profilo</a></li>
+                    <li><hr></li>
+                    <li><a href="/logout" class="logout-link">🚪 Logout</a></li>
+                </ul>
+            </li>
+
         </ul>
     </nav>
 
-        <hr>
-        
-        <main>
-            <div class="formCliente">
-                <h1>Aggiungi Nuovo Cliente</h1>
-                
-                <p><em>I campi contrassegnati con l'asterisco (*) sono obbligatori.</em></p>
-                
-                <form id = "formCliente">
-                    
-                    <fieldset>
-                        <legend>Dati Società / Fatturazione</legend>
-                        <div class="form-group">
-                            <label for="societa">Nome Società *:</label>
-                            <input type="text" id="societa" name="societa" required>
-                        </div>
+    <hr>
 
-                        <div class="form-group">
-                            <label for="email">Email Standard *:</label>
-                            <input type="email" id="email" name="email" required>
-                            <span id="email-errore" style="color: #e74c3c; font-size: 12px; margin-top: 5px; display: none;">
-                                Inserisci un indirizzo email valido (es. nome@dominio.it)
-                            </span>
-                        </div>
+    <main>
+        <div class="form-aggiunta-cliente">
 
-                        <div class="form-group">
-                            <label for="telefono">Telefono Mobile Società *:</label>
-                            <div class="telefono-wrapper">
-                                <span class="prefisso">+39</span>
-                                <input type="tel" id="telefono" name="telefono" required>
-                            </div>
-                        </div>
+            <!-- Il titolo viene sovrascritto da aggiungi_cliente.js
+                 quando la pagina è aperta in modalità modifica (?edit=true) -->
+            <h1>Aggiungi Nuovo Cliente</h1>
 
-                    </fieldset>
+            <p><em>I campi contrassegnati con l'asterisco (*) sono obbligatori.</em></p>
 
-                    <fieldset>
-                        <legend>Dati Referente / Proprietario</legend>
-                        <div class="form-group">
-                            <label for="nome">Nome Proprietario *:</label>
-                            <input type="text" id="nome" name="nome" required>
-                        </div>
+            <form id="formCliente">
 
-                        <div class="form-group">
-                            <label for="cognome">Cognome Proprietario *:</label>
-                            <input type="text" id="cognome" name="cognome" required>
-                        </div>
+                <!-- Sezione 1: Dati aziendali e di contatto -->
+                <fieldset>
+                    <legend>Dati Società / Fatturazione</legend>
 
-                        <div class="form-group">
-                            <label for="password">Password *:</label>
-                            <div style="display: flex; align-items: center; gap: 10px;">
-                                <input type="password" id="password" name="password" minlength="8" required style="flex: 1;">
-                                <button type="button" id="mostra-password" title="Mostra/Nascondi password" style="background: transparent; border: none; padding: 0; margin: 0; cursor: pointer; display: flex;">
-                                    <img src="allegati/occhio-chiuso.png" id="icona-password" alt="Mostra password" width="24" height="24">
-                                </button>
-                            </div>
-                        </div>
-                    </fieldset>
-
-                    <br>
-
-                    <div class="form-actions">
-                        <button type="submit">Aggiungi Cliente</button>
-                        <button type="reset">Svuota Campi</button>
+                    <div class="form-group">
+                        <label for="societa">Nome Società *:</label>
+                        <input type="text" id="societa" name="societa" required>
                     </div>
-                </form>
-            </div>
-        </main>
-    </body>
+
+                    <div class="form-group">
+                        <label for="email">Email Standard *:</label>
+                        <input type="email" id="email" name="email" required>
+                        <!-- Messaggio di errore mostrato in tempo reale da password-email-phone.js -->
+                        <span id="email-errore" style="color: #e74c3c; font-size: 12px; margin-top: 5px; display: none;">
+                            Inserisci un indirizzo email valido (es. nome@dominio.it)
+                        </span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="telefono">Telefono Mobile Società *:</label>
+                        <!-- Il prefisso +39 è fisso; la formattazione automatica è gestita da password-email-phone.js -->
+                        <div class="telefono-wrapper">
+                            <span class="prefisso">+39</span>
+                            <input type="tel" id="telefono" name="telefono" required>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <!-- Sezione 2: Dati personali del referente -->
+                <fieldset>
+                    <legend>Dati Referente / Proprietario</legend>
+
+                    <div class="form-group">
+                        <label for="nome">Nome Proprietario *:</label>
+                        <input type="text" id="nome" name="nome" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="cognome">Cognome Proprietario *:</label>
+                        <input type="text" id="cognome" name="cognome" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password *:</label>
+                        <!-- Il bottone con l'occhio mostra/nasconde la password (gestito da password-email-phone.js) -->
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <input type="password" id="password" name="password" minlength="8" required style="flex: 1;">
+                            <button type="button" id="mostra-password" title="Mostra/Nascondi password"
+                                style="background: transparent; border: none; padding: 0; margin: 0; cursor: pointer; display: flex;">
+                                <img src="allegati/occhio-chiuso.png" id="icona-password" alt="Mostra password" width="24" height="24">
+                            </button>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <br>
+
+                <!-- Pulsanti di azione -->
+                <div class="form-actions">
+                    <!-- Il testo del submit viene modificato da aggiungi_cliente.js in modalità modifica -->
+                    <button type="submit">Aggiungi Cliente</button>
+                    <button type="reset">Svuota Campi</button>
+                </div>
+
+            </form>
+        </div>
+    </main>
+
+</body>
 </html>
