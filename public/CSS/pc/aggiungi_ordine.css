@@ -73,6 +73,7 @@
     border-radius: 10px;
     background-color: cadetblue;
     color:white;
+    cursor:pointer;
 }
 
 /* 3. RIQUADRO FORM INSERIMENTO */
@@ -132,17 +133,33 @@
 
 /* Bottoni icone (Reset, Allega, Aggiungi) */
 .bottone_ic {
-    padding: 8px 10px;
+    padding: 14px 28px; /* Più alti e più larghi */
+    font-size: 16px; /* Testo più grande e leggibile */
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    color: white; /* Testo bianco che risalta */
+    background-color: rgb(111, 185, 188); /* Il colore principale del tuo tema */
+    border: none; /* Rimuoviamo il bordino standard */
+    border-radius: 8px; /* Angoli leggermente arrotondati e moderni */
     cursor: pointer;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    background: white;
-    transition: 0.3s;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Ombra morbida per effetto 3D */
+    transition: all 0.3s ease; /* Transizione fluida */
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
+/* Effetto Hover (quando passi sopra col mouse) */
 .bottone_ic:hover {
-    background: #e0e0e0;
-    transform: scale(1.05);
+    background-color: #4f8587; /* Un cadetblue leggermente più scuro */
+    transform: translateY(-3px); /* Effetto sollevamento: il bottone viene verso l'utente */
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15); /* L'ombra si espande */
+}
+
+/* Effetto Active (quando fai click fisicamente sul bottone) */
+.bottone_ic:active {
+    transform: translateY(1px); /* Il bottone si "schiaccia" verso il basso */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* L'ombra si accorcia */
 }
 
 /* Anteprima immagine in tabella */
@@ -153,6 +170,72 @@
 }
 
 
+/* fix del bottone color nella tabella*/
+/* 1. Il nostro cerchio spostato a sinistra */
+.tabella_ordine input[type="color"] {
+    width: 45px;
+    height: 45px;
+    padding: 0;
+    border: 2px solid #ccc;
+    border-radius: 50%;
+    overflow: hidden;
+    cursor: pointer;
+    
+    /* MODIFICA: lo spostiamo a sinistra e togliamo il centraggio */
+    display: inline-block;
+    margin: 0; 
+}
+
+/* 2. LA MAGIA: Diciamo al browser di espandere il colore fino ai bordi */
+.tabella_ordine input[type="color"]::-webkit-color-swatch-wrapper {
+    padding: 0; /* Togliamo lo spazio vuoto interno */
+}
+
+.tabella_ordine input[type="color"]::-webkit-color-swatch {
+    border: none; /* Togliamo il bordino nero nativo */
+}
+
+/* 3. Effetto Hover */
+.tabella_ordine input[type="color"]:hover {
+    border-color: cadetblue;
+    transform: scale(1.1);
+    transition: 0.3s;
+}
+
+
+.colore-taglia-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 25px; /* Distanza precisa tra il pallino del colore e il menu taglia */
+}
+
+/* Allineamento millimetrico tra scritta e pallino */
+.colore-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Distanza tra "Colore:" e il pallino */
+}
+
+/* Fissiamo l'etichetta per evitare che scenda o salga */
+.label-colore {
+    font-size: 14px;
+    font-family: Arial, sans-serif;
+    color: #666;
+    font-weight: bold;
+    margin: 0; 
+    line-height: 1; /* Impedisce al testo di avere spazi invisibili sopra o sotto */
+}
+
+
+.select-taglia-ridotta {
+    width: 120px !important;
+    height: 40px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+}
 
 /* STILI X DIV DEL METODO DI PAGAMENTO */
 /* ==========================================
@@ -257,6 +340,7 @@
     font-weight: bold;
     font-size: 14px;
     transition: 0.3s;
+    cursor: pointer;
 }
 
 .btn-confirm:hover {

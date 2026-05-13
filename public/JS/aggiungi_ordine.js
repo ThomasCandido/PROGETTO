@@ -1,6 +1,4 @@
-// ==========================================
-// 1. CONFIGURAZIONI INIZIALI
-// ==========================================
+// listino base
 const listino_base = {
     "T-shirt": 5.00,
     "Felpa": 10.00,
@@ -14,9 +12,7 @@ const isAdmin = localStorage.getItem('isAdmin') === 'true'; // Recuperiamo il ru
 const cloudName = "dfjburbax"; 
 const uploadPreset = "joajwzcg"; 
 
-// ==========================================
-// 2. AVVIO PAGINA (DOMContentLoaded)
-// ==========================================
+// domloaded
 document.addEventListener('DOMContentLoaded', async () => {
     const inputCliente = document.getElementById('f_cliente');
     const idHidden = document.getElementById('id_cliente_nascosto');
@@ -101,9 +97,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('f_tipologia').addEventListener('change', aggiornaTaglieDinamiche);
 });
 
-// ==========================================
-// 3. CALCOLO PREZZI AUTOMATICO
-// ==========================================
+// calcolo prezzi clienti
 function aggiornaPrezziAutomatici() {
     const tipologia = document.getElementById('f_tipologia').value;
     const imageUrl = document.getElementById('f_image_url').value;
@@ -161,9 +155,7 @@ function aggiornaPrezziAutomatici() {
 }
 
 
-// ==========================================
-// 7. GESTIONE TAGLIE DINAMICHE
-// ==========================================
+// gestione taglie
 function aggiornaTaglieDinamiche() 
 {
     const tipologiaSelezionata = document.getElementById('f_tipologia').value;
@@ -189,9 +181,7 @@ function aggiornaTaglieDinamiche()
         }
     }
 }
-// ==========================================
-// 4. GESTIONE TABELLA RIEPILOGO (FRONTEND)
-// ==========================================
+// carrello riepilogativo
 function aggiungiRigaTabella() {
     const idCliente = document.getElementById('id_cliente_nascosto').value;
     const marchio = document.getElementById('f_marchio').value;
@@ -354,9 +344,7 @@ function svuotaTabella() {
     aggiornaTotaleCalcolato();
 }
 
-// ==========================================
-// 5. SALVATAGGIO FINALE E PAGAMENTO
-// ==========================================
+// salvataggio e pagamento
 function apriModalPagamento() {
     aggiornaTotaleCalcolato();
     if (ordiniInAttesa.length === 0) return alert("⚠️ Tabella vuota!");

@@ -80,7 +80,7 @@
     
         <div class="azioni_tabella">
             <div class="totale_box"><strong>Totale Complessivo: <span id="totale_ordine_display">€0.00</span></strong></div>
-            <button type="button" class="btn_salva" onclick="apriModalPagamento()" title="Procedi al pagamento e salvataggio">PAGA E SALVA 🛒</button>
+            <button type="button" class="btn_salva" onclick="apriModalPagamento()" title="Procedi al pagamento e salvataggio">PAGA E SALVA 💵</button>
             <button type="button" class="btn_refresh" onclick="svuotaTabella()" title="Svuota tabella">SVUOTA TABELLA &#128228;</button>
         </div>
     </div>
@@ -119,10 +119,15 @@
                                 <option value="Scarpa">Scarpa</option>
                             </select>
                         </td>
-                        <td><input type="color" id="f_colore" title="Colore"></td>
-                        <td>
-                            <!-- vedi qui-->
-                            <select id="f_taglia" required>
+                        <td colspan="2">
+                            <div class="colore-taglia-container">
+                            <div class="colore-wrapper">
+                                <label for="f_colore" class="label-colore">Colore:</label>
+                                <input type="color" id="f_colore" title="Colore">
+                            </div>
+                        
+                        
+                            <select id="f_taglia" class="select-taglia-ridotta" required >
                                 <option value="" selected disabled>Taglia</option>
                                 <option value="UNISEX">UNISEX</option>
                                 <optgroup label="Abbigliamento">
@@ -155,6 +160,7 @@
                                     <option value="52">52</option>
                                 </optgroup>
                             </select>
+                            </div>
                         </td>
                     </tr>
 
@@ -176,10 +182,10 @@
                             <div class="campi_sotto">
                                 <input type="hidden" id="f_image_url">
                                 <!-- nuovo bottone-->
-                                <button type="button" class="bottone_ic" id="btn_apri_configuratore" title="Apri Configuratore 3D">🎨</button>
+                                <button type="button" class="bottone_ic" id="btn_apri_configuratore" title="Apri Configuratore 3D">👕</button>
                                 <button type="button" class="bottone_ic" id="upload_widget_opener" title="Allega Foto su Cloudinary">&#128206;</button>
                                 <button type="reset" class="bottone_ic" title="Reset Form">&#x21BB;</button>
-                                <button type="button" class="bottone_ic" onclick="aggiungiRigaTabella()" title="Aggiungi a Riepilogo">&#10133;</button>
+                                <button type="button" class="bottone_ic" onclick="aggiungiRigaTabella()" title="Aggiungi a Riepilogo">🛒</button>
                             </div>
 
                              
