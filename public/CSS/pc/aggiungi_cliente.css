@@ -13,12 +13,12 @@
    ========================================= */
 main {
     max-width: 800px;
-    margin: 40px auto; /* Lo centra nella pagina */
+    margin: 30px auto 40px auto;
 }
 
 .form-aggiunta-cliente {
     background-color: #ffffff;
-    padding: 30px;
+    padding: 20px;
     border-radius: 8px; /* Angoli arrotondati */
     box-shadow: 0 4px 10px rgba(0,0,0,0.05); /* Leggera ombra per l'effetto "carta sollevata" */
 }
