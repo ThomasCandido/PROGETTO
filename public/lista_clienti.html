@@ -20,9 +20,8 @@
     </script>
     </head>
     
-    <body>
-
-        <nav>
+<body class="pagina-con-sfondo">
+    <nav>
         <div class="menu_lt" id="menu_smartphone">
             <span></span>
             <span></span>
@@ -35,26 +34,25 @@
             <li><a href="storico_ordini_home.html">Storico Ordine</a></li>
             <li class="theme-item">
             <button id="themeBtn" class="theme-button">🎨</button>
-    
-    <ul class="theme-dropdown" id="themeMenu">
-        <li class="dropdown-header">Tema</li>
-        <li>
-            <label class="theme-option">
-                <input type="radio" name="theme" value="light" onchange="applyTheme('light')"> ☀️ Chiaro
-            </label>
-        </li>
-        <li>
-            <label class="theme-option">
-                <input type="radio" name="theme" value="dark" onchange="applyTheme('dark')"> 🌙 Scuro
-            </label>
-        </li>
-    </ul>
-</li>
+                <ul class="theme-dropdown" id="themeMenu">
+                    <li class="dropdown-header">Tema</li>
+                    <li>
+                        <label class="theme-option">
+                        <input type="radio" name="theme" value="light" onchange="applyTheme('light')"> ☀️ Chiaro
+                        </label>
+                    </li>
+                    <li>
+                    <label class="theme-option">
+                        <input type="radio" name="theme" value="dark" onchange="applyTheme('dark')"> 🌙 Scuro
+                    </label>
+                    </li>
+                </ul>
+            </li>
           
-<li class="user-item">
-    <img src="allegati/log.png" class="user-avatar" id="userBtn" alt="login" title="Menu Utente">
-    <ul class="user-dropdown" id="userMenu">
-        <li class="dropdown-header">Account</li>
+            <li class="user-item">
+                <img src="allegati/log.png" class="user-avatar" id="userBtn" alt="login" title="Menu Utente">
+            <ul class="user-dropdown" id="userMenu">
+            <li class="dropdown-header">Account</li>
         <li><a href="aggiungi_cliente.html?edit=true">⚙️ Modifica Profilo</a></li>
         <li><hr></li>
         <li><a href="/logout" class="logout-link">🚪 Logout</a></li>

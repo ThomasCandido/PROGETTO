@@ -4,6 +4,20 @@
     --text-color: black;
 }
 
+/* Sfondo personalizzato solo per le pagine con la classe specifica */
+body.pagina-con-sfondo {
+    background-image: url('../../allegati/armadietto.png');
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: center; 
+    background-repeat: no-repeat;
+}
+
+/* Opzionale: Se vuoi che lo sfondo cambi o si scurisca con il tema Dark */
+body.theme-dark.pagina-con-sfondo {
+    background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('../../allegati/armadietto.png');
+    /* L'effetto linear-gradient sopra mette uno strato scuro per rendere i testi leggibili */
+}
 
 body.theme-dark {
     --bg-page: #121212;
