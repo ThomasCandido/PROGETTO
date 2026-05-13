@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Benvenuto - Gestione Ordini</title>
+    <link rel="stylesheet" href="CSS/pc/body.css">
+    <link rel="stylesheet" href="CSS/pc/menu_bar.css">
+    <script src="JS/tema.js"></script>
+    <style>
+        /* --- MODIFICHE PER IL VIDEO DI SFONDO --- */
+        #video-background {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            min-width: 100%; 
+            min-height: 100%;
+            width: auto; 
+            height: auto;
+            z-index: -100; /* Lo mette dietro a tutto il resto */
+            object-fit: cover; /* Si comporta come 'background-size: cover' */
+            filter: brightness(0.6) blur(1px); /* Scurisce e sfoca un po' per far risaltare il testo */
+        }
+
+        /* Container principale relativo per stare sopra il video */
+        .hero-section {
+            position: relative;
+            z-index: 1; 
+            text-align: center;
+            padding: 50px 20px;
+            max-width: 800px;
+            margin: 50px auto; /* Aggiunto un po' di margine sopra */
+        }
+
+        /* --- TUOI STILI ORIGINALI --- */
+        .features-box {
+            background-color: rgba(255, 255, 255, 0.85); /* Aumentata opacità per leggibilità */
+            border: 1px solid cadetblue;
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            color: #333; /* Testo scuro sulla box chiara */
+        }
+
+        /* Se il tema è dark, adattiamo la box */
+        body.theme-dark .features-box {
+            background-color: rgba(30, 30, 30, 0.85);
+            color: white;
+        }
+
+        .auth-links {
+            margin-top: 40px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .btn-home {
+            padding: 15px 30px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: transform 0.3s ease;
+        }
+
+        .btn-login {
+            background-color: cadetblue;
+            color: white;
+        }
+
+        .btn-register {
+            background-color: rgba(255, 255, 255, 0.9); /* Sfondo quasi bianco per vederlo bene sul video */
+            border: 2px solid cadetblue;
+            color: cadetblue;
+        }
+
+        .btn-home:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body class="bg-pagine-speciali">
+
+    <video autoplay muted loop playsinline id="video-background">
+        <source src="allegati/il_tuo_video_pressa.mp4" type="video/mp4">
+        Il tuo browser non supporta il tag video.
+    </video>
+
+    <div class="hero-section">
+        <h1 style="color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">Benvenuto in Pop Print Style</h1>
+        
+        <p style="color: white; text-shadow: 1px 1px 3px rgba(0,0,0,0.5);">
+            Questo sito è stata progettato per semplificare la gestione dei tuoi ordini di abbigliamento, 
+            offrendo strumenti intuitivi per la gestione di questi ultimi.
+        </p>
+
+        <div class="features-box">
+            <h3>Cosa puoi fare?</h3>
+            <p>
+            Il sito è una piattaforma dedicata alla gestione e personalizzazione di ordini di abbigliamento.
+            Tra le funzionalità principali è presente una pagina di gestione ordini che consente di visualizzare tutti gli ordini effettuati e permette la modifica o l’eliminazione esclusivamente degli ordini che si trovano nello stato “ordinato”, garantendo così un maggiore controllo sul flusso degli ordini.
+            È inoltre disponibile una pagina dedicata all’aggiunta di nuovi ordini, nella quale l’utente può selezionare il capo di abbigliamento desiderato scegliendo caratteristiche come taglia, colore e altre opzioni disponibili.
+            Il sito include anche un configuratore di capi di abbigliamento che permette di personalizzare prodotti come felpe, pantaloncini e t-shirt, offrendo la possibilità di creare capi personalizzati in base alle proprie preferenze.
+            </p>
+        </div>
+
+        <div class="auth-links">
+            <a href="login.html" class="btn-home btn-login">Accedi (Login)</a>
+            <a href="registrazione.html" class="btn-home btn-register">Registrati ora</a>
+        </div>
+    </div>
+
+</body>
+</html>
