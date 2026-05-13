@@ -43,11 +43,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Se la funzione è globale in storico_ordini.js, possiamo usarla qui
                 location.reload(); 
             } else {
-                alert("Errore: " + result.message);
+                mostraToast("❌ Errore: " + result.message, "error");
             }
         } catch (err) {
             console.error("Errore durante l'eliminazione:", err);
-            alert("Si è verificato un errore di rete.");
+            mostraToast("⚠️ Si è verificato un errore di rete.", "error");
         }
     });
 });

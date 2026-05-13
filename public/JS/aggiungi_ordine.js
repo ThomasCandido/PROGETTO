@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (!error && result && result.event === "success") { 
             document.getElementById('f_image_url').value = result.info.secure_url;
             aggiornaPrezziAutomatici(); // Ricalcola col 35%
-            alert("✅ Foto caricata!");
+            mostraToast("✅ Foto caricata con successo!", "success");
         }
     });
 
@@ -188,8 +188,16 @@ function aggiungiRigaTabella() {
     const qta = document.getElementById('f_quantita').value;
     const imageUrl = document.getElementById('f_image_url').value;
 
-    if (!idCliente) return alert("⚠️ Seleziona un cliente valido!");
-    if (!marchio || !qta || qta <= 0) return alert("⚠️ Compila Marchio e Quantità!");
+    if (!idCliente) 
+    {
+        mostraToast("⚠️ Seleziona prima un cliente valido!", "warning");
+        return;
+    }
+    if (!marchio || !qta || qta <= 0)
+    {
+        mostraToast("⚠️ Compila i campi Marchio e Quantità!", "warning");
+        return;
+    }
 
     const riga = {
         id_temp: Date.now(),
@@ -324,7 +332,7 @@ window.caricaDatiPerModifica = function(index) {
     // 5. Opzionale: Scroll verso l'alto per far capire che i dati sono lì
     window.scrollTo({ top: 0, behavior: 'smooth' });
     
-    alert("✏️ Dati riportati nel modulo. Modificali e clicca 'Aggiungi' per aggiornare l'ordine.");
+    mostraToast("✏️ Dati riportati nel modulo. Modificali e clicca 'Aggiungi'.", "warning");
 };
 
 function svuotaTabella() {
@@ -339,6 +347,7 @@ function svuotaTabella() {
         aggiornaTabellaUI();
         
         console.log("🧹 Tabella ripulita correttamente.");
+        mostraToast("🧹 Tabella ripulita correttamente.", "success");
     }
 
     aggiornaTotaleCalcolato();
@@ -347,7 +356,11 @@ function svuotaTabella() {
 // salvataggio e pagamento
 function apriModalPagamento() {
     aggiornaTotaleCalcolato();
-    if (ordiniInAttesa.length === 0) return alert("⚠️ Tabella vuota!");
+    if (ordiniInAttesa.length === 0)
+    {
+        mostraToast("⚠️ Aggiungi almeno un articolo alla tabella prima di pagare!", "error");
+        return;
+    }
     document.getElementById('modalPagamento').style.display = 'flex';
 }
 
@@ -365,32 +378,36 @@ function processaPagamento() {
     // 1. Controllo base: ha lasciato qualcosa vuoto?
     if (!titolare || !numeroCarta || !scadenza || !cvv) 
     {
-        return alert("⚠️ Attenzione: Devi compilare tutti i campi per procedere al pagamento.");
+       mostraToast("⚠️ Devi compilare tutti i campi per procedere al pagamento.", "error");
+       return;
     }
 
     // 2. Controllo Numero Carta: esattamente 16 cifre numeriche
     const regexCarta = /^[0-9]{16}$/;
     if (!regexCarta.test(numeroCarta)) 
     {
-        return alert("⚠️ Errore Carta: Il numero della carta deve contenere esattamente 16 numeri (senza spazi o lettere).");
+        mostraToast("⚠️ Il numero della carta deve contenere esattamente 16 numeri.", "error");
+        return;
     }
 
     // 3. Controllo Scadenza: formato MM/AA
     const regexScadenza = /^(0[1-9]|1[0-2])\/\d{2}$/;
     if (!regexScadenza.test(scadenza)) 
     {
-        return alert("⚠️ Errore Scadenza: Inserisci la data nel formato MM/AA (es. 11/26 per Novembre 2026).");
+        mostraToast("⚠️ Inserisci la scadenza nel formato MM/AA.", "error");
+        return;
     }
 
     // 4. Controllo CVV: esattamente 3 cifre numeriche
     const regexCVV = /^[0-9]{3}$/;
     if (!regexCVV.test(cvv)) 
     {
-        return alert("⚠️ Errore CVV: Il codice di sicurezza deve essere di 3 numeri.");
+        mostraToast("⚠️ Il codice CVV deve essere di 3 numeri.", "error");
+        return;
     }
 
     // --- SE ARRIVA FINO A QUI, TUTTI I CONTROLLI SONO SUPERATI ---
-    alert("💳 Pagamento Autorizzato con successo!");
+   mostraToast("💳 Pagamento Autorizzato!", "success");
     chiudiPagamento();
     salvaTuttoNelDatabase();
 }
@@ -440,12 +457,12 @@ async function salvaTuttoNelDatabase() {
 
         const result = await res.json();
         if (result.success) {
-            alert("🚀 Ordini inviati con successo!");
+            mostraToast("🚀 Ordini salvati con successo!", "success");
             ordiniInAttesa = [];
             window.location.href = "storico_ordini_home.html";
         }
     } catch (err) {
-        alert("Errore salvataggio database.");
+        mostraToast("❌ Errore salvataggio database.", "error");
     }
 }
 
@@ -492,7 +509,7 @@ window.salvaImmagineConfiguratore = function(cloudinaryUrl, tipologia, colore, t
     aggiornaPrezziAutomatici(); 
     chiudiConfiguratore();
     
-    alert("✅ Grafica generata! Tipologia, Colore, Taglia e Quantità sono stati inseriti automaticamente.");
+    mostraToast("✅ Grafica importata! Campi autocompilati.", "success");
 };
 
 

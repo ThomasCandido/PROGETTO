@@ -1,9 +1,36 @@
+// --- 1. FUNZIONE GLOBALE PER I TOAST (Sostituisce gli alert) ---
+function mostraToast(messaggio, tipo = 'error') {
+    let toast = document.getElementById("toast-container");
+    if (!toast) {
+        toast = document.createElement("div");
+        toast.id = "toast-container";
+        document.body.appendChild(toast);
+    }
+    toast.innerText = messaggio;
+    toast.className = ""; // Reset classi
+    toast.classList.add("show", `toast-${tipo}`);
+
+    setTimeout(() => { 
+        toast.classList.remove("show"); 
+    }, 3000);
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
     try {
         const response = await fetch('/api/get-profile');
         const result = await response.json();
+        const paginaAttuale = window.location.pathname;
 
         if (result.success) {
+            // --- 2. LOGICA ANTI-INDIETRO (Loggato) ---
+            // Se l'utente è loggato e prova a tornare al login o alla home iniziale
+            if (paginaAttuale.includes('login.html') || paginaAttuale === '/' || paginaAttuale.includes('index.html')) {
+                // Usiamo replace per sovrascrivere la cronologia: il login "non esiste più" per il tasto indietro
+                const destinazione = result.data.is_admin ? 'lista_clienti.html' : 'storico_ordini_home.html';
+                window.location.replace(destinazione);
+                return; 
+            }
+
             const utente = result.data;
             const isAdmin = utente.is_admin;
 
@@ -15,31 +42,33 @@ document.addEventListener('DOMContentLoaded', async () => {
                 document.documentElement.classList.remove('is-admin');
             }
 
-            // 2. POPOLAMENTO DATI (Inclusa Email)
+            // 3. POPOLAMENTO DATI
             const inputEmail = document.getElementById('f_email');
             const inputCliente = document.getElementById('f_cliente');
 
-            // Se siamo nella pagina profilo, riempiamo l'email (che ora arriva dal server)
             if (inputEmail) {
                 inputEmail.value = utente.email || '';
             }
 
-            // 3. LOGICA SPECIFICA PER CLIENTE
+            // 4. LOGICA SPECIFICA PER CLIENTE
             if (!isAdmin) {
-                // Nascondi tasto statistiche (se presente nella pagina)
                 const btnStats = document.getElementById('openStats');
                 if (btnStats) btnStats.style.display = 'none';
 
-                // Nascondi campi costo azienda (usando la classe universale)
                 document.querySelectorAll('.admin-only').forEach(el => el.remove());
 
-                // Blocca nome società
                 if (inputCliente) {
-                    inputCliente.value = utente.societa || ''; 
-                    inputCliente.readOnly = true; 
-                    inputCliente.style.backgroundColor = "#e9ecef"; 
+                    inputCliente.value = utente.societa || '';
+                    inputCliente.readOnly = true;
+                    inputCliente.style.backgroundColor = "#e9ecef";
                     inputCliente.style.cursor = "not-allowed";
                 }
+            }
+        } else {
+            // --- 5. PROTEZIONE ROTTE (Non Loggato) ---
+            // Se non sei loggato e non sei già sulle pagine di accesso, vai al login
+            if (!paginaAttuale.includes('login.html') && !paginaAttuale.includes('registrazione.html') && paginaAttuale !== '/') {
+                window.location.replace('login.html');
             }
         }
     } catch (err) {

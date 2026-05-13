@@ -84,9 +84,11 @@ app.get('/', (req, res) => {
 });
 
 // Operazione di Login
+// Operazione di Login MODERNA (AJAX)
 app.post('/login', async (req, res) => {
     const { email, password } = req.body;
     console.log("--- TENTATIVO DI LOGIN ---");
+    
     try {
         const { data: utente, error } = await supabase
             .from('utenti')
@@ -94,8 +96,9 @@ app.post('/login', async (req, res) => {
             .eq('email', email)
             .single();
         
+        // Se non trovo l'utente, rispondo con un JSON di errore
         if (error || !utente) {
-            return res.send("<script>alert('Utente non trovato'); window.location.href='/login.html';</script>");
+            return res.json({ success: false, errore: 'utente_non_trovato' });
         }
         
         const match = await bcrypt.compare(password, utente.password);
@@ -104,22 +107,24 @@ app.post('/login', async (req, res) => {
             req.session.isAdmin = (utente.is_admin === true || utente.is_admin === 'true');
             req.session.clienteId = utente.is_admin ? null : utente.id;
 
-            res.send(`
-                <script>
-                    localStorage.clear();
-                    localStorage.setItem('isAdmin', '${req.session.isAdmin}');
-                    window.location.href = '${req.session.isAdmin ? '/lista_clienti.html' : '/storico_ordini_home.html'}';
-                </script>
-            `);
+            // Salvo la sessione e mando l'OK al frontend con l'URL di destinazione
+            req.session.save(() => {
+                res.json({ 
+                    success: true, 
+                    redirectUrl: req.session.isAdmin ? '/lista_clienti.html' : '/storico_ordini_home.html' 
+                });
+            });
         } else { 
-            res.send("<script>alert('Password errata'); window.location.href='/login.html';</script>"); 
+            // Password errata, JSON di errore
+            return res.json({ success: false, errore: 'password_errata' }); 
         }
     } catch (err) {
-        res.status(500).send("Errore server: " + err.message); 
+        res.status(500).json({ success: false, errore: 'errore_server' }); 
     }
 });
 
 // Operazione di Registrazione
+// Operazione di Registrazione (Aggiornata senza alert)
 app.post('/register', async (req, res) => {
     const { email, password, nome, cognome, societa, telefono } = req.body;
     try {
@@ -142,14 +147,13 @@ app.post('/register', async (req, res) => {
 
         if (clienteError) throw clienteError;
 
-        res.send(`
-            <script>
-                alert('✅ Registrazione completata! Ora puoi accedere.');
-                window.location.href = '/login.html';
-            </script>
-        `);
+        // INVECE DELL'ALERT: Rimanda al login con un segnale di successo
+        res.redirect('/login.html?registrazione=success');
+
     } catch (err) { 
-        res.send(`<script>alert('❌ Errore: ${err.message}'); window.history.back();</script>`);
+        console.error("Errore registrazione:", err.message);
+        // INVECE DELL'ALERT: Rimanda alla registrazione con un segnale di errore
+        res.redirect('/registrazione.html?errore=registrazione_fallita');
     }
 });
 

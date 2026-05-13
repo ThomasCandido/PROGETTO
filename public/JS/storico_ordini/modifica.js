@@ -74,7 +74,7 @@ async function ModificaCard(li, ordine) {
                     }
                 });
             } else {
-                alert("Errore: Libreria Cloudinary non caricata nell'HTML.");
+               mostraToast("⚠️ Errore: Libreria Cloudinary non caricata.", "error");
             }
         };
     }
@@ -120,14 +120,16 @@ async function salvaModifica(dati) {
         });
         const res = await response.json();
         if (res.success) {
-            alert("✅ Ordine aggiornato!");
+            mostraToast("✅ Ordine aggiornato!", "success");
             console.log("Ordine aggiornato");
-            location.reload(); 
+            setTimeout(() => {
+                location.reload(); 
+            }, 2500);
         } else {
-            alert("❌ Errore: " + res.message);
+           mostraToast("❌ Errore: " + res.message, "error");
         }
     } catch (e) {
-        alert("❌ Errore di connessione.");
+        mostraToast("⚠️ Errore di connessione al server.", "error");
         console.log("Nessun aggiornamento dell'ordine");
     }
 }

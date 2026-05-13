@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const resJson = await response.json();
             
             if (resJson.success) {
-                alert(isEditMode ? "✅ Profilo aggiornato con successo!" : "✅ Cliente aggiunto con successo!");
+               mostraToast(isEditMode ? "✅ Profilo aggiornato con successo!" : "✅ Cliente aggiunto con successo!", "success");
 
                 // REDIRECT INTELLIGENTE
                 if (isAdmin) {
@@ -91,10 +91,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                     window.location.href = 'storico_ordini_home.html';
                 }
             } else {
-                alert("❌ Errore: " + resJson.message);
+                mostraToast("❌ Errore: " + resJson.message, "error");
             }
         } catch (err) {
-            alert("Errore di connessione al server.");
+            mostraToast("⚠️ Errore di connessione al server.", "error");
         }
     });
 });

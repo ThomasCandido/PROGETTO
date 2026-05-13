@@ -1,14 +1,35 @@
+// --- FUNZIONE GLOBALE PER I TOAST ---
+function mostraToast(messaggio, tipo = 'error') {
+    let toast = document.getElementById("toast-container");
+    if (!toast) {
+        toast = document.createElement("div");
+        toast.id = "toast-container";
+        document.body.appendChild(toast);
+    }
+    toast.innerText = messaggio;
+    toast.className = ""; 
+    toast.classList.add("show", `toast-${tipo}`);
+    setTimeout(() => toast.classList.remove("show"), 3500);
+}
+
 // =========================================================
-// 1. EVENTI IN REAL-TIME (Mentre l'utente compila il form)
+// 1. EVENTI IN REAL-TIME E CONTROLLO ERRORI DAL SERVER
 // =========================================================
 document.addEventListener('DOMContentLoaded', function() {
     
+    // --- CONTROLLO ERRORI DAL SERVER NODE.JS ---
+    const parametriUrl = new URLSearchParams(window.location.search);
+    if (parametriUrl.get('errore') === 'registrazione_fallita') {
+        mostraToast("❌ Errore durante la registrazione. L'email potrebbe essere già in uso.", "error");
+        // Puliamo l'URL per estetica
+        window.history.replaceState({}, document.title, window.location.pathname);
+    }
+
     /* --- MOSTRA/NASCONDI PASSWORD --- */
     const passwordInput = document.getElementById('password');
     const btnMostraPassword = document.getElementById('mostra-password');
     const iconaPassword = document.getElementById('icona-password');
 
-    // Controllo di sicurezza: esegue il codice solo se gli elementi esistono nella pagina
     if (btnMostraPassword && passwordInput) {
         btnMostraPassword.addEventListener('click', function() {
             if (passwordInput.type === 'password') {
@@ -48,11 +69,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (telefonoInput) {
         telefonoInput.addEventListener('input', function(e) {
-            // Rimuoviamo tutto ciò che NON è un numero
             let numeri = e.target.value.replace(/\D/g, '');
             let formattato = '';
             
-            // Costruiamo il numero con i trattini
             if (numeri.length > 0) {
                 formattato +=  numeri.substring(0, 3); 
             }
@@ -63,7 +82,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 formattato += '-' + numeri.substring(6, 10); 
             }
             
-            // Aggiorniamo l'input con il valore formattato
             e.target.value = formattato;
         });
     }
@@ -81,22 +99,22 @@ function validaRegistrazione() {
     // RegEx più rigorosa per il controllo finale
     const email_regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    // 2. I controlli (Il "Cane da Guardia")
+    // 2. I controlli (SOSTITUITI GLI ALERT CON I TOAST)
     if (societa === "" || email === "" || password === "") {
-        alert("⚠️ Nome Società, Email e Password sono obbligatori!");
+        mostraToast("⚠️ Nome Società, Email e Password sono obbligatori!", "warning");
         return false; 
     }
 
     if (!email_regex.test(email)) {
-        alert("⚠️ Inserisci un formato email valido.");
+        mostraToast("⚠️ Inserisci un formato email valido.", "warning");
         return false;
     }
 
     if (password.length < 8) {
-        alert("⚠️ La password deve essere di almeno 8 caratteri.");
+        mostraToast("⚠️ La password deve essere di almeno 8 caratteri.", "warning");
         return false;
     }
 
-    // Se tutto è OK, restituiamo true e il form parte da solo verso il server
+    // Se tutto è OK, restituiamo true e il form parte verso il server
     return true;
 }

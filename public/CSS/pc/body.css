@@ -72,3 +72,40 @@ body {
     font-weight: bold;
     cursor: pointer;
 }
+
+/* ==========================================
+   TOAST NOTIFICATIONS (Sostituiscono gli alert)
+   ========================================== */
+#toast-container {
+    visibility: hidden;
+    min-width: 280px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 8px;
+    padding: 16px;
+    position: fixed;
+    z-index: 99999; /* Sopra ogni cosa */
+    right: 30px;
+    bottom: 30px;
+    font-size: 15px;
+    box-shadow: 0px 4px 15px rgba(0,0,0,0.3);
+    
+    /* Animazioni fluide */
+    opacity: 0;
+    transition: opacity 0.5s, bottom 0.5s, visibility 0.5s;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+}
+
+/* Quando il toast deve apparire */
+#toast-container.show {
+    visibility: visible;
+    opacity: 1;
+    bottom: 50px; /* Sale leggermente quando appare */
+}
+
+/* Colori specifici in base al tipo di messaggio */
+#toast-container.toast-success { background-color: #27ae60; } /* Verde per i successi */
+#toast-container.toast-error { background-color: #e74c3c; }   /* Rosso per gli errori */
+#toast-container.toast-warning { background-color: #f39c12; color: #000; } /* Giallo */

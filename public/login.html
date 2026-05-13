@@ -8,6 +8,7 @@
         <link rel="stylesheet" href="CSS/pc/login.css">
         <link rel="stylesheet" href="CSS/pc/body.css">
         <script src="JS/login_register_control/check_login.js"></script>
+        <script src="JS/visuale_utente.js"></script>
     </head>
     <body>
         <!-- PAGINA DI LOGIN INIZIALE!-->
@@ -18,7 +19,7 @@
                 <p>Inserisci le tue credenziali per continuare</p>
             </div>
             <!-- invio dati al server e check email e password corretti ? -->
-            <form action="/login" method="POST" onsubmit="return validaLogin()">
+            <form id="loginForm" onsubmit="validaLogin(event)">
                 <div class="form-group">
                     <label for="email">E-mail</label>
                     <input type="email" id="email" name="email" placeholder="Inserisci email" required autocomplete="email">
