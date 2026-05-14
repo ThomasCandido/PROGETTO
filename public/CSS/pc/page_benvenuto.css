@@ -1,245 +1,93 @@
-
-/* --- MODIFICHE PER IL VIDEO DI SFONDO --- */
+/* --- VIDEO DI SFONDO --- */
 #video-background {
     position: fixed;
     right: 0;
     bottom: 0;
     min-width: 100%; 
     min-height: 100%;
-    width: auto; 
-    height: auto;
     z-index: -100;
     object-fit: cover;
-    filter: brightness(0.5) blur(0px); /* Blur a 0 per testare qualità video */
+    filter: brightness(0.6); /* Leggermente più scuro per far risaltare il testo bianco */
 }
 
-/* Container principale relativo per stare sopra il video */
+/* --- SEZIONE CONTENUTO --- */
 .hero-section {
     position: relative;
     z-index: 1; 
-    text-align: center;
+    text-align: left;
     padding: 50px 20px;
-    max-width: 900px;
-    margin: 50px auto;
+    max-width: 60%; /* Lascia ampio spazio ai bottoni a destra */
+    margin: 60px 5%;
 }
 
-/* Titolo principale */
 .hero-section h1 {
     color: white;
-    font-size: 3rem;
-    font-weight: 700;
-    text-shadow: 3px 3px 8px rgba(0,0,0,0.7);
-    margin-bottom: 25px;
-    letter-spacing: 1px;
+    font-size: 3.8rem;
+    font-weight: 800;
+    text-shadow: 3px 3px 12px rgba(0,0,0,0.8);
+    margin-bottom: 30px;
 }
 
-/* Sottotitolo/descrizione */
 .hero-section > p {
     color: white;
-    font-size: 1.3rem;
+    font-size: 1.6rem;
     line-height: 1.8;
-    text-shadow: 2px 2px 6px rgba(0,0,0,0.7);
-    margin-bottom: 30px;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
+    margin-bottom: 40px;
     font-weight: 300;
 }
 
-/* --- BOX FEATURES MIGLIORATA --- */
+/* --- FEATURES (TRASPARENTE) --- */
 .features-box {
-    background-color: rgba(255, 255, 255, 0.95);
-    border: 2px solid cadetblue;
-    border-radius: 20px;
-    padding: 40px;
+    background-color: transparent;
+    padding: 0;
     margin-top: 30px;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
-    color: #2c3e50;
-    backdrop-filter: blur(10px); /* Effetto vetro smerigliato */
 }
 
 .features-box h3 {
-    color: cadetblue;
-    font-size: 2rem;
+    color: #7ec8ca; /* Colore cadetblue chiaro per risaltare */
+    font-size: 2.5rem;
     margin-bottom: 20px;
-    font-weight: 600;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
 }
 
 .features-box p {
-    font-size: 1.1rem;
-    line-height: 2; /* Interlinea aumentata */
-    text-align: left;
-    color: #34495e;
+    font-size: 1.4rem;
+    line-height: 2.2;
+    color: white;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
 }
 
-/* Evidenziazione parole chiave */
 .highlight {
-    background: linear-gradient(120deg, rgba(95, 158, 160, 0.3) 0%, rgba(95, 158, 160, 0.6) 100%);
-    padding: 2px 6px;
-    border-radius: 4px;
+    background: rgba(95, 158, 160, 0.3);
+    padding: 2px 8px;
+    border-radius: 5px;
     font-weight: 600;
-    color: #1a5f61;
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-/* Se il tema è dark, adattiamo la box */
-body.theme-dark .features-box {
-    background-color: rgba(30, 30, 30, 0.95);
-    color: #ecf0f1;
-    border-color: #5f9ea0;
-}
-
-body.theme-dark .features-box h3 {
-    color: #7ec8ca;
-}
-
-body.theme-dark .features-box p {
-    color: #bdc3c7;
-}
-
-body.theme-dark .highlight {
-    background: linear-gradient(120deg, rgba(95, 158, 160, 0.2) 0%, rgba(95, 158, 160, 0.4) 100%);
-    color: #7ec8ca;
-}
-
-/* --- SELETTORE TEMA --- */
-.theme-selector-container {
-    position: absolute; /* In alto a destra rispetto alla pagina */
-    top: 25px;
-    right: 25px;
-    z-index: 100; /* Assicura che stia sopra tutto il resto */
-}
-
-#themeBtn {
-    background-color: rgba(255, 255, 255, 0.9);
-    border: 2px solid cadetblue;
-    color: #2c3e50;
-    padding: 10px 20px;
-    border-radius: 25px;
-    cursor: pointer;
-    font-weight: 700;
-    font-size: 1rem;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    backdrop-filter: blur(5px);
-}
-
-#themeBtn:hover {
-    background-color: cadetblue;
-    color: white;
-    transform: translateY(-2px);
-}
-
-#themeMenu {
-    display: none; /* Nascosto di default */
-    position: absolute;
-    top: 55px; /* Sotto il bottone */
-    right: 0;
-    background-color: rgba(255, 255, 255, 0.95);
-    border: 2px solid cadetblue;
-    border-radius: 15px;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-    padding: 10px;
-    min-width: 140px;
-    backdrop-filter: blur(10px);
-    flex-direction: column;
-    gap: 5px;
-}
-
-/* Questa è la classe attivata dal tuo JavaScript */
-#themeMenu.show {
-    display: flex; 
-    animation: fadeInDown 0.3s ease forwards;
-}
-
-.theme-option {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    cursor: pointer;
-    padding: 10px 12px;
-    border-radius: 8px;
-    transition: background-color 0.2s;
-    color: #2c3e50;
-    font-weight: 600;
-}
-
-.theme-option:hover {
-    background-color: rgba(95, 158, 160, 0.2);
-}
-
-.theme-option input[type="radio"] {
-    accent-color: cadetblue; /* Colore personalizzato per il pallino del radio */
-    cursor: pointer;
-    width: 16px;
-    height: 16px;
-}
-
-/* --- STILE DEL MENU CON TEMA SCURO ATTIVO --- */
-body.theme-dark #themeBtn {
-    background-color: rgba(30, 30, 30, 0.9);
-    color: #ecf0f1;
-    border-color: #5f9ea0;
-}
-
-body.theme-dark #themeBtn:hover {
-    background-color: #5f9ea0;
-    color: white;
-}
-
-body.theme-dark #themeMenu {
-    background-color: rgba(30, 30, 30, 0.95);
-    border-color: #5f9ea0;
-}
-
-body.theme-dark .theme-option {
-    color: #ecf0f1;
-}
-
-body.theme-dark .theme-option:hover {
-    background-color: rgba(95, 158, 160, 0.4);
-}
-
-/* Animazione per l'apertura a tendina */
-@keyframes fadeInDown {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/* --- PULSANTI MIGLIORATI --- */
+/* --- PULSANTI FISSI A DESTRA --- */
 .auth-links {
-    margin-top: 50px;
+    position: fixed;
+    right: 5%;
+    top: 50%;
+    transform: translateY(-50%);
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     gap: 30px;
-    flex-wrap: wrap;
+    z-index: 100;
 }
 
 .btn-home {
-    padding: 18px 40px;
-    border-radius: 12px;
+    padding: 20px 45px;
+    border-radius: 15px;
     text-decoration: none;
     font-weight: 700;
-    font-size: 1.1rem;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    position: relative;
-    overflow: hidden;
-}
-
-/* Effetto onda al click */
-.btn-home::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 0;
-    height: 0;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.5);
-    transform: translate(-50%, -50%);
-    transition: width 0.6s, height 0.6s;
-}
-
-.btn-home:active::before {
-    width: 300px;
-    height: 300px;
+    font-size: 1.2rem;
+    text-align: center;
+    transition: all 0.4s ease;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+    animation: fadeInUp 0.8s ease-out both;
 }
 
 .btn-login {
@@ -248,70 +96,62 @@ body.theme-dark .theme-option:hover {
     border: none;
 }
 
-.btn-login:hover {
-    transform: translateY(-5px) scale(1.05);
-    box-shadow: 0 8px 25px rgba(95, 158, 160, 0.5);
-    background: linear-gradient(135deg, #6eb5b7 0%, #5f9ea0 100%);
-}
-
 .btn-register {
-    background-color: rgba(255, 255, 255, 0.95);
-    border: 3px solid cadetblue;
-    color: cadetblue;
-}
-
-.btn-register:hover {
-    transform: translateY(-5px) scale(1.05);
-    box-shadow: 0 8px 25px rgba(95, 158, 160, 0.4);
-    background-color: white;
-    border-color: #4a7c7e;
+    background-color: rgba(255, 255, 255, 0.9);
+    border: 2px solid #5f9ea0;
     color: #4a7c7e;
 }
 
-/* Animazione pulsante al caricamento */
+.btn-home:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+}
+
+/* --- ANIMAZIONI E RESPONSIVE --- */
 @keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
-.btn-home {
-    animation: fadeInUp 0.8s ease-out both;
+@media (max-width: 1024px) {
+    .hero-section { max-width: 80%; }
+    .auth-links { right: 2%; }
 }
 
-.btn-login {
-    animation-delay: 0.1s;
-}
-
-.btn-register {
-    animation-delay: 0.2s;
-}
-
-/* Responsive */
 @media (max-width: 768px) {
-    .hero-section h1 {
-        font-size: 2rem;
+    .hero-section { 
+        max-width: 95%; 
+        margin: 20px auto; 
+        text-align: center; 
+        /* Aggiunge spazio extra alla fine per non far finire il testo sotto i bottoni */
+        padding-bottom: 120px; 
     }
     
-    .hero-section > p {
-        font-size: 1.1rem;
-    }
-
-    .features-box {
-        padding: 25px;
-    }
-
-    .features-box p {
-        font-size: 1rem;
-    }
-
+    .hero-section h1 { font-size: 2.5rem; }
+    
+    /* --- PULSANTI FISSI IN BASSO SUL TELEFONO --- */
     .auth-links {
-        flex-direction: column;
+        position: fixed;
+        top: auto;           /* Annulla la posizione centrale del PC */
+        bottom: 0;           /* Li fissa in fondo allo schermo */
+        left: 0;
+        right: 0;
+        transform: none;
+        flex-direction: row; /* Li affianca in orizzontale */
+        justify-content: center;
+        width: 100%;
+        margin: 0;
+        padding: 20px 10px;
         gap: 15px;
+        /* Crea un'ombra/sfumatura dietro i bottoni per staccarli dal video */
+        background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%);
+    }
+
+    /* Adatta le dimensioni dei pulsanti per lo smartphone */
+    .btn-home {
+        padding: 15px 10px;
+        font-size: 1rem;
+        flex: 1;             /* Fa in modo che occupino la stessa larghezza (50% e 50%) */
+        max-width: 180px;    /* Limita la larghezza massima per estetica */
     }
 }
