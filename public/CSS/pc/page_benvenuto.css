@@ -113,11 +113,6 @@
     to { opacity: 1; transform: translateY(0); }
 }
 
-@media (max-width: 1024px) {
-    .hero-section { max-width: 80%; }
-    .auth-links { right: 2%; }
-}
-
 /* --- RESPONSIVE PER SMARTPHONE --- */
 @media (max-width: 1025px) {
     
@@ -127,10 +122,6 @@
         text-align: center; 
     }
     
-    .hero-section h1 { font-size: 2.2rem; }
-    .hero-section > p { font-size: 1.2rem; }
-    .features-box h3 { font-size: 1.8rem; }
-    .features-box p { font-size: 1.1rem; }
 
     /* --- PULSANTI DOPO IL TESTO --- */
     .auth-links {
@@ -153,6 +144,6 @@
         width: 100%;
         max-width: 280px;     /* Larghezza massima per non farli sembrare giganti */
         padding: 15px 20px;
-        font-size: 1.1rem;
+        font-size: 1.2rem;
     }
 }
