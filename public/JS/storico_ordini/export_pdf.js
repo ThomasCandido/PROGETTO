@@ -17,7 +17,7 @@ function generaPDF(card) {
         // Cerca per parola (es: "client")
         let riga = righe.find(li => li.innerText.toLowerCase().includes(keyword.toLowerCase()));
         
-        // Se non la trova, prende la riga in quella posizione esatta (Backup sicuro)
+        // Se non la trova, prende la riga in quella posizione esatta
         if (!riga) riga = card.querySelector(`.dettagli li:nth-child(${index})`);
         if (!riga) return "---";
 
@@ -59,7 +59,7 @@ function generaPDF(card) {
     if (btnAllegato && btnAllegato.getAttribute('data-img')) 
     {
         const linkCloudinary = btnAllegato.getAttribute('data-img');
-        // Aggiungiamo il timestamp per aggirare la cache CORS, come detto prima
+        // Aggiungiamo il timestamp per aggirare la cache CORS
         imgUrl = `${linkCloudinary}?t=${new Date().getTime()}`;
     }
 
@@ -182,7 +182,7 @@ function generaPDF(card) {
     
     // Se c'è un'immagine da caricare...
     if (imgUrl) {
-        // Creiamo un caricatore invisibile in memoria
+        // caricatore di immagine invisibile in memoria
         const preloader = new Image();
         preloader.crossOrigin = "anonymous";
         

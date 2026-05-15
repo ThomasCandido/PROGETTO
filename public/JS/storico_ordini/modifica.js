@@ -3,19 +3,28 @@ async function ModificaCard(li, ordine) {
 
     // 1. DETERMINIAMO I PERMESSI
     const isAdmin = localStorage.getItem('isAdmin') === 'true' || localStorage.getItem('isAdmin') === true;
+
+    /* la card si può modificare solo se si ha i permessi di amministartore 
+       oppure il cliente è in tempo perchè l'ordine è stato appena ordinato
+    */
     const isEditable = isAdmin ? true : (ordine.stato === 'Ordinato');
 
+    // salvataggio dei dati precedenti
     const cont_old = li.innerHTML;
+
+    // ottenimento dello stato ordine 
     const stati = ['Ordinato', 'In Lavorazione', 'Evaso', 'Archiviato'];
     const option_stato = stati.map(s => `
         <option value="${s}" ${ordine.stato === s ? 'selected' : ''}>${s}</option>
     `).join('');
     
+    // data 
     const dataIso = new Date(ordine.data_ordine).toISOString().split('T')[0];
     const nomeCliente = (ordine.clienti && ordine.clienti.societa) ? ordine.clienti.societa : 'Sconosciuto';
 
     // Inizializziamo l'URL dell'immagine con quello attuale (se esiste)
     let nuovoUrlImmagine = ordine.image_path || ''; 
+
 
     li.classList.add('editing-mode');
 
@@ -57,7 +66,7 @@ async function ModificaCard(li, ordine) {
         </div>
     `;
 
-    // 3. LOGICA CLOUDINARY (Ottimizzata per velocità)
+    // 3. LOGICA CLOUDINARY 
     const btnWidget = li.querySelector('.btn-apri-widget');
     if (btnWidget) {
         btnWidget.onclick = () => {
@@ -79,7 +88,7 @@ async function ModificaCard(li, ordine) {
         };
     }
 
-    // 4. TASTO ANNULLA
+    // 4. TASTO ANNULLA rolleback della situazione
     li.querySelector('.btn_annulla').onclick = () => {
         li.innerHTML = cont_old;
         li.classList.remove('editing-mode');

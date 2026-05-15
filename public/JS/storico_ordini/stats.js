@@ -79,6 +79,8 @@ function calcolaDatiOrdini()
 }
 
 //PARTE GRAFICA DELLA FUNZIONE
+/*  AVENDO A DISPOSIZIONE I DATI CALCOLATI NELLA FUNZIONI PRECEDENTI VENGONO PASSATI I PARAMETRI FORMALI
+    NEL COSTRUTTORE DI CHART CON LE DOVUTE CONFIG DEGLI ISTOGRAMMI*/
 function disegnaIstogramma(etichette, dati) {
     const graf_c = document.getElementById('graficoCanvas').getContext('2d');
     

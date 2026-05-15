@@ -12,12 +12,10 @@ function mostraToast(messaggio, tipo = 'error') {
     setTimeout(() => toast.classList.remove("show"), 3500);
 }
 
-// =========================================================
-// 1. EVENTI IN REAL-TIME E CONTROLLO ERRORI DAL SERVER
-// =========================================================
+// fase di invio dati al server
 document.addEventListener('DOMContentLoaded', function() {
     
-    // --- CONTROLLO ERRORI DAL SERVER NODE.JS ---
+    // --- controllo errori provenienti dal server NODE.JS ---
     const parametriUrl = new URLSearchParams(window.location.search);
     if (parametriUrl.get('errore') === 'registrazione_fallita') {
         mostraToast("❌ Errore durante la registrazione. L'email potrebbe essere già in uso.", "error");
@@ -25,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
         window.history.replaceState({}, document.title, window.location.pathname);
     }
 
-    /* --- MOSTRA/NASCONDI PASSWORD --- */
+    /* --- logica mostra nascondi password--- */
     const passwordInput = document.getElementById('password');
     const btnMostraPassword = document.getElementById('mostra-password');
     const iconaPassword = document.getElementById('icona-password');
@@ -44,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    /* --- CONTROLLO EMAIL IN REAL TIME --- */
+    /* --- controlli regex --- */
     const emailInput = document.getElementById('email');
     const emailErrore = document.getElementById('email-errore');
     const emailRegex = /(\w+)@(\w+\.\w+)+/;
@@ -64,7 +62,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    /* --- FORMATTAZIONE AUTOMATICA TELEFONO --- */
+    /* --- formattazione automatica telefono --- */
     const telefonoInput = document.getElementById('telefono');
 
     if (telefonoInput) {
@@ -87,16 +85,15 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// =========================================================
-// 2. CONTROLLO FINALE (Al click sul bottone Submit)
-// =========================================================
+//check validazione campi di registrazione
 function validaRegistrazione() {
+
     // 1. Prendiamo i valori
     const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value.trim();
     const societa = document.getElementById('societa').value.trim();
     
-    // RegEx più rigorosa per il controllo finale
+    // Regex per il controllo 
     const email_regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     // 2. I controlli (SOSTITUITI GLI ALERT CON I TOAST)

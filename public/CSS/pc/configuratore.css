@@ -35,7 +35,7 @@ body {
     box-shadow: 0 8px 30px rgba(0,0,0,0.1);
     overflow: hidden;
     width: 100%;
-    max-width: 1100px;
+    max-width: 1150px;
     margin: 0 auto; 
 }
 
@@ -107,27 +107,40 @@ input[type="text"], input[type="file"] { width: 100%; padding: 12px; border: 1px
 .product-selectors button.active { background-color: cadetblue; color: #fff; }
 
 /* --- Stili per le opzioni dei testi (Font e Orientamento) --- */
-.text-options {
-    display: flex;
-    gap: 10px;
-    margin-top: 8px;
-}
-
-.text-options select {
-    flex: 1;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    background-color: #fff;
-    font-family: inherit;
-    font-size: 14px;
-    color: #555;
-    cursor: pointer;
-}
 
 .text-options select:focus {
     outline: none;
     border-color: cadetblue;
+}
+
+
+
+/* Assicura che i controlli del testo stiano su una riga e non vengano tagliati */
+.text-options {
+    display: flex;
+    gap: 5px; /* Riduciamo leggermente lo spazio tra gli elementi */
+    margin-top: 10px;
+    align-items: center;
+    width: 100%; /* Occupa tutto lo spazio disponibile */
+}
+
+.text-options select {
+    flex: 1; /* I select si dividono lo spazio */
+    min-width: 80px; /* Ma non diventano minuscoli */
+    height: 38px;
+    padding: 5px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+.color-picker-testo {
+    flex-shrink: 0; /* Il quadratino colore non deve mai rimpicciolirsi */
+    width: 40px;
+    height: 38px;
+    padding: 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
 }
 
 /* --- RESPONSIVE DESIGN PER SCHERMI PICCOLI --- */

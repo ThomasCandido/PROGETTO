@@ -335,21 +335,18 @@ window.caricaDatiPerModifica = function(index) {
     mostraToast("✏️ Dati riportati nel modulo. Modificali e clicca 'Aggiungi'.", "warning");
 };
 
-function svuotaTabella() {
-    // Chiediamo conferma per sicurezza
-    const conferma = confirm("⚠️ Vuoi davvero svuotare tutto il riepilogo?");
+function svuotaTabella() 
+{
     
-    if (conferma) {
-        // Svuotiamo l'array
-        ordiniInAttesa.length = 0; 
+    // Svuotamento dell'array
+    ordiniInAttesa.length = 0; 
         
-        // Diciamo alla tabella di ridisegnarsi (essendo l'array vuoto, sparirà tutto)
-        aggiornaTabellaUI();
+    // Diciamo alla tabella di ridisegnarsi (essendo l'array vuoto, sparirà tutto)
+    aggiornaTabellaUI();
         
-        console.log("🧹 Tabella ripulita correttamente.");
-        mostraToast("🧹 Tabella ripulita correttamente.", "success");
-    }
-
+    console.log("🧹 Tabella ripulita correttamente.");
+    mostraToast("🧹 Tabella ripulita correttamente.", "success");
+    
     aggiornaTotaleCalcolato();
 }
 
@@ -514,9 +511,7 @@ window.salvaImmagineConfiguratore = function(cloudinaryUrl, tipologia, colore, t
 
 
 
-// ==========================================
-// 8. POP-UP ANTEPRIMA IMMAGINE (LIGHTBOX)
-// ==========================================
+// 8 pop-up anteprima immagine
 window.mostraAnteprima = function(url_immagine) {
     // 1. Crea uno sfondo scuro trasparente che copre tutto lo schermo
     const overlay = document.createElement('div');

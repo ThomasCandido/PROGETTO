@@ -166,10 +166,11 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    function setupDynamicText(inputId, fontId, orientId, customId, defaultTop, defaultLeft, defaultAngle) {
+    function setupDynamicText(inputId, fontId, orientId,colorId, customId, defaultTop, defaultLeft, defaultAngle) {
         const inputEl = document.getElementById(inputId);
         const fontEl = document.getElementById(fontId);
         const orientEl = document.getElementById(orientId);
+        const colorEl = document.getElementById(colorId);
 
         function updateText() {
             const rawText = inputEl.value;
@@ -182,6 +183,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
             const currentFont = fontEl.value;
             const mode = orientEl.value;
+            const currentColor = colorEl.value;
+
             let formattedText = rawText;
             let finalAngle = defaultAngle;
 
@@ -193,11 +196,11 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             if (existingText) {
-                existingText.set({ text: formattedText, fontFamily: currentFont, angle: finalAngle });
+                existingText.set({ text: formattedText, fontFamily: currentFont,fill: currentColor, angle: finalAngle });
             } else {
                 const newText = new fabric.Text(formattedText, {
                     left: defaultLeft, top: defaultTop, angle: finalAngle,
-                    fontFamily: currentFont, fill: '#000000', fontSize: 22, fontWeight: 'bold',
+                    fontFamily: currentFont, fill: currentColor, fontSize: 22, fontWeight: 'bold',
                     originX: 'center', originY: 'center', textAlign: 'center',
                     customId: customId, cornerColor: 'cadetblue', transparentCorners: false
                 });
@@ -209,18 +212,19 @@ document.addEventListener('DOMContentLoaded', function() {
         inputEl.addEventListener('input', updateText);
         fontEl.addEventListener('change', updateText);
         orientEl.addEventListener('change', updateText);
+        colorEl.addEventListener('input', updateText);
     }
 
     // Configurazione campi specifici
     setupImageUpload('upload-hoodie-front');
     setupImageUpload('upload-tshirt-front');
 
-    setupDynamicText('text-hoodie-front-l', 'font-hoodie-front-l', 'orient-hoodie-front-l', 'hoodie-L', 240, 410, 50);  
-    setupDynamicText('text-hoodie-front-r', 'font-hoodie-front-r', 'orient-hoodie-front-r', 'hoodie-R', 240, 90, -55); 
-    setupDynamicText('text-hoodie-front-center', 'font-hoodie-front-center', 'orient-hoodie-front-center', 'hoodie-C', 220, 250, 0); 
-    setupDynamicText('text-shorts-front-l', 'font-shorts-front-l', 'orient-shorts-front-l', 'shorts-L', 300, 340, 0);   
-    setupDynamicText('text-shorts-front-r', 'font-shorts-front-r', 'orient-shorts-front-r', 'shorts-R', 300, 160, 0);
-    setupDynamicText('text-tshirt-front-center', 'font-tshirt-front-center', 'orient-tshirt-front-center', 'tshirt-C', 220, 250, 0);
+    setupDynamicText('text-hoodie-front-l', 'font-hoodie-front-l', 'orient-hoodie-front-l','color-hoodie-front-l', 'hoodie-L', 240, 410, 50);  
+    setupDynamicText('text-hoodie-front-r', 'font-hoodie-front-r', 'orient-hoodie-front-r','color-hoodie-front-r','hoodie-R', 240, 90, -55); 
+    setupDynamicText('text-hoodie-front-center', 'font-hoodie-front-center', 'orient-hoodie-front-center','color-hoodie-front-center', 'hoodie-C', 220, 250, 0); 
+    setupDynamicText('text-shorts-front-l', 'font-shorts-front-l', 'orient-shorts-front-l','color-shorts-front-l','shorts-L', 300, 340, 0);   
+    setupDynamicText('text-shorts-front-r', 'font-shorts-front-r', 'orient-shorts-front-r','color-shorts-front-r','shorts-R', 300, 160, 0);
+    setupDynamicText('text-tshirt-front-center', 'font-tshirt-front-center', 'orient-tshirt-front-center','color-tshirt-front-center','tshirt-C', 220, 250, 0);
 
     // 9. RIMOZIONE OGGETTI
     document.addEventListener('keydown', function(e) {

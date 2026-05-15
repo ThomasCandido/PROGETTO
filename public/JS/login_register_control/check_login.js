@@ -9,22 +9,24 @@ function mostraToast(messaggio, tipo = 'error') {
     toast.innerText = messaggio;
     toast.className = ""; 
     toast.classList.add("show", `toast-${tipo}`);
+
+    // SET TIMEOUT COMPARSA BANNER
     setTimeout(function(){ toast.classList.remove("show"); }, 3500);
 }
 
-// ==========================================
-// FUNZIONE DI LOGIN TRAMITE FETCH (AJAX)
-// ==========================================
+// VALIDAZIONE LOGIN
 async function validaLogin(event) {
     // 1. BLOCCHIAMO IL CARICAMENTO NATIVO DELLA PAGINA (Cruciale per la cronologia!)
     event.preventDefault(); 
 
+    // check dei campi compilati e costruzione della regex
     const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value.trim();
     const email_regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     // Controlli validità base
-    if (email === "" || password === "") {
+    if (email === "" || password === "") 
+    {
         mostraToast("⚠️ Errore: Tutti i campi sono obbligatori.", "error");
         return;
     } else if (!email_regex.test(email)) {
@@ -35,7 +37,7 @@ async function validaLogin(event) {
         return;
     }
 
-    // 2. CHIEDIAMO AL SERVER SE I DATI SONO CORRETTI SOTTOBANCO
+    // 2. CHIEDIAMO AL SERVER SE I DATI SONO CORRETTI (esiste l'utente ?)
     try {
         const response = await fetch('/login', {
             method: 'POST',
@@ -45,17 +47,28 @@ async function validaLogin(event) {
         
         const result = await response.json();
 
-        if (result.success) {
-            // LOGIN OK! Sostituiamo la pagina attuale. 
-            // In questo modo la pagina di login SPARIRE dalla cronologia!
-            window.location.replace(result.redirectUrl);
-        } else {
-            // LOGIN FALLITO! Lanciamo i Toast appropriati senza ricaricare la pagina
-            if (result.errore === 'utente_non_trovato') {
+       if (result.success) 
+       {
+            mostraToast("✅ Accesso eseguito!", "success");
+            // 1. Salvataggio del ruolo nel localStorage 
+            localStorage.setItem('isAdmin', result.isAdmin);
+
+            // 2. Usa l'URL deciso dal server (redirectUrl) sulla bas del ruolo amministratore o cliente
+            setTimeout(() => { window.location.replace(result.redirectUrl);}, 1000);
+        }
+        else 
+        {
+            // LOGIN FALLITO! Generazione dei toast appropriati
+            if (result.errore === 'utente_non_trovato') 
+            {
                 mostraToast("⚠️ Errore: Utente non trovato. Controlla l'email!", "error");
-            } else if (result.errore === 'password_errata') {
+            } 
+            else if (result.errore === 'password_errata') 
+            {
                 mostraToast("⚠️ Errore: Password errata. Riprova.", "error");
-            } else {
+            } 
+            else 
+            {
                 mostraToast("⚠️ Errore di sistema. Riprova più tardi.", "error");
             }
         }
@@ -71,6 +84,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const btnMostraPassword = document.getElementById('mostra-password');
     const iconaPassword = document.getElementById('icona-password');
 
+    // logica dell'occhio chiuso aperto al click del bottone la password
+    // switcha da tipo password a tipo text
     if (btnMostraPassword && passwordInput) {
         btnMostraPassword.addEventListener('click', function() {
             if (passwordInput.type === 'password') {

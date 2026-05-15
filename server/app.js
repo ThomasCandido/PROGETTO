@@ -27,7 +27,7 @@ app.use(session({
     saveUninitialized: true
 }));
 
-// --- LE TUE FUNZIONI DI PROTEZIONE ---
+// --- Requirement ---
 const requireLogin = (req, res, next) => {
     if (!req.session.utenteId) {
         return res.status(401).json({ success: false, message: "Utente non autorizzato!" });
@@ -43,10 +43,7 @@ const requireAdmin = (req, res, next) => {
     next();
 };
 
-// ============================================================
-// 1. ROTTE HTML PROTETTE
-// ============================================================
-
+// rotte html
 app.get('/lista_clienti.html', requireAdmin, (req, res) => {
     res.sendFile(path.join(ROOT, 'lista_clienti.html'));
 });
@@ -67,24 +64,19 @@ app.get('/Configuratore_felpe_pantaloncini.html', requireLogin, (req, res) => {
     res.sendFile(path.join(ROOT, 'Configuratore_felpe_pantaloncini.html'));
 });
 
-// ============================================================
-// 2. DISTRIBUZIONE FILE STATICI (CSS, JS, IMMAGINI)
-// ============================================================
+// 2 file statici progetto
 app.use(express.static(ROOT)); 
 
 
 
-// ============================================================
-// 3. IMPLEMENTAZIONI FUNZIONALITA' SERVER
-// ============================================================
+// 3 funzionalità server 
 
 // default prima pagina mostrata
 app.get('/', (req, res) => {
-    res.sendFile(path.join(ROOT, 'login.html'));
+    res.sendFile(path.join(ROOT, 'Page_Benvenuto.html'));
 });
 
 // Operazione di Login
-// Operazione di Login MODERNA (AJAX)
 app.post('/login', async (req, res) => {
     const { email, password } = req.body;
     console.log("--- TENTATIVO DI LOGIN ---");
@@ -124,7 +116,6 @@ app.post('/login', async (req, res) => {
 });
 
 // Operazione di Registrazione
-// Operazione di Registrazione (Aggiornata senza alert)
 app.post('/register', async (req, res) => {
     const { email, password, nome, cognome, societa, telefono } = req.body;
     try {
@@ -446,7 +437,15 @@ app.post('/recupero-diretto', async (req, res) => {
 
 // Logout
 app.get('/logout', (req, res) => {
-    req.session.destroy(() => res.redirect('/login.html'));
+    req.session.destroy(() => {
+        // Inviamo una piccola pagina che pulisce il browser prima di tornare al login
+        res.send(`
+            <script>
+                localStorage.clear(); 
+                window.location.href = '/login.html';
+            </script>
+        `);
+    });
 });
 
 // AVVIO SERVER

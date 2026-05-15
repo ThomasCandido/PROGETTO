@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (result.success) {
             // --- 2. LOGICA ANTI-INDIETRO (Loggato) ---
             // Se l'utente è loggato e prova a tornare al login o alla home iniziale
-            if (paginaAttuale.includes('login.html') || paginaAttuale === '/' || paginaAttuale.includes('index.html')) {
+            if (paginaAttuale.includes('login.html')) {
                 // Usiamo replace per sovrascrivere la cronologia: il login "non esiste più" per il tasto indietro
                 const destinazione = result.data.is_admin ? 'lista_clienti.html' : 'storico_ordini_home.html';
                 window.location.replace(destinazione);
@@ -65,8 +65,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 }
             }
         } else {
-            // --- 5. PROTEZIONE ROTTE (Non Loggato) ---
-            // Se non sei loggato e non sei già sulle pagine di accesso, vai al login
+            /*5. PROTEZIONE ROTTE (Non Loggato) Se non sei loggato e non sei già sulle pagine 
+            di accesso, vai al login*/
             if (!paginaAttuale.includes('login.html') && !paginaAttuale.includes('registrazione.html') && paginaAttuale !== '/') {
                 window.location.replace('login.html');
             }

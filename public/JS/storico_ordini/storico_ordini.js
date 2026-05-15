@@ -1,8 +1,9 @@
 // 1. CONFIGURAZIONE STATI
 const list_stati = ["Ordinato", "In Lavorazione", "Evaso", "Archiviato"];
 
-// 2. AGGIORNAMENTO GRAFICO (Senza ricaricare tutto)
-function aggiornaCardGraficamente(id, nuovoStato) {
+// 2. AGGIORNAMENTO GRAFICO dello stato (Senza ricaricare tutto)
+function aggiornaCardGraficamente(id, nuovoStato) 
+{
     // 1. Troviamo la card in modo sicuro grazie al nuovo ID
     const card = document.getElementById(`card_${id}`);
     if (!card) return;
@@ -22,7 +23,7 @@ function aggiornaCardGraficamente(id, nuovoStato) {
         pallina.style.backgroundColor = colore;
     }
 
-    // 4. --- GESTIONE DINAMICA DEL LUCCHETTO ---
+    // 4. gestione dinamica dll'editing card in caso si clienti
     const isAdmin = localStorage.getItem('isAdmin') === 'true';
     if (!isAdmin && nuovoStato !== 'Ordinato') 
     {
@@ -56,6 +57,7 @@ async function eseguiCicloSimulazione(ordine) {
         await new Promise(res => setTimeout(res, msPerStep));
         const prossimoStato = list_stati[i];
 
+        // viene passato soltanto lo stato da modificare
         try {
             const res = await fetch('/api/update-order', {
                 method: 'POST',
