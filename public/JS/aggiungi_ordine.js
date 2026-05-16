@@ -404,8 +404,8 @@ function processaPagamento() {
         return;
     }
 
-    // --- SE ARRIVA FINO A QUI, TUTTI I CONTROLLI SONO SUPERATI ---
-   mostraToast("💳 Pagamento Autorizzato!", "success");
+    // 5. Fine check momento del pagamento autorizzato
+    mostraToast("💳 Pagamento Autorizzato!", "success");
     chiudiPagamento();
     salvaTuttoNelDatabase();
 }
