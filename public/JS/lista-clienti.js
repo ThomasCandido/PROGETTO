@@ -1,3 +1,48 @@
+function chiediConfermaEliminazione(messaggio) {
+    return new Promise((resolve) => {
+        // 1. Crezione del contenitore pop up ( assicurarsi che l'utete sia intenzionato a canc ordine)
+        const modal = document.createElement('div');
+        modal.className = 'modal-overlay';
+        modal.style.display = 'flex'; // Lo mostriamo subito
+
+        // 2. creazione dei tag html del pop up
+        modal.innerHTML = `
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>⚠️ Conferma Eliminazione</h3>
+                </div>
+                <div class="modal-body">
+                    <p>${messaggio}</p>
+                    <p><small>L'azione è irreversibile.</small></p>
+                </div>
+                <div class="modal-footer">
+                    <button id="btn-annulla-delete" class="btn-secondario">Annulla</button>
+                    <button id="btn-conferma-delete" class="btn-pericolo">Elimina</button>
+                </div>
+            </div>
+        `;
+
+        // 3. Lo aggiungiamo al body della pagina
+        document.body.appendChild(modal);
+
+        // 4. Gestione dei click
+        const btnSi = modal.querySelector('#btn-conferma-delete');
+        const btnNo = modal.querySelector('#btn-annulla-delete');
+
+        btnSi.onclick = () => {
+            document.body.removeChild(modal); // Rimuove il popup dal DOM
+            resolve(true);
+        };
+
+        btnNo.onclick = () => {
+            document.body.removeChild(modal); // Rimuove il popup dal DOM
+            resolve(false);
+        };
+    });
+}
+
+
+
 document.addEventListener('DOMContentLoaded', () => {
     caricaClienti();
 });
@@ -80,7 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
         btnElimina.addEventListener('click', async () => {
             const checkboxes = document.querySelectorAll('.seleziona-cliente:checked');
             
-            if (confirm(`Vuoi davvero eliminare ${checkboxes.length} clienti dal database? L'operazione non può essere annullata.`)) {
+            if (await chiediConfermaEliminazione(`Vuoi davvero eliminare ${checkboxes.length} clienti dal database? L'operazione non può essere annullata.`)) {
                 
                 // Cicla tutti gli ID selezionati e invia la richiesta al server
                 for (let cb of checkboxes) {
@@ -91,7 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
                 }
                 
-                alert('✅ Clienti eliminati con successo!');
+                mostraToast('✅ Clienti eliminati con successo!', 'success');
                 caricaClienti(); // Ricarica la griglia aggiornata
                 btnElimina.classList.remove('mostra'); // Nasconde il bottone con animazione inversa
             }
@@ -195,7 +240,7 @@ window.ordinaClienti = function() {
 
 //ELIMINAZIONE SINGOLA
 window.eliminaClienteDalDb = async function(id) {
-    if (confirm("Sei sicuro di voler eliminare questo cliente dal database? L'operazione non può essere annullata.")) {
+    if (await chiediConfermaEliminazione("Sei sicuro di voler eliminare questo cliente dal database? L'operazione non può essere annullata.")) {
         try {
             const response = await fetch('/api/delete-client', {
                 method: 'DELETE',
@@ -205,13 +250,13 @@ window.eliminaClienteDalDb = async function(id) {
             const result = await response.json();
             
             if (result.success) {
-                alert('✅ Cliente eliminato!');
+                mostraToast('✅ Cliente eliminato!', 'success');
                 caricaClienti(); // Ricarica la griglia aggiornata
             } else {
-                alert('❌ Errore: ' + result.message);
+                mostraToast('❌ Errore: ' + result.message, 'error');
             }
         } catch (error) {
-            alert('❌ Errore di connessione.');
+            mostraToast('❌ Errore di connessione.', 'error');
         }
     }
 };
@@ -245,7 +290,7 @@ window.toggleModifica = async function(btn, id) {
         
         // Controllo Email
         if (!emailRegex.test(inputEmail.value)) {
-            alert("❌ Errore: Inserisci un'email valida che contenga '@' e un dominio (es. '.it' o '.com').");
+            mostraToast("❌ Errore: Inserisci un'email valida che contenga '@' e un dominio (es. '.it' o '.com').", 'error');
             inputEmail.focus();
             return; // Ferma il salvataggio e non prosegue
         }
@@ -253,7 +298,7 @@ window.toggleModifica = async function(btn, id) {
         // Controllo Telefono (verifichiamo che se inserito, abbia almeno 9-10 cifre)
         const numeriTel = inputTel.value.replace(/\D/g, ''); // Prende solo i numeri
         if (numeriTel.length > 0 && numeriTel.length < 9) {
-            alert("❌ Errore: Il numero di telefono è troppo corto. Inserisci un recapito valido.");
+            mostraToast("❌ Errore: Il numero di telefono è troppo corto. Inserisci un recapito valido.", 'error');
             inputTel.focus();
             return; // Ferma il salvataggio
         }
@@ -290,13 +335,13 @@ window.toggleModifica = async function(btn, id) {
                 btn.style.backgroundColor = 'transparent';
                 btn.style.borderColor = 'transparent';
                 
-                alert('✅ Modifiche salvate con successo!');
+                mostraToast('✅ Modifiche salvate con successo!', 'success');
             } else {
-                alert('❌ Errore durante il salvataggio: ' + result.message);
+                mostraToast('❌ Errore durante il salvataggio: ' + result.message, 'error');
             }
         } catch (error) {
             console.error(error);
-            alert('❌ Errore di connessione al server.');
+            mostraToast('❌ Errore di connessione al server.', 'error');
         }
     }
 };
