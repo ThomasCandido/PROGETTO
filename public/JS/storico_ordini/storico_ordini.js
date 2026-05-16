@@ -51,7 +51,7 @@ async function eseguiCicloSimulazione(ordine) {
     const stepRimanenti = (list_stati.length - 1) - indice;
     if (stepRimanenti <= 0) return; 
 
-    const msPerStep = (30 * 1000) / stepRimanenti;
+    const msPerStep = (40 * 1000) / stepRimanenti;
 
     for (let i = indice + 1; i < list_stati.length; i++) {
         await new Promise(res => setTimeout(res, msPerStep));
