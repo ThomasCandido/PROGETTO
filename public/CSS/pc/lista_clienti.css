@@ -76,6 +76,77 @@ hr {
     border-color: #dcdde1;
 }
 
+
+/* =========================================
+   MODALE DI CONFERMA ELIMINAZIONE
+   ========================================= */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.6); /* Sfondo scuro semitrasparente */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999; /* Lo posiziona sopra tutto il resto */
+}
+
+.modal-content {
+    background-color: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+    animation: comparsaModal 0.3s ease-out; /* Piccola animazione */
+}
+
+@keyframes comparsaModal {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.modal-header h3 {
+    margin-top: 0;
+    color: #e74c3c;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+.btn-secondario {
+    padding: 10px 20px;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    background: #f1f1f1;
+    border-radius: 8px;
+    transition: background 0.2s;
+}
+
+.btn-secondario:hover {
+    background: #e4e4e4;
+}
+
+.btn-pericolo {
+    padding: 10px 20px;
+    cursor: pointer;
+    border: none;
+    background: #e74c3c;
+    color: white;
+    border-radius: 8px;
+    transition: background 0.2s;
+}
+
+.btn-pericolo:hover {
+    background: #c0392b;
+}
+
 /*CAMPI EDITABILI QUANDO MODIFICO IL CLIENTE*/
 
 .campo-editabile {
