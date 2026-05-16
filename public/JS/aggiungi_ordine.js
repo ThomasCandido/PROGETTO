@@ -323,9 +323,10 @@ window.caricaDatiPerModifica = function(index) {
     // 3. Ricalcoliamo i prezzi (importante se è cambiata la tipologia o la foto)
     aggiornaPrezziAutomatici();
 
-    // 4. Rimuoviamo la riga dalla tabella
-    // Idea: quando "carichi" per modificare, la riga sparisce dalla tabella 
-    // e "torna" nel form. Quando cliccherai di nuovo su Aggiungi, tornerà in tabella corretta.
+    /*4. Rimuoviamo la riga dalla tabella
+         Dopo l'opzione di modifica, la riga sparisce dalla tabella 
+         e "torna" nel form. Al nuovo click di Aggiungi, tornerà in tabella corretta.*/
+         
     ordiniInAttesa.splice(index, 1);
     aggiornaTabellaUI();
 
