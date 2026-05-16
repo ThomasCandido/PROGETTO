@@ -210,14 +210,14 @@
     gap: 25px; /* Distanza precisa tra il pallino del colore e il menu taglia */
 }
 
-/* Allineamento millimetrico tra scritta e pallino */
+/* Allineamento tra scritta e pallino */
 .colore-wrapper {
     display: flex;
     align-items: center;
     gap: 10px; /* Distanza tra "Colore:" e il pallino */
 }
 
-/* Fissiamo l'etichetta per evitare che scenda o salga */
+/* Fissaggio dell'etichetta colore*/
 .label-colore {
     font-size: 14px;
     font-family: Arial, sans-serif;
@@ -237,10 +237,7 @@
     cursor: pointer;
 }
 
-/* STILI X DIV DEL METODO DI PAGAMENTO */
-/* ==========================================
-   METODO DI PAGAMENTO (MODAL)
-   ========================================== */
+/* stili x il metodo di pagamento */
 
 .modal-pay {
     display: none; /* Verrà cambiato in 'flex' via JS */
@@ -253,7 +250,7 @@
     background-color: rgba(0, 0, 0, 0.7);
     backdrop-filter: blur(5px);
     
-    /* CENTRAGGIO PERFETTO */
+    /* centraggio del mdal di pagamento*/
     justify-content: center;
     align-items: center;
 }
@@ -280,7 +277,7 @@
     overflow-y: auto;
 }
 
-/* Header del Modal (Logo + Testo) */
+/* Header del Modal (Logo + Testo) n26 riprende il nome di una banca fittizia */
 .n26-header {
     display: flex;
     justify-content: space-between;
@@ -380,7 +377,7 @@
     margin-bottom: 20px;
     border-radius: 5px;
 }
-/* --- MEDIA QUERY PER SMARTPHONE (OTTIMIZZATA A SCHEDE) --- */
+/* --- MEDIA QUERY PER SMARTPHONE--- */
 @media screen and (max-width: 768px) {
 
     /* 1. IL FORM */
@@ -399,7 +396,7 @@
         margin-bottom: 10px;
     }
 
-    /* Compattiamo gli input */
+    /* compattazione degli input */
     .tabella_ordine td {
         display: block;
         width: 100%;
@@ -464,8 +461,7 @@
         border-bottom: none;
     }
 
-    /* AGGIUNGIAMO LE ETICHETTE (Pseudo-elementi) */
-    /* Visto che abbiamo nascosto l'intestazione, rimettiamo i nomi dei campi a sinistra di ogni dato! */
+    /* etichette x descrzione campo*/
     .tabella_stile_lista td::before {
         content: attr(data-label); /* Prenderà il nome dal HTML */
         font-weight: bold;
@@ -474,14 +470,14 @@
         width: 40%;
     }
 
-    /* 3. SISTEMIAMO L'IMMAGINE E LE AZIONI */
+    /* riposizionamento immagine e azioni*/
     .tabella_stile_lista td img {
         height: 40px;
         width: auto;
         border-radius: 5px;
     }
 
-    /* I bottoni Modifica/Elimina li mettiamo belli larghi in fondo alla scheda */
+    /* I bottoni Modifica/Elimina*/
     .azioni_tabella {
         display: flex;
         justify-content: center;
@@ -493,6 +489,6 @@
     .azioni_tabella button {
         flex: 1;
         padding: 10px;
-        font-size: 18px; /* Più facili da premere col dito */
+        font-size: 18px;
     }
 }

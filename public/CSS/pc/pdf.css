@@ -1,4 +1,4 @@
-/* --- STILE PROFESSIONALE REPORT PDF --- */
+/*stili css x pdf */
 .pdf-document {
     padding: 40px;
     background-color: white;
@@ -6,7 +6,7 @@
     color: #333;
 }
 
-/* Testata */
+/* Testata del documento*/
 .pdf-header {
     display: flex;
     justify-content: space-between;
@@ -16,6 +16,7 @@
     margin-bottom: 30px;
 }
 
+/*titolo testata*/s
 .pdf-header h1 {
     margin: 0;
     color: #5f9ea0;

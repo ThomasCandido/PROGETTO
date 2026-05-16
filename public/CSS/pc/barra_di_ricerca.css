@@ -1,7 +1,7 @@
 /*---------BARRA DI RICERCA + FILTRO -----------*/
 .ricerca-completa {
     width: 100%;
-    max-width: 650px; /* TORNATA A 650PX COME VOLEVI TU */
+    max-width: 650px; 
     margin: 0 auto 20px auto;
     padding: 0 20px;
     box-sizing: border-box;

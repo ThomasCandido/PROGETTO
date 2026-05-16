@@ -9,10 +9,9 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh; /* Occupa tutta l'altezza dello schermo */
+    min-height: 100vh; 
     
     /* GESTIONE SFONDO */
-    /* Assicurati che il percorso sia corretto: se il CSS è in CSS/pc/, devi uscire due volte */
     background-image: url('../../allegati/SFONDO_LOGIN.png'); 
     background-size: cover; /* L'immagine copre tutto lo spazio disponibile */
     background-position: center; /* L'immagine viene centrata */
@@ -21,16 +20,14 @@ body {
 }
 
 .login_cnt {
-    /* Ho aggiunto un po' di trasparenza (0.95) per far intravedere lo sfondo 
-       ma mantenere la leggibilità perfetta */
     background-color: rgba(255, 255, 255, 0.95); 
     padding: 40px;
-    border-radius: 20px; /* '10%' su un rettangolo a volte deforma, 20px è più pulito */
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); /* Ombra più marcata per staccare dal disegno */
+    border-radius: 20px; 
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); 
     width: 100%;
     max-width: 380px;
     box-sizing: border-box; 
-    backdrop-filter: blur(5px); /* Effetto sfocato moderno sullo sfondo dietro il box */
+    backdrop-filter: blur(5px);
 }
 
 .login-header {
@@ -47,14 +44,14 @@ body {
 }
 
 .login-header h2 {
-    color: #34495e; /* Il blu scuro elegante della tua navbar */
+    color: #34495e; /* Il blu scuro che riprende il colore della navbar */
     margin: 10px 0 5px 0;
     font-size: 24px;
 }
 
 .login-header p {
     margin-bottom: 10px;
-    color: black; /* Grigio per non appesantire la lettura */
+    color: black; 
     font-size: 14px;
     margin: 0;
 }
@@ -86,7 +83,7 @@ body {
 .btn-login {
     width: 100%;
     padding: 14px;
-    background-color: #34495e; /* Riprende il blu scuro aziendale */
+    background-color: #34495e; /* Riprende il blu scuro*/
     color: white;
     border: none;
     border-radius: 6px;
