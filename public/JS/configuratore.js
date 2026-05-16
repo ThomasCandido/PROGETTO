@@ -1,3 +1,19 @@
+// config toast
+function mostraToast(messaggio, tipo = 'error') {
+    let toast = document.getElementById("toast-container");
+    if (!toast) {
+        toast = document.createElement("div");
+        toast.id = "toast-container";
+        document.body.appendChild(toast);
+    }
+    toast.innerText = messaggio;
+    toast.className = ""; 
+    toast.classList.add("show", `toast-${tipo}`);
+    setTimeout(() => { toast.classList.remove("show"); }, 3500);
+}
+
+
+
 document.addEventListener('DOMContentLoaded', function() {
 
     // 1. RIFERIMENTI AGLI ELEMENTI HTML (DOM)
@@ -246,7 +262,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('btn-conferma-salva').addEventListener('click', async () => {
         const tagliaScelta = tagliaSelect ? tagliaSelect.value : null;
         const quantitaScelta = quantitaInput ? quantitaInput.value : 1;
-        if (!tagliaScelta) return alert("⚠️ Seleziona una taglia!");
+        if (!tagliaScelta) return mostraToast("⚠️ Seleziona una taglia!", "warning");
         
         const btn = document.getElementById('btn-conferma-salva');
         btn.innerText = "⏳ Elaborazione...";
@@ -286,14 +302,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 } 
                 else 
                 {
-                    alert("Errore: impossibile comunicare con il carrello principale.");
+                    mostraToast("❌ Errore: impossibile comunicare con il carrello principale.", "error");
                 }
                 
                 btn.innerText = "✅ CONFERMA E ALLEGA ALL'ORDINE";
                 btn.disabled = false;
             });
         } catch (error) {
-            alert("Errore durante il salvataggio.");
+            mostraToast("❌ Errore durante il salvataggio.", "error");
             btn.disabled = false;
         }
     });

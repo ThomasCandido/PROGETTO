@@ -161,3 +161,37 @@ input[type="text"], input[type="file"] { width: 100%; padding: 12px; border: 1px
         padding: 20px;
     }
 }
+
+
+
+/* Contenitore principale del Toast */
+#toast-container {
+    position: fixed;
+    top: 20px;          /* Distanza dal bordo superiore */
+    right: 20px;        /* Distanza dal bordo destro */
+    min-width: 250px;
+    padding: 15px 20px;
+    background-color: #333;
+    color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    z-index: 9999;      /* Assicura che sia sopra a tutto */
+    
+    /* Gestione visibilità */
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(-20px); /* Parte leggermente più in alto */
+    transition: all 0.4s ease;
+}
+
+/* Classe aggiunta dal JS per mostrarlo */
+#toast-container.show {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);    /* Scivola verso il basso nella sua posizione */
+}
+
+/* Varianti di colore */
+.toast-success { background-color: #28a745 !important; border-left: 5px solid #1e7e34; }
+.toast-error   { background-color: #dc3545 !important; border-left: 5px solid #a71d2a; }
+.toast-warning { background-color: #ffc107 !important; color: #333 !important; border-left: 5px solid #d39e00; }

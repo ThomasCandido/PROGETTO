@@ -37,24 +37,39 @@ function aggiornaStatistiche()
 function calcolaDatiOrdini() 
 {
     const ordini = document.querySelectorAll('.lista_ordini > li');
-    // counter diz x stilare la classifica
+
+    // Dizionario per accumulare le quantità totali per ogni capo
     const conteggio = {};
+
+    // Variabile per calcolare il totale complessivo di TUTTI i pezzi venduti
+    let totalePezziVenduti = 0;
 
     for (let i = 0; i < ordini.length; i++) 
     {
         const ordine = ordini[i];
+        
+        // 1. estrazione tipo e colore
         const dettaglioTipo = ordine.querySelector('.dettagli li:nth-child(3)').textContent;
         const dettaglioColore = ordine.querySelector('.dettagli li:nth-child(4)').textContent;
-        // debugging caso campi null
+        
+        // 2. estrazione quantità 
+        const dettaglioQta = ordine.querySelector('.dettagli li:nth-child(6)').textContent;
+        const qtaEffettiva = parseInt(dettaglioQta.split(': ')[1]) || 0;
+        
+        // Pulizia testi
         const tipo = dettaglioTipo.split(': ')[1] || "Sconosciuto";
         const colore = dettaglioColore.split(': ')[1] || "Sconosciuto";
     
-        // counter in diz per contare statistiche comuni
         const chiave = `${tipo} (${colore})`;
-        conteggio[chiave] = (conteggio[chiave] || 0) + 1;
+        
+        // sum del dizionario
+        conteggio[chiave] = (conteggio[chiave] || 0) + qtaEffettiva;
+        
+        // Accumuliamo nel totale generale per il calcolo delle percentuali corretto
+        totalePezziVenduti += qtaEffettiva;
     }
 
-    // passaggio da diz a list x sorting
+    // 3. conversione da dizionario a lista per essere processato nel sorting
     let listaConteggio = Object.entries(conteggio);
 
     listaConteggio.sort(function(a, b) {
@@ -63,18 +78,16 @@ function calcolaDatiOrdini()
         return quantitaB - quantitaA; 
     });
 
-    // taglio della classifica si tengono i primi 5 top vincitori
+    // taglio ai 5 capi più venditi
     const dati_ord = listaConteggio.slice(0, 5);
 
-    // separazione di Tipo(Colore) e quantità di freq in 2 sub_list
     const labels = dati_ord.map(d => d[0]);
     const valori = dati_ord.map(d => d[1]);
-    const totale = ordini.length;
     
-    // da lista valori ci creiamo una lista di percentuali
-    const percentuali = valori.map(v => parseFloat(((v / totale) * 100).toFixed(1)));
+    // 4. Calcolo delle percentuali basandosi sul totale dei PEZZI
+    const divisore = totalePezziVenduti || 1;
+    const percentuali = valori.map(v => parseFloat(((v / divisore) * 100).toFixed(1)));
 
-    // Restituisce un oggetto con i dati pronti all'uso
     return { labels, percentuali }; 
 }
 
