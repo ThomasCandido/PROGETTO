@@ -1,17 +1,23 @@
 // --- FUNZIONE GLOBALE PER I TOAST ---
+// --- FUNZIONE GLOBALE PER I TOAST ---
 function mostraToast(messaggio, tipo = 'error') {
     let toast = document.getElementById("toast-container");
+
     if (!toast) {
         toast = document.createElement("div");
         toast.id = "toast-container";
         document.body.appendChild(toast);
     }
     toast.innerText = messaggio;
+    
     toast.className = ""; 
+    
     toast.classList.add("show", `toast-${tipo}`);
-    setTimeout(() => toast.classList.remove("show"), 3500);
+    
+    setTimeout(() => { 
+        toast.classList.remove("show"); 
+    }, 3500);
 }
-
 // fase di invio dati al server
 document.addEventListener('DOMContentLoaded', function() {
     
@@ -96,10 +102,17 @@ function validaRegistrazione() {
     // Regex per il controllo 
     const email_regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    // 2. I controlli (SOSTITUITI GLI ALERT CON I TOAST)
-    if (societa === "" || email === "" || password === "") {
-        mostraToast("⚠️ Nome Società, Email e Password sono obbligatori!", "warning");
-        return false; 
+    // Controllo campi obbligatori (la password è obbligatoria solo in inserimento)
+    if (societa === "" || email === "" || nome === "" || cognome === "" || (!isEditMode && password === "")) {
+        mostraToast("⚠️ Compila tutti i campi obbligatori (*)", "warning");
+        return;
+    }
+    
+    // Controllo lunghezza Telefono (se inserito qualcosa)
+    if (numeriTel.length > 0 && numeriTel.length < 9) {
+        mostraToast("⚠️ Il numero di telefono è troppo corto.", "warning");
+        if(telefonoInput) telefonoInput.focus();
+        return false;
     }
 
     if (!email_regex.test(email)) {
