@@ -54,6 +54,11 @@ document.addEventListener('DOMContentLoaded', function () {
         shorts: '#ffffff',
         tshirt: '#ffffff'
     };
+    const productSizes = {
+        hoodie: '',
+        shorts: '',
+        tshirt: ''
+    };
 
     // Immagini prodotti
     const imageFiles = {
@@ -143,6 +148,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 tagliaSelect.innerHTML += `<option value="${i}">${i}</option>`;
             }
         }
+        if (productSizes[activeProduct]) {
+            tagliaSelect.value = productSizes[activeProduct];
+        }
     }
 
     // Cambio prodotto/vista
@@ -196,6 +204,12 @@ document.addEventListener('DOMContentLoaded', function () {
         colorLayer.style.backgroundColor = selectedColor;
         productColors[activeProduct] = selectedColor;
     });
+
+    if (tagliaSelect) {
+        tagliaSelect.addEventListener('change', () => {
+            productSizes[activeProduct] = tagliaSelect.value;
+        });
+    }
 
     // Cambio prodotto
     btnHoodie.addEventListener('click', () => switchState('hoodie', 'front'));
