@@ -1,14 +1,10 @@
-/* --- style.css --- */
-
-/* --- IMPORTAZIONE FONT LOCALI (Self-Hosted) --- */
-
+/* ===== FONT LOCALI ===== */
 @font-face {
     font-family: 'Anton';
-    /* Nota il percorso: fa due passi indietro (../../) per uscire da CSS/pc/ e poi entra in fonts/ */
-    src: url('../public/fonts/anton.woff2') format('woff2'); 
+    src: url('../public/fonts/anton.woff2') format('woff2');
     font-weight: 400;
     font-style: normal;
-    font-display: swap; /* Mostra subito il font di fallback in attesa di caricare questo */
+    font-display: swap;
 }
 
 @font-face {
@@ -19,7 +15,7 @@
     font-display: swap;
 }
 
-
+/* ===== BODY ===== */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #f4f7f6;
@@ -28,6 +24,7 @@ body {
     min-height: 100vh;
 }
 
+/* ===== CONTENITORE PRINCIPALE ===== */
 .main-container {
     display: flex;
     background-color: #fff;
@@ -36,9 +33,10 @@ body {
     overflow: hidden;
     width: 100%;
     max-width: 1150px;
-    margin: 0 auto; 
+    margin: 0 auto;
 }
 
+/* ===== AREA ANTEPRIMA ===== */
 .preview-area {
     flex: 2;
     padding: 40px;
@@ -49,17 +47,19 @@ body {
     border-right: 1px solid #eee;
 }
 
-/* LA MAGIA DEI LIVELLI */
+/* Contenitore prodotto */
 .product-visualizer {
     position: relative;
     width: 500px;
     height: 500px;
 }
 
-/* Livello 1: Il colore che prende la forma della maschera */
+/* Livello colore */
 #color-layer {
     position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
     background-color: #ffffff;
     -webkit-mask-size: contain;
     -webkit-mask-position: center;
@@ -71,70 +71,136 @@ body {
     transition: background-color 0.3s;
 }
 
-/* Livello 2: Le ombre e i dettagli del tessuto (si fondono col colore sotto) */
+/* Immagine prodotto */
 #base-image {
     position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
     object-fit: contain;
     z-index: 2;
     mix-blend-mode: multiply;
-    pointer-events: none; /* Impedisce di cliccarla per sbaglio */
+    pointer-events: none;
 }
 
-/* Livello 3: Fabric.js Canvas */
+/* Canvas Fabric.js */
 #canvas-wrapper {
     position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
     z-index: 3;
 }
+
 .canvas-container {
     margin: 0 auto;
 }
 
-/* Resto della UI */
-.view-selectors { margin-top: 30px; display: flex; gap: 15px; }
-.view-selectors button { padding: 10px 20px; background-color: #e0e0e0; border: none; border-radius: 6px; cursor: pointer; transition: background 0.2s; }
-.view-selectors button.active { background-color: cadetblue; color: #fff; }
-
-.controls-panel { flex: 1; padding: 40px; }
-h2 { margin-top: 0; color: #333; }
-.control-group { margin-bottom: 25px; }
-label { display: block; margin-bottom: 8px; font-weight: 600; color: #555; }
-input[type="text"], input[type="file"] { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
-
-.product-selectors { display: flex; gap: 10px; margin-bottom: 30px; }
-.product-selectors button { flex: 1; padding: 10px; background-color: #fff; border: 2px solid cadetblue; color: cadetblue; font-size: 14px; font-weight: bold; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
-.product-selectors button.active { background-color: cadetblue; color: #fff; }
-
-/* --- Stili per le opzioni dei testi (Font e Orientamento) --- */
-
-.text-options select:focus {
-    outline: none;
-    border-color: cadetblue;
+/* ===== BOTTONI VISTA ===== */
+.view-selectors {
+    margin-top: 30px;
+    display: flex;
+    gap: 15px;
 }
 
+.view-selectors button {
+    padding: 10px 20px;
+    background-color: #e0e0e0;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
 
+.view-selectors button.active {
+    background-color: cadetblue;
+    color: #fff;
+}
 
-/* Assicura che i controlli del testo stiano su una riga e non vengano tagliati */
+/* ===== PANNELLO CONTROLLI ===== */
+.controls-panel {
+    flex: 1;
+    padding: 40px;
+}
+
+h2 {
+    margin-top: 0;
+    color: #333;
+}
+
+.control-group {
+    margin-bottom: 25px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #555;
+}
+
+/* Input */
+input[type="text"],
+input[type="file"] {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+
+/* ===== SELEZIONE PRODOTTI ===== */
+.product-selectors {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+.product-selectors button {
+    flex: 1;
+    padding: 10px;
+    background-color: #fff;
+    border: 2px solid cadetblue;
+    color: cadetblue;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.product-selectors button.active {
+    background-color: cadetblue;
+    color: #fff;
+}
+
+/* ===== OPZIONI TESTO ===== */
 .text-options {
     display: flex;
-    gap: 5px; /* Riduciamo leggermente lo spazio tra gli elementi */
+    gap: 5px;
     margin-top: 10px;
     align-items: center;
-    width: 100%; /* Occupa tutto lo spazio disponibile */
+    width: 100%;
 }
 
+/* Select font/orientamento */
 .text-options select {
-    flex: 1; /* I select si dividono lo spazio */
-    min-width: 80px; /* Ma non diventano minuscoli */
+    flex: 1;
+    min-width: 80px;
     height: 38px;
     padding: 5px;
     border-radius: 4px;
     border: 1px solid #ccc;
 }
 
+.text-options select:focus {
+    outline: none;
+    border-color: cadetblue;
+}
+
+/* Color picker testo */
 .color-picker-testo {
-    flex-shrink: 0; /* Il quadratino colore non deve mai rimpicciolirsi */
+    flex-shrink: 0;
     width: 40px;
     height: 38px;
     padding: 0;
@@ -143,17 +209,17 @@ input[type="text"], input[type="file"] { width: 100%; padding: 12px; border: 1px
     cursor: pointer;
 }
 
-/* --- RESPONSIVE DESIGN PER SCHERMI PICCOLI --- */
+/* ===== RESPONSIVE ===== */
 @media (max-width: 1150px) {
     .main-container {
-        flex-direction: column; /* Incolonna l'immagine e i controlli in verticale */
+        flex-direction: column;
         width: 100%;
-        max-width: 600px; /* Stringe il contenitore per farlo sembrare un'app */
+        max-width: 600px;
     }
 
     .preview-area {
         border-right: none;
-        border-bottom: 1px solid #eee; /* Sposta la linea separatrice sotto */
+        border-bottom: 1px solid #eee;
         padding: 20px;
     }
 
@@ -162,36 +228,45 @@ input[type="text"], input[type="file"] { width: 100%; padding: 12px; border: 1px
     }
 }
 
-
-
-/* Contenitore principale del Toast */
+/* ===== TOAST ===== */
 #toast-container {
     position: fixed;
-    top: 20px;          /* Distanza dal bordo superiore */
-    right: 20px;        /* Distanza dal bordo destro */
+    top: 20px;
+    right: 20px;
     min-width: 250px;
     padding: 15px 20px;
     background-color: #333;
     color: #fff;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    z-index: 9999;      /* Assicura che sia sopra a tutto */
-    
-    /* Gestione visibilità */
+    z-index: 9999;
+
     visibility: hidden;
     opacity: 0;
-    transform: translateY(-20px); /* Parte leggermente più in alto */
+    transform: translateY(-20px);
     transition: all 0.4s ease;
 }
 
-/* Classe aggiunta dal JS per mostrarlo */
+/* Mostra toast */
 #toast-container.show {
     visibility: visible;
     opacity: 1;
-    transform: translateY(0);    /* Scivola verso il basso nella sua posizione */
+    transform: translateY(0);
 }
 
-/* Varianti di colore */
-.toast-success { background-color: #28a745 !important; border-left: 5px solid #1e7e34; }
-.toast-error   { background-color: #dc3545 !important; border-left: 5px solid #a71d2a; }
-.toast-warning { background-color: #ffc107 !important; color: #333 !important; border-left: 5px solid #d39e00; }
+/* Varianti colore */
+.toast-success {
+    background-color: #28a745 !important;
+    border-left: 5px solid #1e7e34;
+}
+
+.toast-error {
+    background-color: #dc3545 !important;
+    border-left: 5px solid #a71d2a;
+}
+
+.toast-warning {
+    background-color: #ffc107 !important;
+    color: #333 !important;
+    border-left: 5px solid #d39e00;
+}

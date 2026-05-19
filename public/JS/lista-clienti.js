@@ -1,20 +1,24 @@
+/*POPUP CONFERMA ELIMINAZIONE*/
 function chiediConfermaEliminazione(messaggio) {
     return new Promise((resolve) => {
-        // 1. Crezione del contenitore pop up ( assicurarsi che l'utete sia intenzionato a canc ordine)
+
+        // Creazione popup
         const modal = document.createElement('div');
         modal.className = 'modal-overlay';
-        modal.style.display = 'flex'; // Lo mostriamo subito
+        modal.style.display = 'flex';
 
-        // 2. creazione dei tag html del pop up
+        // Contenuto popup
         modal.innerHTML = `
             <div class="modal-content">
                 <div class="modal-header">
                     <h3>⚠️ Conferma Eliminazione</h3>
                 </div>
+
                 <div class="modal-body">
                     <p>${messaggio}</p>
                     <p><small>L'azione è irreversibile.</small></p>
                 </div>
+
                 <div class="modal-footer">
                     <button id="btn-annulla-delete" class="btn-secondario">Annulla</button>
                     <button id="btn-conferma-delete" class="btn-pericolo">Elimina</button>
@@ -22,34 +26,34 @@ function chiediConfermaEliminazione(messaggio) {
             </div>
         `;
 
-        // 3. Lo aggiungiamo al body della pagina
+        // Aggiunge popup al body
         document.body.appendChild(modal);
 
-        // 4. Gestione dei click
         const btnSi = modal.querySelector('#btn-conferma-delete');
         const btnNo = modal.querySelector('#btn-annulla-delete');
 
+        // Conferma eliminazione
         btnSi.onclick = () => {
-            document.body.removeChild(modal); // Rimuove il popup dal DOM
+            document.body.removeChild(modal);
             resolve(true);
         };
 
+        // Annulla eliminazione
         btnNo.onclick = () => {
-            document.body.removeChild(modal); // Rimuove il popup dal DOM
+            document.body.removeChild(modal);
             resolve(false);
         };
     });
 }
 
-
-
+/*AVVIO PAGINA*/
 document.addEventListener('DOMContentLoaded', () => {
     caricaClienti();
 });
 
-let tuttiIClienti = []; // Array per la barra di ricerca
+let tuttiIClienti = []; // Array usato per ricerca e ordinamento
 
-//RECUPERO DATI DAL DB
+/*CARICAMENTO CLIENTI DAL DATABASE*/
 async function caricaClienti() {
     try {
         const response = await fetch('/api/get-full-clients');
@@ -61,55 +65,104 @@ async function caricaClienti() {
         } else {
             console.error('Errore nel caricamento:', result.message);
         }
+
     } catch (error) {
         console.error('Errore di connessione:', error);
     }
 }
 
-//DISEGNO DELLE CARD DEI CLIENTI
+/* CREAZIONE CARD CLIENTI */
 function disegnaGriglia(clienti) {
-    const contenitore = document.getElementById('contenitore-clienti');
-    contenitore.innerHTML = ''; 
 
+    const contenitore = document.getElementById('contenitore-clienti');
+    contenitore.innerHTML = '';
+
+    // Nessun cliente trovato
     if (clienti.length === 0) {
-        contenitore.innerHTML = '<p style="text-align:center; grid-column: 1/-1; font-size: 1.2rem; color: #555;">Nessun cliente registrato nel database.</p>';
+        contenitore.innerHTML = `
+            <p style="text-align:center; grid-column: 1/-1; font-size: 1.2rem; color: #555;">
+                Nessun cliente registrato nel database.
+            </p>
+        `;
         return;
     }
 
     clienti.forEach(cliente => {
+
         const email = cliente.utenti ? cliente.utenti.email : cliente.email_contatto;
         const nomeCompleto = `${cliente.nome || ''} ${cliente.cognome || ''}`.trim();
 
         const card = document.createElement('div');
         card.className = 'card-cliente';
 
-        // ECCO LA PARTE CORRETTA:
+        // Contenuto card
         card.innerHTML = `
             <div class="intestazione">
-                <p class="nome-societa"><strong>${cliente.societa || 'Privato'}</strong></p>
-                
+
+                <p class="nome-societa">
+                    <strong>${cliente.societa || 'Privato'}</strong>
+                </p>
+
                 <div class="azioni-card">
-                    <button class="btn-modifica-card" onclick="toggleModifica(this, '${cliente.id}')" title="Modifica Cliente">✏️</button>
-                    <input type="checkbox" class="seleziona-cliente" value="${cliente.id}" onchange="gestisciAzioniFluttuanti()">
+
+                    <!-- Modifica cliente -->
+                    <button class="btn-modifica-card"
+                        onclick="toggleModifica(this, '${cliente.id}')"
+                        title="Modifica Cliente">
+
+                        ✏️
+                    </button>
+
+                    <!-- Checkbox selezione -->
+                    <input type="checkbox"
+                        class="seleziona-cliente"
+                        value="${cliente.id}"
+                        onchange="gestisciAzioniFluttuanti()">
+
                 </div>
             </div>
-                
+
             <ul class="dettagli">
-                <li><strong>Referente:</strong> <input type="text" class="campo-editabile" id="nome-${cliente.id}" value="${nomeCompleto || '-'}" readonly></li>
-                <li><strong>Email:</strong> <input type="email" class="campo-editabile" id="email-${cliente.id}" value="${email || '-'}" readonly></li>
-                <li><strong>Telefono:</strong> <input type="text" class="campo-editabile" id="tel-${cliente.id}" value="${cliente.telefono || '-'}" readonly></li>
+                <li>
+                    <strong>Referente:</strong>
+                    <input type="text"
+                        class="campo-editabile"
+                        id="nome-${cliente.id}"
+                        value="${nomeCompleto || '-'}"
+                        readonly>
+                </li>
+
+                <li>
+                    <strong>Email:</strong>
+                    <input type="email"
+                        class="campo-editabile"
+                        id="email-${cliente.id}"
+                        value="${email || '-'}"
+                        readonly>
+                </li>
+
+                <li>
+                    <strong>Telefono:</strong>
+                    <input type="text"
+                        class="campo-editabile"
+                        id="tel-${cliente.id}"
+                        value="${cliente.telefono || '-'}"
+                        readonly>
+                </li>
             </ul>
         `;
+
         contenitore.appendChild(card);
     });
 }
 
-
+/* GESTIONE PULSANTE ELIMINA */
 window.gestisciAzioniFluttuanti = function() {
+
     const checkboxes = document.querySelectorAll('.seleziona-cliente:checked');
     const btnElimina = document.getElementById('btn-elimina-fluttuante');
-    
-    // Aggiunge o rimuove la classe 'mostra' per attivare l'animazione del tuo collega
+
+    // Mostra/nasconde pulsante elimina
     if (checkboxes.length > 0) {
         btnElimina.classList.add('mostra');
     } else {
@@ -117,76 +170,88 @@ window.gestisciAzioniFluttuanti = function() {
     }
 };
 
-// Esecuzione dell'eliminazione multipla tramite il pulsante fluttuante
+/* ELIMINAZIONE MULTIPLA */
 document.addEventListener('DOMContentLoaded', () => {
+
     const btnElimina = document.getElementById('btn-elimina-fluttuante');
-    
+
     if (btnElimina) {
+
         btnElimina.addEventListener('click', async () => {
+
             const checkboxes = document.querySelectorAll('.seleziona-cliente:checked');
-            
-            if (await chiediConfermaEliminazione(`Vuoi davvero eliminare ${checkboxes.length} clienti dal database? L'operazione non può essere annullata.`)) {
-                
-                // Cicla tutti gli ID selezionati e invia la richiesta al server
+
+            if (await chiediConfermaEliminazione(
+                `Vuoi davvero eliminare ${checkboxes.length} clienti dal database?`
+            )) {
+
+                // Elimina tutti i clienti selezionati
                 for (let cb of checkboxes) {
+
                     await fetch('/api/delete-client', {
                         method: 'DELETE',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ id: cb.value })
                     });
                 }
-                
+
                 mostraToast('✅ Clienti eliminati con successo!', 'success');
-                caricaClienti(); // Ricarica la griglia aggiornata
-                btnElimina.classList.remove('mostra'); // Nasconde il bottone con animazione inversa
+
+                caricaClienti();
+                btnElimina.classList.remove('mostra');
             }
         });
     }
 });
 
-//CONTROLLO IN TEMPO REALE DEI CAMPI EMAIL E TELEFONO NELLE CARD
-
+/* VALIDAZIONE CAMPI IN TEMPO REALE */
 document.addEventListener('input', function(e) {
-    
-    // 1. FORMATTAZIONE TELEFONO (se l'ID inizia con "tel-")
+
+    /* Formattazione telefono */
     if (e.target && e.target.id && e.target.id.startsWith('tel-')) {
+
         let numeri = e.target.value.replace(/\D/g, '');
         let formattato = '';
-        
+
         if (numeri.length > 0) formattato += numeri.substring(0, 3);
         if (numeri.length > 3) formattato += '-' + numeri.substring(3, 6);
         if (numeri.length > 6) formattato += '-' + numeri.substring(6, 10);
-        
+
         e.target.value = formattato;
     }
 
-    // 2. VALIDAZIONE EMAIL VISIVA (se l'ID inizia con "email-")
+    /* Validazione email */
     if (e.target && e.target.id && e.target.id.startsWith('email-')) {
+
         const emailRegex = /(\w+)@(\w+\.\w+)+/;
-        
+
         if (e.target.value === '') {
-            e.target.style.borderColor = 'transparent'; // Colore neutro per campo vuoto
+            e.target.style.borderColor = 'transparent';
+
         } else if (emailRegex.test(e.target.value)) {
-            e.target.style.borderColor = '#27ae60'; // Verde se valida
+            e.target.style.borderColor = '#27ae60';
+
         } else {
-            e.target.style.borderColor = '#e74c3c'; // Rosso se non valida
+            e.target.style.borderColor = '#e74c3c';
         }
     }
 });
 
-//BARRA DI RICERCA
+/* RICERCA CLIENTI */
 window.filtraClienti = function() {
+
     const termine = document.getElementById('barraRicerca').value.toLowerCase();
-    
+
     const clientiFiltrati = tuttiIClienti.filter(cliente => {
+
         const email = (cliente.utenti ? cliente.utenti.email : cliente.email_contatto) || "";
         const societa = cliente.societa || "";
         const nome = cliente.nome || "";
         const cognome = cliente.cognome || "";
         const telefono = cliente.telefono || "";
 
-        return societa.toLowerCase().includes(termine) || 
-               email.toLowerCase().includes(termine) || 
+        return societa.toLowerCase().includes(termine) ||
+               email.toLowerCase().includes(termine) ||
                nome.toLowerCase().includes(termine) ||
                cognome.toLowerCase().includes(termine) ||
                telefono.toLowerCase().includes(termine);
@@ -195,115 +260,129 @@ window.filtraClienti = function() {
     disegnaGriglia(clientiFiltrati);
 };
 
-
+/* ORDINAMENTO CLIENTI */
 window.ordinaClienti = function() {
+
     const criterio = document.getElementById('filtroOrdinamento').value;
-    
-    // Se l'utente torna su "Ordina per..." (valore vuoto), non facciamo nulla
+
     if (!criterio) return;
 
-    // Ordiniamo l'array globale tuttiIClienti
     tuttiIClienti.sort((a, b) => {
+
         let valA = "";
         let valB = "";
 
-        // Scegliamo quale campo confrontare in base alla selezione
+        // Campo da ordinare
         if (criterio.includes('societa')) {
             valA = (a.societa || "Privato").toLowerCase();
             valB = (b.societa || "Privato").toLowerCase();
+
         } else if (criterio.includes('cognome')) {
             valA = (a.cognome || "").toLowerCase();
             valB = (b.cognome || "").toLowerCase();
+
         } else if (criterio.includes('nome')) {
             valA = (a.nome || "").toLowerCase();
             valB = (b.nome || "").toLowerCase();
         }
 
-        // Determiniamo se è crescente (asc) o decrescente (desc)
-        // localeCompare garantisce che l'ordine alfabetico italiano (con accenti ecc.) sia perfetto
+        // Ordinamento crescente/decrescente
         if (criterio.includes('asc')) {
             return valA.localeCompare(valB);
+
         } else {
             return valB.localeCompare(valA);
         }
     });
 
-    // Ridisegniamo le card. 
-    // Se hai già una funzione filtraClienti() attiva, la chiamiamo per mantenere
-    // attiva un'eventuale ricerca testuale in corso, altrimenti chiamiamo disegnaGriglia
+    // Mantiene eventuale filtro ricerca
     if (typeof window.filtraClienti === 'function') {
         window.filtraClienti();
+
     } else {
         disegnaGriglia(tuttiIClienti);
     }
 };
 
-//ELIMINAZIONE SINGOLA
+/* ELIMINAZIONE SINGOLA */
 window.eliminaClienteDalDb = async function(id) {
-    if (await chiediConfermaEliminazione("Sei sicuro di voler eliminare questo cliente dal database? L'operazione non può essere annullata.")) {
+
+    if (await chiediConfermaEliminazione(
+        "Sei sicuro di voler eliminare questo cliente?"
+    )) {
+
         try {
             const response = await fetch('/api/delete-client', {
                 method: 'DELETE',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ id: id })
             });
+
             const result = await response.json();
-            
+
             if (result.success) {
                 mostraToast('✅ Cliente eliminato!', 'success');
-                caricaClienti(); // Ricarica la griglia aggiornata
+                caricaClienti();
+
             } else {
                 mostraToast('❌ Errore: ' + result.message, 'error');
             }
+
         } catch (error) {
             mostraToast('❌ Errore di connessione.', 'error');
         }
     }
 };
 
-
-//Funzione per modificare e salvare i dati del cliente
+/* MODIFICA CLIENTE */
 window.toggleModifica = async function(btn, id) {
+
     const inModifica = btn.innerHTML.includes('💾');
     const inputs = document.querySelectorAll(`input[id$="-${id}"]`);
-    
+
+    // Attiva modifica
     if (!inModifica) {
-        // ENTRA IN MODALITÀ MODIFICA
+
         inputs.forEach(input => {
             input.removeAttribute('readonly');
             input.classList.add('attivo');
         });
-        
+
         btn.innerHTML = '💾';
         btn.title = "Salva Modifiche";
-        btn.style.backgroundColor = '#ffefd5'; 
+        btn.style.backgroundColor = '#ffefd5';
         btn.style.borderColor = '#f39c12';
-        
+
     } else {
-        // RECUPERA I DATI E I CAMPI ATTUALI
+
+        // Recupero campi
         const inputNome = document.getElementById(`nome-${id}`);
         const inputEmail = document.getElementById(`email-${id}`);
         const inputTel = document.getElementById(`tel-${id}`);
-        
-        // --- 🚨 NUOVI CONTROLLI DI VALIDAZIONE 🚨 ---
-        const emailRegex = /(\w+)@(\w+\.\w+)+/;
-        
-        // Controllo Email
-        if (!emailRegex.test(inputEmail.value)) {
-            mostraToast("❌ Errore: Inserisci un'email valida che contenga '@' e un dominio (es. '.it' o '.com').", 'error');
-            inputEmail.focus();
-            return; // Ferma il salvataggio e non prosegue
-        }
-        
-        // Controllo Telefono (verifichiamo che se inserito, abbia almeno 9-10 cifre)
-        const numeriTel = inputTel.value.replace(/\D/g, ''); // Prende solo i numeri
-        if (numeriTel.length > 0 && numeriTel.length < 9) {
-            mostraToast("❌ Errore: Il numero di telefono è troppo corto. Inserisci un recapito valido.", 'error');
-            inputTel.focus();
-            return; // Ferma il salvataggio
-        }
-        // --------------------------------------------
 
+        const emailRegex = /(\w+)@(\w+\.\w+)+/;
+
+        /* Validazione email */
+        if (!emailRegex.test(inputEmail.value)) {
+
+            mostraToast("❌ Inserisci un'email valida.",'error');
+
+            inputEmail.focus();
+            return;
+        }
+
+        /* Validazione telefono */
+        const numeriTel = inputTel.value.replace(/\D/g, '');
+
+        if (numeriTel.length > 0 && numeriTel.length < 9) {
+
+            mostraToast("❌ Numero di telefono non valido.",'error');
+
+            inputTel.focus();
+            return;
+        }
+
+        // Dati aggiornati
         const datiAggiornati = {
             id: id,
             referente: inputNome.value,
@@ -312,36 +391,43 @@ window.toggleModifica = async function(btn, id) {
         };
 
         try {
-            // Chiamata alla nuova API creata in app.js
+
+            // Salvataggio database
             const response = await fetch('/api/admin-update-client', {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(datiAggiornati)
             });
-            
+
             const result = await response.json();
 
             if (result.success) {
-                // Se il db si aggiorna, ripristina la grafica
+
+                // Ripristina campi readonly
                 inputs.forEach(input => {
                     input.setAttribute('readonly', 'true');
                     input.classList.remove('attivo');
-                    input.style.borderColor = 'transparent'; // Resetta i colori verde/rosso
+                    input.style.borderColor = 'transparent';
                 });
-                
-                // Ripristina il pulsante a matita
+
+                // Ripristina bottone modifica
                 btn.innerHTML = '✏️';
                 btn.title = "Modifica Cliente";
                 btn.style.backgroundColor = 'transparent';
                 btn.style.borderColor = 'transparent';
-                
+
                 mostraToast('✅ Modifiche salvate con successo!', 'success');
+
             } else {
-                mostraToast('❌ Errore durante il salvataggio: ' + result.message, 'error');
+                mostraToast('❌ Errore durante il salvataggio: ' + result.message,'error');
             }
+
         } catch (error) {
+
             console.error(error);
-            mostraToast('❌ Errore di connessione al server.', 'error');
+
+            mostraToast('❌ Errore di connessione al server.','error');
         }
     }
 };
+

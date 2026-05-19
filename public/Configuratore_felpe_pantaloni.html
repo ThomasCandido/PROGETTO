@@ -4,149 +4,219 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Configuratore Abbigliamento Personalizzato</title>
-    
+
+    <!-- CSS -->
     <link rel="stylesheet" href="CSS/pc/configuratore.css">
-    
+
+    <!-- Precaricamento font -->
     <link rel="preload" href="fonts/anton.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="fonts/permanent-marker.woff2" as="font" type="font/woff2" crossorigin>
 
+    <!-- Libreria Fabric.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+
+    <!-- Script configuratore -->
     <script src="JS/configuratore.js" defer></script>
 </head>
+
 <body>
 
 <div class="main-container">
 
+    <!-- AREA ANTEPRIMA -->
     <div class="preview-area">
+
         <div class="product-visualizer" id="visualizer">
+
+            <!-- Livello colore prodotto -->
             <div id="color-layer"></div>
+
+            <!-- Immagine base prodotto -->
             <img id="base-image" src="allegati/Fronte-Felpa.png" alt="Prodotto">
+
+            <!-- Canvas Fabric.js -->
             <div id="canvas-wrapper">
                 <canvas id="fabric-canvas" width="500" height="500"></canvas>
             </div>
         </div>
 
+        <!-- Pulsanti fronte/retro -->
         <div class="view-selectors">
             <button id="btn-front" class="active">Fronte</button>
             <button id="btn-back">Retro</button>
         </div>
     </div>
 
+    <!-- PANNELLO CONTROLLI -->
     <div class="controls-panel">
+
         <h2>Personalizza</h2>
 
+        <!-- Selettore prodotto -->
         <div class="product-selectors">
             <button id="select-hoodie" class="active">Felpa</button>
             <button id="select-shorts">Pantaloncino</button>
             <button id="select-tshirt">Maglia</button>
         </div>
 
+        <!-- Colore, taglia e quantità -->
         <div class="control-group" style="margin-top: 20px; display: flex; gap: 15px; align-items: flex-end;">
-            
-            <!-- 1. Colonna Colore -->
+
+            <!-- Colore -->
             <div style="flex: 1;">
                 <label for="product-color" style="font-size: 0.9em;">Colore</label>
-                <input type="color" id="product-color" value="#ffffff" style="width: 100%; height: 38px; cursor: pointer; padding: 0; border: 1px solid #ccc; border-radius: 4px;">
+
+                <input type="color" id="product-color" value="#ffffff"
+                    style="width: 100%; height: 38px; cursor: pointer; padding: 0; border: 1px solid #ccc; border-radius: 4px;">
             </div>
 
-            <!-- 2. Colonna Taglia -->
+            <!-- Taglia -->
             <div style="flex: 1;">
                 <label for="conf-taglia" style="font-size: 0.9em;">Taglia</label>
-                <select id="conf-taglia" style="width: 100%; height: 38px; padding: 5px; border-radius: 4px; border: 1px solid #ccc;">
-                    <!-- Verrà popolato in automatico dal JavaScript -->
+
+                <select id="conf-taglia"
+                    style="width: 100%; height: 38px; padding: 5px; border-radius: 4px; border: 1px solid #ccc;">
+
+                    <!-- Popolato via JavaScript -->
                 </select>
             </div>
 
-            <!-- 3. Colonna Quantità -->
+            <!-- Quantità -->
             <div style="flex: 1;">
                 <label for="conf-quantita" style="font-size: 0.9em;">Quantità</label>
-                <input type="number" id="conf-quantita" value="1" min="1" style="width: 100%; height: 38px; padding: 5px; border-radius: 4px; border: 1px solid #ccc;">
+
+                <input type="number" id="conf-quantita" value="1" min="1"
+                    style="width: 100%; height: 38px; padding: 5px; border-radius: 4px; border: 1px solid #ccc;">
             </div>
-            
         </div>
 
+        <!-- CONTROLLI FELPA -->
         <div id="controls-hoodie" class="custom-controls active">
+
+            <!-- Upload immagine -->
             <div class="control-group for-front">
                 <label>Immagine Petto (Fronte)</label>
                 <input type="file" id="upload-hoodie-front" accept="image/*">
             </div>
-            
+
+            <!-- Testo manica sinistra -->
             <div class="control-group for-front">
+
                 <label>Testo Manica Sinistra (Fronte)</label>
+
                 <input type="text" id="text-hoodie-front-l" placeholder="Scrivi qui...">
+
                 <div class="text-options">
+
+                    <!-- Font -->
                     <select id="font-hoodie-front-l">
                         <optgroup label="I Nostri Font Premium">
                             <option value="'Anton', Impact, sans-serif">Anton (Sportivo/Numeri)</option>
-                            <option value="'Permanent Marker', 'Brush Script MT', cursive">Permanent Marker (Streetwear)</option>
+                            <option value="'Permanent Marker', 'Brush Script MT', cursive">
+                                Permanent Marker (Streetwear)
+                            </option>
                         </optgroup>
+
                         <optgroup label="Semplici e Puliti">
                             <option value="Arial">Arial</option>
                             <option value="'Trebuchet MS', sans-serif">Trebuchet MS</option>
                         </optgroup>
+
                         <optgroup label="Classici ed Eleganti">
                             <option value="Georgia, serif">Georgia</option>
                         </optgroup>
                     </select>
+
+                    <!-- Orientamento -->
                     <select id="orient-hoodie-front-l">
                         <option value="angled" selected>Lungo la manica</option>
                         <option value="horizontal">Orizzontale</option>
                         <option value="vertical">Verticale (Lettere impilate)</option>
                     </select>
-                    <input type="color" id="color-hoodie-front-l" value="#000000" title="Colore testo" class="color-picker-testo">
+
+                    <!-- Colore testo -->
+                    <input type="color" id="color-hoodie-front-l" value="#000000"
+                        title="Colore testo" class="color-picker-testo">
                 </div>
             </div>
 
+            <!-- Testo manica destra -->
             <div class="control-group for-front">
+
                 <label>Testo Manica Destra (Fronte)</label>
+
                 <input type="text" id="text-hoodie-front-r" placeholder="Scrivi qui...">
+
                 <div class="text-options">
+
                     <select id="font-hoodie-front-r">
                         <optgroup label="I Nostri Font Premium">
                             <option value="'Anton', Impact, sans-serif">Anton (Sportivo/Numeri)</option>
-                            <option value="'Permanent Marker', 'Brush Script MT', cursive">Permanent Marker (Streetwear)</option>
+                            <option value="'Permanent Marker', 'Brush Script MT', cursive">
+                                Permanent Marker (Streetwear)
+                            </option>
                         </optgroup>
+
                         <optgroup label="Semplici e Puliti">
                             <option value="Arial">Arial</option>
                             <option value="'Trebuchet MS', sans-serif">Trebuchet MS</option>
                         </optgroup>
+
                         <optgroup label="Classici ed Eleganti">
                             <option value="Georgia, serif">Georgia</option>
                         </optgroup>
                     </select>
+
                     <select id="orient-hoodie-front-r">
                         <option value="angled" selected>Lungo la manica</option>
                         <option value="horizontal">Orizzontale</option>
                         <option value="vertical">Verticale (Lettere impilate)</option>
                     </select>
-                    <input type="color" id="color-hoodie-front-r" value="#000000" title="Colore testo" class="color-picker-testo">
+
+                    <input type="color" id="color-hoodie-front-r" value="#000000"
+                        title="Colore testo" class="color-picker-testo">
                 </div>
             </div>
 
+            <!-- Testo centrale -->
             <div class="control-group for-front">
+
                 <label>Testo Centrale:</label>
-                <input type="text" id="text-hoodie-front-center" placeholder="Inserisci testo centrale...">
-                    <div class="text-options">
-                        <select id="font-hoodie-front-center">
-                            <optgroup label="I Nostri Font Premium">
-                                <option value="'Anton', Impact, sans-serif">Anton (Sportivo/Numeri)</option>
-                                <option value="'Permanent Marker', 'Brush Script MT', cursive">Permanent Marker (Streetwear)</option>
-                            </optgroup>
-                            <optgroup label="Semplici e Puliti">
-                                <option value="Arial">Arial</option>
-                                <option value="'Trebuchet MS', sans-serif">Trebuchet MS</option>
-                            </optgroup>
-                            <optgroup label="Classici ed Eleganti">
-                                <option value="Georgia, serif">Georgia</option>
-                            </optgroup>
-                        </select>
-                        <select id="orient-hoodie-front-center" style="display: none;">
-                            <option value="horizontal" selected>Orizzontale</option>
-                        </select>
-                        <input type="color" id="color-hoodie-front-center" value="#000000" title="Colore testo" class="color-picker-testo">
-                    </div>
+
+                <input type="text" id="text-hoodie-front-center"
+                    placeholder="Inserisci testo centrale...">
+
+                <div class="text-options">
+
+                    <select id="font-hoodie-front-center">
+                        <optgroup label="I Nostri Font Premium">
+                            <option value="'Anton', Impact, sans-serif">Anton (Sportivo/Numeri)</option>
+                            <option value="'Permanent Marker', 'Brush Script MT', cursive">
+                                Permanent Marker (Streetwear)
+                            </option>
+                        </optgroup>
+
+                        <optgroup label="Semplici e Puliti">
+                            <option value="Arial">Arial</option>
+                            <option value="'Trebuchet MS', sans-serif">Trebuchet MS</option>
+                        </optgroup>
+
+                        <optgroup label="Classici ed Eleganti">
+                            <option value="Georgia, serif">Georgia</option>
+                        </optgroup>
+                    </select>
+
+                    <!-- Orientamento fisso -->
+                    <select id="orient-hoodie-front-center" style="display: none;">
+                        <option value="horizontal" selected>Orizzontale</option>
+                    </select>
+
+                    <input type="color" id="color-hoodie-front-center" value="#000000"
+                        title="Colore testo" class="color-picker-testo">
+                </div>
             </div>
 
+            <!-- Retro felpa -->
             <div class="control-group for-back" style="display: none;">
                 <p style="color: #777; font-style: italic;">
                     Il retro della felpa è a tinta unita e non è personalizzabile.
@@ -154,100 +224,150 @@
             </div>
         </div>
 
+        <!-- CONTROLLI PANTALONCINO -->
         <div id="controls-shorts" class="custom-controls" style="display: none;">
+
+            <!-- Testo gamba sinistra -->
             <div class="control-group for-front">
+
                 <label>Testo Gamba Sinistra (Fronte)</label>
+
                 <input type="text" id="text-shorts-front-l" placeholder="Scrivi qui...">
+
                 <div class="text-options">
+
                     <select id="font-shorts-front-l">
                         <optgroup label="I Nostri Font Premium">
                             <option value="'Anton', Impact, sans-serif">Anton (Sportivo/Numeri)</option>
-                            <option value="'Permanent Marker', 'Brush Script MT', cursive">Permanent Marker (Streetwear)</option>
+                            <option value="'Permanent Marker', 'Brush Script MT', cursive">
+                                Permanent Marker (Streetwear)
+                            </option>
                         </optgroup>
+
                         <optgroup label="Semplici e Puliti">
                             <option value="Arial">Arial</option>
                             <option value="'Trebuchet MS', sans-serif">Trebuchet MS</option>
                         </optgroup>
+
                         <optgroup label="Classici ed Eleganti">
                             <option value="Georgia, serif">Georgia</option>
                         </optgroup>
                     </select>
+
                     <select id="orient-shorts-front-l">
                         <option value="horizontal" selected>Orizzontale</option>
                         <option value="vertical">Verticale (Lettere impilate)</option>
                     </select>
-                    <input type="color" id="color-shorts-front-l" value="#000000" title="Colore testo" class="color-picker-testo">
+
+                    <input type="color" id="color-shorts-front-l" value="#000000"
+                        title="Colore testo" class="color-picker-testo">
                 </div>
             </div>
 
+            <!-- Testo gamba destra -->
             <div class="control-group for-front">
+
                 <label>Testo Gamba Destra (Fronte)</label>
+
                 <input type="text" id="text-shorts-front-r" placeholder="Scrivi qui...">
+
                 <div class="text-options">
+
                     <select id="font-shorts-front-r">
                         <optgroup label="I Nostri Font Premium">
                             <option value="'Anton', Impact, sans-serif">Anton (Sportivo/Numeri)</option>
-                            <option value="'Permanent Marker', 'Brush Script MT', cursive">Permanent Marker (Streetwear)</option>
+                            <option value="'Permanent Marker', 'Brush Script MT', cursive">
+                                Permanent Marker (Streetwear)
+                            </option>
                         </optgroup>
+
                         <optgroup label="Semplici e Puliti">
                             <option value="Arial">Arial</option>
                             <option value="'Trebuchet MS', sans-serif">Trebuchet MS</option>
                         </optgroup>
+
                         <optgroup label="Classici ed Eleganti">
                             <option value="Georgia, serif">Georgia</option>
                         </optgroup>
                     </select>
+
                     <select id="orient-shorts-front-r">
                         <option value="horizontal" selected>Orizzontale</option>
                         <option value="vertical">Verticale (Lettere impilate)</option>
                     </select>
-                    <input type="color" id="color-shorts-front-r" value="#000000" title="Colore testo" class="color-picker-testo">
+
+                    <input type="color" id="color-shorts-front-r" value="#000000"
+                        title="Colore testo" class="color-picker-testo">
                 </div>
             </div>
 
+            <!-- Retro pantaloncino -->
             <p class="for-back" style="display: none; color: #777; font-style: italic;">
                 Il retro del pantaloncino è a tinta unita e non è personalizzabile.
             </p>
         </div>
-        
+
+        <!-- CONTROLLI MAGLIA -->
         <div id="controls-tshirt" class="custom-controls" style="display: none;">
+
+            <!-- Upload immagine -->
             <div class="control-group for-front">
                 <label>Immagine Petto (Fronte)</label>
                 <input type="file" id="upload-tshirt-front" accept="image/*">
             </div>
-    
+
+            <!-- Testo centrale -->
             <div class="control-group for-front">
+
                 <label>Testo Centrale (Orizzontale)</label>
-                <input type="text" id="text-tshirt-front-center" placeholder="Scrivi il testo centrale...">
+
+                <input type="text" id="text-tshirt-front-center"
+                    placeholder="Scrivi il testo centrale...">
+
                 <div class="text-options">
+
                     <select id="font-tshirt-front-center">
                         <optgroup label="I Nostri Font Premium">
                             <option value="'Anton', Impact, sans-serif">Anton (Sportivo/Numeri)</option>
-                            <option value="'Permanent Marker', 'Brush Script MT', cursive">Permanent Marker (Streetwear)</option>
+                            <option value="'Permanent Marker', 'Brush Script MT', cursive">
+                                Permanent Marker (Streetwear)
+                            </option>
                         </optgroup>
+
                         <optgroup label="Semplici e Puliti">
                             <option value="Arial">Arial</option>
                             <option value="'Trebuchet MS', sans-serif">Trebuchet MS</option>
                         </optgroup>
+
                         <optgroup label="Classici ed Eleganti">
                             <option value="Georgia, serif">Georgia</option>
                         </optgroup>
                     </select>
+
                     <select id="orient-tshirt-front-center">
                         <option value="horizontal" selected>Orizzontale</option>
                         <option value="vertical">Verticale (Lettere impilate)</option>
                     </select>
-                    <input type="color" id="color-tshirt-front-center" value="#000000" title="Colore testo" class="color-picker-testo">
+
+                    <input type="color" id="color-tshirt-front-center" value="#000000"
+                        title="Colore testo" class="color-picker-testo">
                 </div>
             </div>
 
+            <!-- Retro maglia -->
             <div class="control-group for-back" style="display: none;">
-                <p style="color: #777; font-style: italic;">Il retro della maglia non è personalizzabile.</p>
+                <p style="color: #777; font-style: italic;">
+                    Il retro della maglia non è personalizzabile.
+                </p>
             </div>
         </div>
 
+        <!-- Pulsante conferma -->
+        <button id="btn-conferma-salva"
+            style="width: 100%; padding: 15px; background: #28a745; color: white; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; margin-top: 20px;">
 
-        <button id="btn-conferma-salva" style="width: 100%; padding: 15px; background: #28a745; color: white; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; margin-top: 20px;">✅ CONFERMA E ALLEGA ALL'ORDINE</button>
+            ✅ CONFERMA E ALLEGA ALL'ORDINE
+        </button>
     </div>
 </div>
 
