@@ -1,16 +1,13 @@
-/* =========================================
-    IMPOSTAZIONI BASE (Reset)
-   ========================================= */
+
+   /*RESET BASE*/
+
 * {
-    /* Fa in modo che padding e bordi non sballino le larghezze */
-    box-sizing: border-box; 
+    box-sizing: border-box; /* Include padding e bordi nelle dimensioni */
     margin: 0;
     padding: 0;
 }
 
-/* =========================================
-    CONTENITORE PRINCIPALE (La "Scheda")
-   ========================================= */
+/*CONTENITORE PRINCIPALE*/
 main {
     max-width: 800px;
     margin: 30px auto 40px auto;
@@ -19,8 +16,8 @@ main {
 .form-aggiunta-cliente {
     background-color: #ffffff;
     padding: 20px;
-    border-radius: 8px; /* Angoli arrotondati */
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05); /* Leggera ombra per l'effetto "carta sollevata" */
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
 }
 
 .form-aggiunta-cliente h1 {
@@ -35,20 +32,18 @@ main {
     margin-bottom: 20px;
 }
 
-/* =========================================
-    STILE DEL FORM E DEI CAMPI
-   ========================================= */
+/*FORM E CAMPI*/
 fieldset {
     border: 1px solid #dcdde1;
     border-radius: 6px;
     padding: 20px;
     margin-bottom: 25px;
     background-color: #fafbfc;
-    
-    /*Grid Layout per mettere due campi affiancati! */
+
+    /* Layout a 2 colonne */
     display: grid;
-    grid-template-columns: 1fr 1fr; /* Due colonne di uguale larghezza */
-    gap: 15px; /* Spazio tra le righe e le colonne */
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
 }
 
 legend {
@@ -61,10 +56,9 @@ legend {
     font-size: 14px;
 }
 
-
 .form-group {
     display: flex;
-    flex-direction: column; /* Mette la label SOPRA l'input */
+    flex-direction: column; /* Label sopra input */
 }
 
 .form-group label {
@@ -82,22 +76,21 @@ legend {
     transition: border-color 0.3s;
 }
 
-/* Effetto quando l'utente clicca dentro un campo per scrivere */
+/* Effetto focus input */
 .form-group input:focus {
     outline: none;
     border-color: #3498db;
     box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
 }
 
-/*TELEFONO*/
-/* Stile per il contenitore del telefono */
+/*CAMPO TELEFONO*/
 .telefono-wrapper {
     display: flex;
-    border: 1px solid #bdc3c7; /* Stesso colore degli altri input */
+    border: 1px solid #bdc3c7;
     border-radius: 4px;
 }
 
-/* L'effetto quando clicchi dentro l'input */
+/* Focus sul contenitore telefono */
 .telefono-wrapper:focus-within {
     border-color: #3498db;
     box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
@@ -113,15 +106,14 @@ legend {
 .telefono-wrapper input[type="tel"] {
     border: none;
     padding: 10px;
-    flex: 1; /* Espande l'input per riempire lo spazio */
+    flex: 1; /* Occupa tutto lo spazio disponibile */
     outline: none;
 }
-/* =========================================
-    PULSANTI
-   ========================================= */
+
+/*PULSANTI*/
 .form-actions {
     display: flex;
-    justify-content: flex-end; /* Allinea i pulsanti a destra */
+    justify-content: flex-end; /* Pulsanti a destra */
     gap: 15px;
     margin-top: 10px;
 }
@@ -136,8 +128,9 @@ button {
     transition: all 0.3s;
 }
 
+/* Bottone conferma */
 button[type="submit"] {
-    background-color: #27ae60; /* Verde per l'azione principale */
+    background-color: #27ae60;
     color: white;
 }
 
@@ -145,8 +138,9 @@ button[type="submit"]:hover {
     background-color: #219150;
 }
 
+/* Bottone reset */
 button[type="reset"] {
-    background-color: #ecf0f1; /* Grigio per annullare */
+    background-color: #ecf0f1;
     color: #7f8c8d;
 }
 
@@ -155,31 +149,30 @@ button[type="reset"]:hover {
     color: #333;
 }
 
-/* =========================================
-    RESPONSIVE (Smartphone & Tablet)
-   ========================================= */
+/*RESPONSIVE*/
 @media screen and (max-width: 768px) {
+
+    /* Layout ad una colonna */
     fieldset {
-        /* Griglia ad 1 colonna singola */
-        grid-template-columns: 1fr; 
+        grid-template-columns: 1fr;
     }
 
-    /*Riduco un po' i margini e i padding su schermi piccoli per guadagnare spazio */
+    /* Riduce margini su schermi piccoli */
     main {
-        margin: 20px 15px; 
+        margin: 20px 15px;
     }
-    
+
     .form-aggiunta-cliente {
         padding: 20px;
     }
 
-    /* Per evitare che i bottoni vengano tagliati o stiano stretti su display molto piccoli */
+    /* Bottoni verticali */
     .form-actions {
         flex-direction: column;
         gap: 10px;
     }
-    
+
     .form-actions button {
-        width: 100%; /* I bottoni prendono tutta la larghezza */
+        width: 100%;
     }
 }
