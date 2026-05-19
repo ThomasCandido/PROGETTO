@@ -1,7 +1,9 @@
 // --- 1. FUNZIONE GLOBALE PER I TOAST (Sostituisce gli alert) ---
-function mostraToast(messaggio, tipo = 'error') {
+function mostraToast(messaggio, tipo = 'error') 
+{
     let toast = document.getElementById("toast-container");
-    if (!toast) {
+    if (!toast) 
+    {
         toast = document.createElement("div");
         toast.id = "toast-container";
         document.body.appendChild(toast);
@@ -34,7 +36,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const utente = result.data;
             const isAdmin = utente.is_admin;
 
-            // SINCRONIZZAZIONE RUOLO
+            // SINCRONIZZAZIONE RUOLO se utente is admin aggiungi classi x visualizzare altre pagine
             localStorage.setItem('isAdmin', isAdmin ? 'true' : 'false');
             if (isAdmin) {
                 document.documentElement.classList.add('is-admin');
@@ -51,6 +53,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
 
             // 4. LOGICA SPECIFICA PER CLIENTE
+            /* se non sei admin non hai accesso ne alle statsistiche ne puoi modificare
+               i campi a piacimento
+            */
             if (!isAdmin) {
                 const btnStats = document.getElementById('openStats');
                 if (btnStats) btnStats.style.display = 'none';

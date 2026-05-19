@@ -29,10 +29,12 @@ async function validaLogin(event) {
     {
         mostraToast("⚠️ Errore: Tutti i campi sono obbligatori.", "error");
         return;
-    } else if (!email_regex.test(email)) {
+    } else if (!email_regex.test(email)) 
+    {
         mostraToast("⚠️ Errore: Inserisci un indirizzo email valido.", "error");
         return;
-    } else if (password.length < 8) {
+    } else if (password.length < 8) 
+    {
         mostraToast("⚠️ Errore: La password deve avere almeno 8 caratteri.", "error");
         return;
     }
@@ -78,6 +80,7 @@ async function validaLogin(event) {
     }
 }
 
+// funzione x gestire apri e chiudi occhiello per visualizzare password
 document.addEventListener('DOMContentLoaded', function() {
     // GESTIONE OCCHIO (MOSTRA/NASCONDI PASSWORD)
     const passwordInput = document.getElementById('password');
@@ -100,6 +103,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // poichè dopo reg non è possibile vedere in tempo il toast lo si vede in pagina di login
     const parametriUrl = new URLSearchParams(window.location.search);
     const registrazione = parametriUrl.get('registrazione');
 

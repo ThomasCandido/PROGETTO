@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnElimina = document.getElementById('btn_elimina_multiplo');
     const listaUl = document.querySelector('.lista_ordini');
 
-    // Mostra/Nasconde il tasto
+    // Mostra/Nasconde il tasto se num di checkbox = 0 allora nascondi cestino
     listaUl.addEventListener('change', () => {
         const selezionati = listaUl.querySelectorAll('input[name="ordine_sel"]:checked').length;
         if (selezionati > 0) 

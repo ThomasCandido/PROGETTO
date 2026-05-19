@@ -5,6 +5,10 @@ document.addEventListener('DOMContentLoaded', async function() {
     const men_sm = document.getElementById('menu_smartphone');
     const navMenu = document.getElementById('nav_menu');
     
+    /* questa funzione serve a gestire apertura dell 'hamburger al click otteniamo la x 
+       se esci cliccando altrove si ristabilisce come prima */
+    // al click dell' hamburgehr c'è la tendina sulla sinista delle sezioni del menù
+
     if (men_sm && navMenu) 
     {
         men_sm.addEventListener('click', () => {

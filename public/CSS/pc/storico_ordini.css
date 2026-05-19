@@ -1,7 +1,4 @@
-
-
-
-/*--------LISTA DEGI ORDINI--------*/
+/*LISTA DEGI ORDINI*/
 .lista_ordini {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));

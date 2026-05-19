@@ -1,5 +1,4 @@
-// --- FUNZIONE GLOBALE PER I TOAST ---
-// --- FUNZIONE GLOBALE PER I TOAST ---
+// FUNZIONE GLOBALE PER I TOAST 
 function mostraToast(messaggio, tipo = 'error') {
     let toast = document.getElementById("toast-container");
 

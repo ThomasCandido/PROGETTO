@@ -1,4 +1,4 @@
-// listino base
+// listino base prezzi tipologia abbigliamento
 const listino_base = {
     "T-shirt": 5.00,
     "Felpa": 10.00,
@@ -6,7 +6,9 @@ const listino_base = {
     "Scarpa": 20.00
 };
 
+// questa lista conserva i dati del carrello da mostarare non appena l'ordine viene inserito
 let ordiniInAttesa = [];
+
 const isAdmin = localStorage.getItem('isAdmin') === 'true'; // Recuperiamo il ruolo dal login
 
 const cloudName = "dfjburbax"; 
@@ -77,28 +79,35 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'none');
     }
 
-    // --- INIZIALIZZAZIONE CLOUDINARY ---
+    // --- INIZIALIZZAZIONE CLOUDINARY  Api x allegare l'ordine---
     const myWidget = cloudinary.createUploadWidget({
         cloudName: cloudName, 
         uploadPreset: uploadPreset,
         sources: ['local', 'camera'],
         multiple: false
     }, (error, result) => { 
-        if (!error && result && result.event === "success") { 
+        if (!error && result && result.event === "success") 
+        { 
+            // selezionato il file l'url veine popolato nell'input nascosto
             document.getElementById('f_image_url').value = result.info.secure_url;
+
+            // logica di base se alleghi il prezzo aumenta 
             aggiornaPrezziAutomatici(); // Ricalcola col 35%
             mostraToast("✅ Foto caricata con successo!", "success");
         }
     });
 
-    //VEDI QUI
+   
     document.getElementById("upload_widget_opener").addEventListener("click", () => myWidget.open());
+
+    // gestione eventi in base alla tipologia di abbiglimento cambiano prezzi e taglie
     document.getElementById('f_tipologia').addEventListener('change', aggiornaPrezziAutomatici);
     document.getElementById('f_tipologia').addEventListener('change', aggiornaTaglieDinamiche);
 });
 
 // calcolo prezzi clienti
-function aggiornaPrezziAutomatici() {
+function aggiornaPrezziAutomatici() 
+{
     const tipologia = document.getElementById('f_tipologia').value;
     const imageUrl = document.getElementById('f_image_url').value;
     
@@ -116,7 +125,8 @@ function aggiornaPrezziAutomatici() {
         if (campoPrezzoCl) {
             campoPrezzoCl.value = prezzo_finale_cliente.toFixed(2);
             
-            if (isAdmin) {
+            if (isAdmin) 
+            {
                 // Se è Admin, il campo è editabile e bianco
                 campoPrezzoCl.readOnly = false;
                 campoPrezzoCl.style.backgroundColor = "#fff"; 
@@ -128,7 +138,8 @@ function aggiornaPrezziAutomatici() {
         }
 
         // 2. AGGIORNIAMO IL PREZZO AZIENDA (Solo se il campo esiste, cioè se è Admin)
-        if (campoPrezzoAz) {
+        if (campoPrezzoAz) 
+        {
             if (campoPrezzoAz) 
             {
                 campoPrezzoAz.value = costo_base.toFixed(2);
@@ -219,7 +230,10 @@ function aggiungiRigaTabella() {
         image_path: imageUrl
     };
 
+    // caricmanto ordini in carrello 
     ordiniInAttesa.push(riga);
+
+    // visualizzazione carrello corrente 
     aggiornaTabellaUI();
     
     // Reset campi per prossimo articolo
@@ -253,6 +267,9 @@ function aggiungiRigaTabella() {
     console.log("Form ripulito per il prossimo articolo!");
 }
 
+
+
+// funzione per visualizzare gli ordini
 function aggiornaTabellaUI() {
     const tbody = document.getElementById('corpo_tabella_ordini');
     const thAzienda = document.getElementById('th_prezzo_az'); 
@@ -262,6 +279,7 @@ function aggiornaTabellaUI() {
 
     tbody.innerHTML = "";
 
+    // iterazione lista carrello x visualizzazione
     ordiniInAttesa.forEach((o, index) => {
         const tr = document.createElement('tr');
         
@@ -297,14 +315,22 @@ function aggiornaTabellaUI() {
         tbody.appendChild(tr);
     });
 
+
+    // ogni volta che carichiamo un articolo si aggiorna il prezzo tot
+
     aggiornaTotaleCalcolato();
 }
 
-function rimuoviRiga(i) {
+function rimuoviRiga(i) 
+{
+    // questa funzione taglia l'ordine selezionato dentro il carrello
     ordiniInAttesa.splice(i, 1);
+    // reflesh tabellla visual
     aggiornaTabellaUI();
 }
 
+
+// funzione per modficare ordine isnerito nel carrello
 window.caricaDatiPerModifica = function(index) {
     const o = ordiniInAttesa[index];
 
@@ -325,12 +351,13 @@ window.caricaDatiPerModifica = function(index) {
 
     /*4. Rimuoviamo la riga dalla tabella
          Dopo l'opzione di modifica, la riga sparisce dalla tabella 
-         e "torna" nel form. Al nuovo click di Aggiungi, tornerà in tabella corretta.*/
+         e "torna" nel form. Al nuovo click di Aggiungi, tornerà in tabella corretta.
+    */
          
     ordiniInAttesa.splice(index, 1);
     aggiornaTabellaUI();
 
-    // 5. Opzionale: Scroll verso l'alto per far capire che i dati sono lì
+    // 5. Scroll verso l'alto per far capire che i dati sono lì
     window.scrollTo({ top: 0, behavior: 'smooth' });
     
     mostraToast("✏️ Dati riportati nel modulo. Modificali e clicca 'Aggiungi'.", "warning");
@@ -339,7 +366,7 @@ window.caricaDatiPerModifica = function(index) {
 function svuotaTabella() 
 {
     
-    // Svuotamento dell'array
+    // Vengono cestinati tutti gli ordini del carrello
     ordiniInAttesa.length = 0; 
         
     // Diciamo alla tabella di ridisegnarsi (essendo l'array vuoto, sparirà tutto)
@@ -362,7 +389,8 @@ function apriModalPagamento() {
     document.getElementById('modalPagamento').style.display = 'flex';
 }
 
-function chiudiPagamento() {
+function chiudiPagamento() 
+{
     document.getElementById('modalPagamento').style.display = 'none';
 }
 
@@ -430,7 +458,7 @@ function aggiornaTotaleCalcolato() {
 }
 
 async function salvaTuttoNelDatabase() {
-    // Prepariamo i dati eliminando le informazioni che non servono al DB (tipo 'societa' testuale)
+    // Prepariamo i dati da processare al server
     const datiPuliti = ordiniInAttesa.map(o => ({
         id_cliente: o.id_cliente,
         data_ordine: o.data_ordine,
@@ -441,7 +469,7 @@ async function salvaTuttoNelDatabase() {
         taglia: o.taglia,
         quantita: o.quantita,
         prezzo_cliente: o.prezzo_cliente,
-        prezzo_azienda: o.prezzo_azienda, // Sarà NULL se l'utente è cliente
+        prezzo_azienda: o.prezzo_azienda,
         note: o.note,
         image_path: o.image_path
     }));

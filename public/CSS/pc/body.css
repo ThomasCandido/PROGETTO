@@ -73,9 +73,10 @@ body {
     cursor: pointer;
 }
 
-/* ==========================================
-   TOAST NOTIFICATIONS (Sostituiscono gli alert)
-   ========================================== */
+/* Regole css x toast notifiche di sistema che si attivano in base a successo
+    , warning o errore 
+ */
+ 
 #toast-container {
     visibility: hidden;
     min-width: 280px;
